@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 - EDA Part 2: Bivariate & Multivariate Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .objectives-list {
+            display: grid;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.1);
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .comparison-card {
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .comparison-card.good {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .comparison-card.bad {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .code-example {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            white-space: pre;
+        }
+
+        .code-example .comment {
+            color: #68d391;
+            font-style: italic;
+        }
+
+        .code-example .keyword {
+            color: #f093fb;
+            font-weight: bold;
+        }
+
+        .code-example .string {
+            color: #ffd93d;
+        }
+
+        .code-example .function {
+            color: #4fd1c7;
+        }
+
+        .code-example .number {
+            color: #f6ad55;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-card h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .concept-box .analogy {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+
+        .demo-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .workshop-section {
+            text-align: center;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+
+        .correlation-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(90deg, #ff7675, #fdcb6e, #00b894);
+            border-radius: 10px;
+            margin: 20px 0;
+            color: white;
+            font-weight: bold;
+        }
+
+        .correlation-scale span {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Previous</button>
+        <span class="slide-counter" id="slideCounter">1 / 18</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title (HOOK) -->
+        <div class="slide title-slide">
+            <h1>EDA Part 2: Bivariate & Multivariate Analysis</h1>
+            <h2>Week 5 - Data Analytics</h2>
+            <div class="author">Julian Eduardo Garzon Giraldo, MsC</div>
+            <div style="margin-top: 40px; opacity: 0.8;">Universidad Cooperativa de Colombia - I/2025</div>
+        </div>
+
+        <!-- Slide 2: Hook - The Question (HOOK) -->
+        <div class="slide">
+            <h1>Does Eating Ice Cream Cause Drowning?</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0; align-items: center;">
+                <div style="text-align: center;">
+                    <div style="font-size: 6rem;">🍦</div>
+                    <p style="font-size: 1.3rem; margin-top: 20px;">Ice Cream Sales</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 6rem;">🏊</div>
+                    <p style="font-size: 1.3rem; margin-top: 20px;">Drowning Deaths</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
+                <h2 style="color: white; margin-bottom: 15px;">These two variables are HIGHLY CORRELATED</h2>
+                <p style="font-size: 1.2rem;">When ice cream sales go up, drowning deaths go up too!</p>
+                <p style="font-size: 1.5rem; margin-top: 20px; font-weight: bold;">Should we ban ice cream?</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.3rem; color: #666;">Today we'll learn why this question is FUNDAMENTALLY WRONG</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Learning Objectives (HOOK) -->
+        <div class="slide">
+            <h1>What You'll Learn Today</h1>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <div class="check-icon">1</div>
+                    <div>Understand correlation: positive, negative, and none</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">2</div>
+                    <div>CRITICAL: Why correlation does NOT mean causation</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">3</div>
+                    <div>Choose the right visualization for different variable types</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">4</div>
+                    <div>Create scatter plots, correlation matrices, and heatmaps</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">5</div>
+                    <div>Analyze relationships across groups (multivariate)</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.2rem;">Dataset: Water Consumption (continuing from Week 4)</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Recap - Univariate vs Bivariate (CONTEXT) -->
+        <div class="slide">
+            <h1>From ONE Variable to TWO</h1>
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="color: white; margin-bottom: 20px;">Week 4: Univariate</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 20px;">Looking at ONE variable at a time</p>
+                    <ul style="list-style: none; text-align: left;">
+                        <li style="padding: 8px 0;">- What's the average consumption?</li>
+                        <li style="padding: 8px 0;">- What's the distribution?</li>
+                        <li style="padding: 8px 0;">- Are there outliers?</li>
+                        <li style="padding: 8px 0;">- Is it skewed?</li>
+                    </ul>
+                    <div style="margin-top: 20px; font-size: 1.5rem;">📊 Histograms, Boxplots</div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="color: white; margin-bottom: 20px;">Week 5: Bivariate</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 20px;">Looking at TWO variables TOGETHER</p>
+                    <ul style="list-style: none; text-align: left;">
+                        <li style="padding: 8px 0;">- Do they move together?</li>
+                        <li style="padding: 8px 0;">- When one goes up, does the other?</li>
+                        <li style="padding: 8px 0;">- How strong is the relationship?</li>
+                        <li style="padding: 8px 0;">- Is it consistent across groups?</li>
+                    </ul>
+                    <div style="margin-top: 20px; font-size: 1.5rem;">📈 Scatter plots, Heatmaps</div>
+                </div>
+            </div>
+
+            <div class="concept-box">
+                <p style="font-size: 1.2rem;"><strong>Key Question:</strong> Does variable A RELATE to variable B?</p>
+                <div class="analogy">
+                    Univariate = Checking your height alone<br>
+                    Bivariate = Checking if height relates to shoe size
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Correlation - The Dance Partners Analogy (CONTEXT) -->
+        <div class="slide">
+            <h1>Correlation: The Dance Partners Analogy</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="font-size: 5rem;">💃🕺</div>
+                <p style="font-size: 1.3rem; margin-top: 20px; color: #666;">
+                    Correlation measures how two variables "dance" together
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 40px 0;">
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">↗️↗️</div>
+                    <h3 style="color: white;">Positive Correlation</h3>
+                    <p style="margin-top: 15px;">When one goes UP,<br>the other goes UP</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+                        Partners moving in the SAME direction
+                    </p>
+                    <p style="margin-top: 10px; font-weight: bold;">Height & Weight</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">↗️↘️</div>
+                    <h3 style="color: white;">Negative Correlation</h3>
+                    <p style="margin-top: 15px;">When one goes UP,<br>the other goes DOWN</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+                        Partners moving in OPPOSITE directions
+                    </p>
+                    <p style="margin-top: 10px; font-weight: bold;">Exercise & Body Fat</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🔀</div>
+                    <h3 style="color: white;">No Correlation</h3>
+                    <p style="margin-top: 15px;">Variables move<br>INDEPENDENTLY</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+                        Partners dancing to different music
+                    </p>
+                    <p style="margin-top: 10px; font-weight: bold;">Shoe Size & IQ</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Correlation Coefficient (CONTENT) -->
+        <div class="slide">
+            <h1>The Correlation Coefficient (r)</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                    <p style="font-size: 1.3rem;">A number between <strong>-1</strong> and <strong>+1</strong> that measures relationship strength</p>
+                </div>
+            </div>
+
+            <div class="correlation-scale">
+                <span>-1.0<br>Perfect Negative</span>
+                <span>-0.7<br>Strong Negative</span>
+                <span>-0.3<br>Weak Negative</span>
+                <span>0<br>None</span>
+                <span>+0.3<br>Weak Positive</span>
+                <span>+0.7<br>Strong Positive</span>
+                <span>+1.0<br>Perfect Positive</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0;">
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #00b894;">Interpreting Strength</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <tr><th>|r| Value</th><th>Interpretation</th></tr>
+                        <tr><td>0.7 - 1.0</td><td>Strong relationship</td></tr>
+                        <tr><td>0.3 - 0.7</td><td>Moderate relationship</td></tr>
+                        <tr><td>0.0 - 0.3</td><td>Weak relationship</td></tr>
+                    </table>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Dance Partner Interpretation</h3>
+                    <div class="analogy">
+                        |r| > 0.7 = Holding hands tight, perfectly synchronized<br>
+                        0.3 < |r| < 0.7 = Casual partners, somewhat in sync<br>
+                        |r| < 0.3 = Barely dancing together
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: CRITICAL - Correlation vs Causation (CONTENT) -->
+        <div class="slide">
+            <h1>CRITICAL: Correlation Does NOT Mean Causation</h1>
+            <div class="alert alert-danger" style="text-align: center;">
+                <h2 style="color: white; margin-bottom: 20px;">THE MOST IMPORTANT LESSON IN DATA ANALYTICS</h2>
+                <p style="font-size: 1.3rem;">Just because two things move together does NOT mean one CAUSES the other!</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;">
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 15px;">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Ice Cream & Drowning Mystery</h3>
+                    <div style="font-size: 3rem; text-align: center; margin: 20px 0;">🍦 <span style="color: #00b894;">+</span> 🏊</div>
+                    <p style="font-size: 1.1rem; margin-top: 20px;">
+                        <strong>Correlation:</strong> r = 0.85 (strong positive!)<br><br>
+                        <strong>Does ice cream CAUSE drowning?</strong><br>
+                        NO! Both increase in SUMMER (the hidden variable)
+                    </p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 15px;">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">The Hidden Third Variable</h3>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="display: inline-block; background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); color: white; padding: 20px; border-radius: 50%; font-size: 2rem;">☀️</div>
+                        <p style="margin-top: 10px; font-weight: bold; color: #e17055;">HOT WEATHER</p>
+                    </div>
+                    <p style="font-size: 1.1rem; margin-top: 20px;">
+                        Hot weather causes BOTH:<br>
+                        - More ice cream sales<br>
+                        - More people swimming (and drowning)
+                    </p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                <h3 style="color: white;">This is called a CONFOUNDING VARIABLE or LURKING VARIABLE</h3>
+                <p style="margin-top: 10px; font-size: 1.1rem;">Always ask: "Could there be a hidden third factor?"</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: More Spurious Correlations (CONTENT) -->
+        <div class="slide">
+            <h1>Spurious Correlations: More Examples</h1>
+            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+                Real correlations from real data... that mean NOTHING
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Nicolas Cage Films & Pool Drownings</h3>
+                    <p style="font-size: 0.95rem;">r = 0.67</p>
+                    <p style="margin-top: 10px;">More Nicolas Cage movies released = More pool drownings</p>
+                    <p style="margin-top: 15px; font-style: italic;">Should we ban Nicolas Cage?</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Cheese Consumption & PhD Deaths</h3>
+                    <p style="font-size: 0.95rem;">r = 0.95</p>
+                    <p style="margin-top: 10px;">More cheese eaten per capita = More deaths by bedsheet tanglement</p>
+                    <p style="margin-top: 15px; font-style: italic;">Is cheese deadly?</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Divorce Rate & Margarine</h3>
+                    <p style="font-size: 0.95rem;">r = 0.99</p>
+                    <p style="margin-top: 10px;">Divorce rate in Maine = Per capita margarine consumption</p>
+                    <p style="margin-top: 15px; font-style: italic;">Ban margarine to save marriages?</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">The Reality Check</h3>
+                    <p style="font-size: 1.1rem; margin-top: 15px;">
+                        With enough data points, you can find correlation between ANYTHING.<br><br>
+                        <strong>Always ask:</strong><br>
+                        "Does this make logical sense?"<br>
+                        "Is there a mechanism?"
+                    </p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #666;">Source: tylervigen.com/spurious-correlations</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Variable Type Combinations Table (CONTENT) -->
+        <div class="slide">
+            <h1>Choosing the Right Analysis</h1>
+            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+                Different variable types require different visualizations and metrics
+            </p>
+
+            <table class="data-table">
+                <tr>
+                    <th>Variable 1</th>
+                    <th>Variable 2</th>
+                    <th>Visualization</th>
+                    <th>Metric</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><span style="background: #74b9ff; color: white; padding: 3px 8px; border-radius: 4px;">Numeric</span></td>
+                    <td><span style="background: #74b9ff; color: white; padding: 3px 8px; border-radius: 4px;">Numeric</span></td>
+                    <td>Scatter plot</td>
+                    <td>Correlation (r)</td>
+                    <td>Height vs Weight</td>
+                </tr>
+                <tr>
+                    <td><span style="background: #00b894; color: white; padding: 3px 8px; border-radius: 4px;">Categorical</span></td>
+                    <td><span style="background: #74b9ff; color: white; padding: 3px 8px; border-radius: 4px;">Numeric</span></td>
+                    <td>Box plot / Bar chart</td>
+                    <td>Compare means/medians</td>
+                    <td>Gender vs Salary</td>
+                </tr>
+                <tr>
+                    <td><span style="background: #00b894; color: white; padding: 3px 8px; border-radius: 4px;">Categorical</span></td>
+                    <td><span style="background: #00b894; color: white; padding: 3px 8px; border-radius: 4px;">Categorical</span></td>
+                    <td>Heatmap / Stacked bar</td>
+                    <td>Cross-tabulation</td>
+                    <td>Department vs Job Level</td>
+                </tr>
+            </table>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">📈</div>
+                    <h4>Scatter Plot</h4>
+                    <p style="font-size: 0.9rem; color: #666;">See the pattern of points</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">📊</div>
+                    <h4>Box Plot</h4>
+                    <p style="font-size: 0.9rem; color: #666;">Compare distributions by group</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🗺️</div>
+                    <h4>Heatmap</h4>
+                    <p style="font-size: 0.9rem; color: #666;">See correlation matrix</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Scatter Plots (CONTENT) -->
+        <div class="slide">
+            <h1>Scatter Plots: Visualizing Relationships</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <div>
+                    <div class="code-example"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+
+<span class="comment"># Basic scatter plot</span>
+plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))
+plt.scatter(df[<span class="string">'population'</span>], df[<span class="string">'consumption'</span>])
+plt.xlabel(<span class="string">'Population'</span>)
+plt.ylabel(<span class="string">'Water Consumption'</span>)
+plt.title(<span class="string">'Population vs Consumption'</span>)
+plt.show()
+
+<span class="comment"># With regression line (seaborn)</span>
+sns.regplot(x=<span class="string">'population'</span>, y=<span class="string">'consumption'</span>,
+            data=df)</div>
+                </div>
+
+                <div>
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="color: #667eea;">What to Look For</h3>
+                        <ul style="margin-top: 15px; line-height: 2;">
+                            <li><strong>Direction:</strong> Up-right = positive, down-right = negative</li>
+                            <li><strong>Strength:</strong> Tight cluster = strong, scattered = weak</li>
+                            <li><strong>Shape:</strong> Linear? Curved? Clusters?</li>
+                            <li><strong>Outliers:</strong> Points far from the pattern</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info" style="margin-top: 20px;">
+                        <strong>Pro Tip:</strong> Add a regression line to see the trend more clearly
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center;">
+                <p style="font-size: 1.1rem;">Scatter plots are the FOUNDATION of bivariate analysis for numeric variables</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Calculating Correlation (CONTENT) -->
+        <div class="slide">
+            <h1>Calculating Correlation in Python</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <div>
+                    <h3 style="color: #00b894;">Single Correlation</h3>
+                    <div class="code-example"><span class="comment"># Correlation between two columns</span>
+r = df[<span class="string">'population'</span>].corr(df[<span class="string">'consumption'</span>])
+<span class="function">print</span>(<span class="string">f"Correlation: {r:.3f}"</span>)
+
+<span class="comment"># Output: Correlation: 0.847</span>
+
+<span class="comment"># Interpretation</span>
+<span class="keyword">if</span> <span class="function">abs</span>(r) > <span class="number">0.7</span>:
+    <span class="function">print</span>(<span class="string">"Strong relationship"</span>)
+<span class="keyword">elif</span> <span class="function">abs</span>(r) > <span class="number">0.3</span>:
+    <span class="function">print</span>(<span class="string">"Moderate relationship"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Weak relationship"</span>)</div>
+                </div>
+
+                <div>
+                    <h3 style="color: #00b894;">Correlation Matrix (All Variables)</h3>
+                    <div class="code-example"><span class="comment"># Correlation between ALL numeric columns</span>
+corr_matrix = df.corr()
+
+<span class="comment"># Show the matrix</span>
+<span class="function">print</span>(corr_matrix)
+
+<span class="comment"># Find strongest correlations</span>
+<span class="comment"># (excluding diagonal = 1.0)</span>
+mask = corr_matrix != <span class="number">1.0</span>
+strongest = corr_matrix[mask].abs().max()
+<span class="function">print</span>(<span class="string">f"Strongest: {strongest:.3f}"</span>)</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 30px;">
+                <h3 style="color: white; margin-bottom: 15px;">Warning: Correlation Assumptions</h3>
+                <ul style="line-height: 1.8;">
+                    <li><strong>Linear relationships only:</strong> Correlation misses curved patterns</li>
+                    <li><strong>Sensitive to outliers:</strong> One extreme point can change r dramatically</li>
+                    <li><strong>Numeric data:</strong> Use different methods for categorical data</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Heatmaps (CONTENT) -->
+        <div class="slide">
+            <h1>Correlation Heatmaps</h1>
+            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+                See ALL correlations at once with a color-coded matrix
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <div class="code-example"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Create correlation matrix</span>
+corr_matrix = df.corr()
+
+<span class="comment"># Create heatmap</span>
+plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))
+sns.heatmap(corr_matrix,
+            annot=<span class="keyword">True</span>,        <span class="comment"># Show numbers</span>
+            cmap=<span class="string">'RdYlGn'</span>,      <span class="comment"># Color scheme</span>
+            center=<span class="number">0</span>,           <span class="comment"># 0 = neutral color</span>
+            vmin=-<span class="number">1</span>, vmax=<span class="number">1</span>,    <span class="comment"># Scale limits</span>
+            fmt=<span class="string">'.2f'</span>)          <span class="comment"># 2 decimal places</span>
+plt.title(<span class="string">'Correlation Heatmap'</span>)
+plt.tight_layout()
+plt.show()</div>
+                </div>
+
+                <div>
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">Reading the Heatmap</h3>
+                        <ul style="line-height: 2;">
+                            <li><span style="background: #00b894; color: white; padding: 2px 8px; border-radius: 4px;">Dark Green</span> = Strong positive (+1)</li>
+                            <li><span style="background: #fdcb6e; color: #333; padding: 2px 8px; border-radius: 4px;">Yellow</span> = No correlation (0)</li>
+                            <li><span style="background: #ff7675; color: white; padding: 2px 8px; border-radius: 4px;">Dark Red</span> = Strong negative (-1)</li>
+                        </ul>
+                        <p style="margin-top: 20px;">
+                            <strong>Diagonal is always 1.0</strong><br>
+                            (every variable correlates perfectly with itself)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 30px;">
+                <strong>Best Practice:</strong> Use <code>annot=True</code> to show the actual correlation values. Colors alone can be misleading!
+            </div>
+        </div>
+
+        <!-- Slide 13: Categorical vs Numeric (CONTENT) -->
+        <div class="slide">
+            <h1>Categorical vs Numeric Analysis</h1>
+            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+                When one variable is a category (municipality, region, type)
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h3 style="color: #00b894;">Box Plot by Category</h3>
+                    <div class="code-example"><span class="comment"># Compare consumption by municipality</span>
+plt.figure(figsize=(<span class="number">12</span>, <span class="number">6</span>))
+sns.boxplot(x=<span class="string">'municipality'</span>,
+            y=<span class="string">'consumption'</span>,
+            data=df)
+plt.xticks(rotation=<span class="number">45</span>)
+plt.title(<span class="string">'Consumption by Municipality'</span>)
+plt.show()
+
+<span class="comment"># Compare means</span>
+df.groupby(<span class="string">'municipality'</span>)[<span class="string">'consumption'</span>].mean()</div>
+                </div>
+
+                <div>
+                    <h3 style="color: #00b894;">Bar Chart with Means</h3>
+                    <div class="code-example"><span class="comment"># Average consumption by region</span>
+means = df.groupby(<span class="string">'region'</span>)[<span class="string">'consumption'</span>].mean()
+
+plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))
+means.sort_values().plot(kind=<span class="string">'barh'</span>)
+plt.xlabel(<span class="string">'Average Consumption'</span>)
+plt.title(<span class="string">'Consumption by Region'</span>)
+plt.show()</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="concept-box">
+                    <h4>When to Use Box Plot</h4>
+                    <ul style="margin-top: 10px;">
+                        <li>Want to see distribution within each group</li>
+                        <li>Need to identify outliers by group</li>
+                        <li>Compare medians and spread</li>
+                    </ul>
+                </div>
+                <div class="concept-box">
+                    <h4>When to Use Bar Chart</h4>
+                    <ul style="margin-top: 10px;">
+                        <li>Just need to compare averages</li>
+                        <li>Simpler message for stakeholders</li>
+                        <li>Many categories to compare</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Multivariate Analysis (CONTENT) -->
+        <div class="slide">
+            <h1>Multivariate: Adding a Third Variable</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; display: inline-block;">
+                    <p style="font-size: 1.2rem;">Does the relationship CHANGE across different groups?</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h3 style="color: #00b894;">Color by Category</h3>
+                    <div class="code-example"><span class="comment"># Scatter with color = third variable</span>
+plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))
+sns.scatterplot(x=<span class="string">'population'</span>,
+                y=<span class="string">'consumption'</span>,
+                hue=<span class="string">'region'</span>,  <span class="comment"># Color by region</span>
+                data=df)
+plt.title(<span class="string">'Consumption vs Population by Region'</span>)
+plt.show()</div>
+                </div>
+
+                <div>
+                    <h3 style="color: #00b894;">Correlation by Group</h3>
+                    <div class="code-example"><span class="comment"># Calculate correlation for each group</span>
+<span class="keyword">for</span> region <span class="keyword">in</span> df[<span class="string">'region'</span>].unique():
+    subset = df[df[<span class="string">'region'</span>] == region]
+    r = subset[<span class="string">'population'</span>].corr(
+        subset[<span class="string">'consumption'</span>]
+    )
+    <span class="function">print</span>(<span class="string">f"{region}: r = {r:.3f}"</span>)
+
+<span class="comment"># Output might show different patterns!</span>
+<span class="comment"># Region A: r = 0.92</span>
+<span class="comment"># Region B: r = 0.45</span>
+<span class="comment"># Region C: r = 0.78</span></div>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 30px;">
+                <h3>Simpson's Paradox: When Overall Hides the Truth</h3>
+                <div class="analogy">
+                    Overall correlation: r = 0.60 (moderate positive)<br>
+                    But when you split by region:<br>
+                    - Urban: r = 0.90 (strong)<br>
+                    - Rural: r = 0.20 (weak)<br><br>
+                    <strong>The third variable reveals hidden patterns!</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Pair Plots (CONTENT) -->
+        <div class="slide">
+            <h1>Pair Plots: See Everything at Once</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <div>
+                    <div class="code-example"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+
+<span class="comment"># Pair plot: all combinations</span>
+sns.pairplot(df[[<span class="string">'consumption'</span>,
+                 <span class="string">'population'</span>,
+                 <span class="string">'avg_temp'</span>,
+                 <span class="string">'region'</span>]],
+             hue=<span class="string">'region'</span>)  <span class="comment"># Color by group</span>
+plt.show()
+
+<span class="comment"># This creates a matrix of:</span>
+<span class="comment"># - Scatter plots (off-diagonal)</span>
+<span class="comment"># - Histograms (diagonal)</span>
+<span class="comment"># - All colored by region</span></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">What You Get</h3>
+                    <ul style="line-height: 2;">
+                        <li><strong>Diagonal:</strong> Distribution of each variable</li>
+                        <li><strong>Upper triangle:</strong> Scatter plots</li>
+                        <li><strong>Lower triangle:</strong> Same scatter plots (mirrored)</li>
+                        <li><strong>Colors:</strong> Show groups within each plot</li>
+                    </ul>
+
+                    <div class="alert alert-warning" style="margin-top: 20px;">
+                        <strong>Warning:</strong> Can be slow with many variables! Select only the most important ones.
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 15px; text-align: center;">
+                <p style="font-size: 1.1rem;">Pair plots are the FASTEST way to explore multiple relationships at once</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Complete Analysis Framework (CONTENT) -->
+        <div class="slide">
+            <h1>Bivariate Analysis Framework</h1>
+            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+                Follow these steps for systematic relationship analysis
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">1</div>
+                    <h4 style="color: white;">Identify Types</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Numeric vs Categorical?</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">2</div>
+                    <h4 style="color: white;">Visualize</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Choose right chart type</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">3</div>
+                    <h4 style="color: white;">Calculate</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Get correlation or compare means</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">4</div>
+                    <h4 style="color: white;">Check Groups</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Does it change by segment?</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">5</div>
+                    <h4 style="color: white;">Interpret</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">What does it MEAN?</p>
+                </div>
+            </div>
+
+            <div class="code-example" style="margin-top: 30px;"><span class="comment"># Complete bivariate analysis template</span>
+<span class="keyword">def</span> <span class="function">analyze_relationship</span>(df, var1, var2):
+    <span class="comment"># 1. Check types</span>
+    <span class="function">print</span>(<span class="string">f"Types: {df[var1].dtype}, {df[var2].dtype}"</span>)
+
+    <span class="comment"># 2. Visualize</span>
+    plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))
+    <span class="keyword">if</span> df[var1].dtype <span class="keyword">in</span> [<span class="string">'int64'</span>, <span class="string">'float64'</span>]:
+        sns.scatterplot(x=var1, y=var2, data=df)
+    <span class="keyword">else</span>:
+        sns.boxplot(x=var1, y=var2, data=df)
+
+    <span class="comment"># 3. Calculate correlation</span>
+    r = df[var1].corr(df[var2])
+    <span class="function">print</span>(<span class="string">f"Correlation: {r:.3f}"</span>)
+
+    <span class="keyword">return</span> r</div>
+        </div>
+
+        <!-- Slide 17: Exercise Preview -->
+        <div class="slide">
+            <div class="demo-section">
+                <div class="demo-title">Exercise: Water Consumption Analysis</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Find the Top 3 Correlations and Explain Each</div>
+
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Your Tasks:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">1. Create correlation matrix for water data</li>
+                                <li style="padding: 8px 0;">2. Generate heatmap visualization</li>
+                                <li style="padding: 8px 0;">3. Identify top 3 strongest correlations</li>
+                                <li style="padding: 8px 0;">4. Create scatter plot for each</li>
+                                <li style="padding: 8px 0;">5. Write explanation for each relationship</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">For Each Correlation, Answer:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">- What is the r value?</li>
+                                <li style="padding: 8px 0;">- Is it positive or negative?</li>
+                                <li style="padding: 8px 0;">- Does it make logical sense?</li>
+                                <li style="padding: 8px 0;">- Could there be a confounding variable?</li>
+                                <li style="padding: 8px 0;">- What's the business implication?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.2rem;">
+                    <strong>Time: 30 minutes | Remember: Correlation != Causation!</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Summary and Key Takeaways -->
+        <div class="slide">
+            <h1>Key Takeaways</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;">
+                <div>
+                    <h2>Today You Learned:</h2>
+                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">Correlation measures relationship strength (-1 to +1)</li>
+                            <li style="padding: 8px 0;">Positive: both go same direction</li>
+                            <li style="padding: 8px 0;">Negative: opposite directions</li>
+                            <li style="padding: 8px 0;">CRITICAL: Correlation != Causation</li>
+                            <li style="padding: 8px 0;">Always check for confounding variables</li>
+                            <li style="padding: 8px 0;">Choose visualization by variable types</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Next Week (Week 6):</h2>
+                    <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <h3 style="color: white; margin-bottom: 15px;">MILESTONE 1 EVALUATION</h3>
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">Complete EDA of your project dataset</li>
+                            <li style="padding: 8px 0;">Univariate + Bivariate analysis</li>
+                            <li style="padding: 8px 0;">At least 5 actionable insights</li>
+                            <li style="padding: 8px 0;">Clean, documented notebook</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                    <h2 style="color: white; margin-bottom: 15px;">The Golden Rule</h2>
+                    <p style="font-size: 1.5rem;">
+                        "Ice cream doesn't cause drowning.<br>
+                        Always look for the hidden variable."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analítica de Datos - I/2025 | Universidad Cooperativa de Colombia</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            color: #2d3748;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Hero ─────────────────────────────────────── */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 80px 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .hero .instructor {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        /* ── Container ────────────────────────────────── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Momento Section ──────────────────────────── */
+        .momento {
+            margin: 48px 0;
+        }
+
+        .momento-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid;
+        }
+
+        .momento-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .momento-header .badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 50px;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .momento-header .weight {
+            margin-left: auto;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        /* Momento colors */
+        .momento--1 .momento-header { border-color: #e17055; }
+        .momento--1 .badge { background: #e17055; }
+        .momento--1 .week-number { background: linear-gradient(135deg, #e17055, #fdcb6e); }
+
+        .momento--2 .momento-header { border-color: #764ba2; }
+        .momento--2 .badge { background: #764ba2; }
+        .momento--2 .week-number { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .momento--3 .momento-header { border-color: #00b894; }
+        .momento--3 .badge { background: #00b894; }
+        .momento--3 .week-number { background: linear-gradient(135deg, #00b894, #00cec9); }
+
+        /* ── Week Cards ───────────────────────────────── */
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .week-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .week-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .week-card--eval {
+            border: 2px dashed;
+            background: #fafafa;
+        }
+
+        .momento--1 .week-card--eval { border-color: #e17055; }
+        .momento--2 .week-card--eval { border-color: #764ba2; }
+        .momento--3 .week-card--eval { border-color: #00b894; }
+
+        .week-card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .week-number {
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .week-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a202c;
+            line-height: 1.4;
+        }
+
+        .week-type {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .week-type--eval {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .week-type--self {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .week-type--closure {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* ── Material Links ───────────────────────────── */
+        .materials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .material-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 10px;
+            background: #f7fafc;
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+
+        .material-link:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            color: #2d3748;
+        }
+
+        .material-link .icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* ── Footer ───────────────────────────────────── */
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: rgba(255,255,255,0.85);
+            text-align: center;
+            padding: 32px 24px;
+            margin-top: 60px;
+            font-size: 0.9rem;
+        }
+
+        .footer strong {
+            color: #fff;
+        }
+
+        /* ── Responsive ───────────────────────────────── */
+        @media (max-width: 600px) {
+            .hero { padding: 60px 20px 40px; }
+            .weeks-grid { grid-template-columns: 1fr; }
+            .momento-header { flex-wrap: wrap; }
+            .momento-header .weight { margin-left: 0; width: 100%; margin-top: 4px; }
+            .week-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HERO ═══ -->
+    <header class="hero">
+        <h1>Analitica de Datos</h1>
+        <p class="subtitle">Ingenieria de Sistemas &mdash; Universidad Cooperativa de Colombia</p>
+        <p class="subtitle" style="font-size: 1rem; opacity: 0.75; margin-bottom: 0;">Periodo I/2025</p>
+        <div class="instructor">Profesor: Julian Garzon, MsC</div>
+    </header>
+
+    <main class="container">
+
+        <!-- ═══ MOMENTO 1 ═══ -->
+        <section class="momento momento--1">
+            <div class="momento-header">
+                <h2>Momento 1</h2>
+                <span class="badge">Semanas 1 &ndash; 6</span>
+                <span class="weight">30% del curso</span>
+            </div>
+            <div class="weeks-grid">
+
+                <!-- Semana 1 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 01</span>
+                        <div>
+                            <div class="week-title">Introduccion a Analitica de Datos</div>
+                            <span class="week-type week-type--self">Autoestudio</span>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana01/README.md" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📚</span> Lecturas y Videos
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 2 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 02</span>
+                        <div class="week-title">Python y Pandas Fundamentals</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana02/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana02/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana02/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                        <a href="semana02/intro.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">👨‍🏫</span> Presentacion del Profesor
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 3 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 03</span>
+                        <div class="week-title">Limpieza y Manipulacion de Datos</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana03/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana03/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana03/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 4 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 04</span>
+                        <div class="week-title">EDA Univariado + Estadistica Basica</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana04/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana04/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana04/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 5 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 05</span>
+                        <div class="week-title">EDA Bivariado y Multivariado</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana05/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana05/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana05/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 6 -->
+                <article class="week-card week-card--eval">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 06</span>
+                        <div>
+                            <div class="week-title">Momento 1</div>
+                            <span class="week-type week-type--eval">Evaluacion</span>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana06/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana06/rubric.md" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📋</span> Rubrica
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ═══ MOMENTO 2 ═══ -->
+        <section class="momento momento--2">
+            <div class="momento-header">
+                <h2>Momento 2</h2>
+                <span class="badge">Semanas 7 &ndash; 12</span>
+                <span class="weight">35% del curso</span>
+            </div>
+            <div class="weeks-grid">
+
+                <!-- Semana 7 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 07</span>
+                        <div class="week-title">Principios de Visualizacion</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana07/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana07/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana07/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 8 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 08</span>
+                        <div class="week-title">Plotly + Streamlit</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana08/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana08/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana08/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 9 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 09</span>
+                        <div class="week-title">Power BI Essentials</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana09/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana09/exercise.md" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana09/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 10 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 10</span>
+                        <div class="week-title">Estadistica Descriptiva</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana10/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana10/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana10/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 11 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 11</span>
+                        <div class="week-title">Data Storytelling</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana11/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana11/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana11/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 12 -->
+                <article class="week-card week-card--eval">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 12</span>
+                        <div>
+                            <div class="week-title">Momento 2</div>
+                            <span class="week-type week-type--eval">Evaluacion</span>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana12/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana12/rubric.md" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📋</span> Rubrica
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ═══ MOMENTO 3 ═══ -->
+        <section class="momento momento--3">
+            <div class="momento-header">
+                <h2>Momento 3</h2>
+                <span class="badge">Semanas 13 &ndash; 16</span>
+                <span class="weight">35% del curso</span>
+            </div>
+            <div class="weeks-grid">
+
+                <!-- Semana 13 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 13</span>
+                        <div class="week-title">Introduccion a Machine Learning</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana13/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana13/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana13/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 14 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 14</span>
+                        <div class="week-title">Modelos de ML con scikit-learn</div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana14/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana14/exercise.ipynb" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">💻</span> Ejercicio
+                        </a>
+                        <a href="semana14/workshop/" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">🔧</span> Workshop
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 15 -->
+                <article class="week-card week-card--eval">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 15</span>
+                        <div>
+                            <div class="week-title">Momento 3</div>
+                            <span class="week-type week-type--eval">Evaluacion</span>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana15/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                        <a href="semana15/rubric.md" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📋</span> Rubrica
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Semana 16 -->
+                <article class="week-card">
+                    <div class="week-card-top">
+                        <span class="week-number">Sem 16</span>
+                        <div>
+                            <div class="week-title">Cierre del Curso</div>
+                            <span class="week-type week-type--closure">Cierre</span>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        <a href="semana16/slides.html" target="_blank" rel="noopener" class="material-link">
+                            <span class="icon">📊</span> Slides
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <strong>Analitica de Datos</strong> &mdash; Periodo I/2025<br>
+        Universidad Cooperativa de Colombia
+    </footer>
+
+</body>
+</html>

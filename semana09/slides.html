@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9 - Power BI Essentials</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .objectives-list {
+            display: grid;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.1);
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .comparison-card {
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .comparison-card.good {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .comparison-card.bad {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .code-example {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            white-space: pre;
+        }
+
+        .code-example .comment {
+            color: #68d391;
+            font-style: italic;
+        }
+
+        .code-example .keyword {
+            color: #f093fb;
+            font-weight: bold;
+        }
+
+        .code-example .string {
+            color: #ffd93d;
+        }
+
+        .code-example .function {
+            color: #4fd1c7;
+        }
+
+        .code-example .number {
+            color: #f6ad55;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-card h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .concept-box .analogy {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+
+        .demo-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .workshop-section {
+            text-align: center;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+
+        .kitchen-analogy {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .kitchen-step {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .kitchen-step:hover {
+            transform: translateY(-10px);
+        }
+
+        .kitchen-step .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .dax-formula {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            border-left: 4px solid #ffd93d;
+        }
+
+        .dax-formula .function-name {
+            color: #74b9ff;
+            font-weight: bold;
+        }
+
+        .dax-formula .table-name {
+            color: #00cec9;
+        }
+
+        .dax-formula .column-name {
+            color: #fd79a8;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .viz-gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .viz-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .viz-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .viz-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kitchen-analogy {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .viz-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Previous</button>
+        <span class="slide-counter" id="slideCounter">1 / 20</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title (HOOK) -->
+        <div class="slide title-slide">
+            <h1>Power BI Essentials</h1>
+            <h2>Week 9 - Data Analytics</h2>
+            <div class="author">Julian Eduardo Garzon Giraldo, MsC</div>
+            <div style="margin-top: 40px; opacity: 0.8;">Universidad Cooperativa de Colombia - I/2025</div>
+        </div>
+
+        <!-- Slide 2: Hook - The CEO Question (HOOK) -->
+        <div class="slide">
+            <h1>The CEO Just Called...</h1>
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 5rem;">&#128222;</div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 20px; text-align: center;">
+                <p style="font-size: 1.5rem; font-style: italic; margin-bottom: 20px;">
+                    "I need a dashboard showing birth statistics by region.<br>
+                    The board meeting is in 2 hours."
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <h3 style="color: white; margin-bottom: 15px;">With Python Only</h3>
+                    <p>Write code, debug, format charts, export to PDF...</p>
+                    <p style="font-size: 2rem; margin-top: 15px;">4+ hours</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <h3 style="color: white; margin-bottom: 15px;">With Power BI</h3>
+                    <p>Drag, drop, click, publish.</p>
+                    <p style="font-size: 2rem; margin-top: 15px;">30 minutes</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px; font-size: 1.2rem; color: #666;">
+                Different tools for different situations. Today you learn when and how to use Power BI.
+            </p>
+        </div>
+
+        <!-- Slide 3: Learning Objectives (HOOK) -->
+        <div class="slide">
+            <h1>What You'll Learn Today</h1>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <div class="check-icon">1</div>
+                    <div>Navigate the Power BI Desktop interface</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">2</div>
+                    <div>Import and transform data with Power Query</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">3</div>
+                    <div>Write basic DAX measures (SUM, AVERAGE, COUNT, DIVIDE)</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">4</div>
+                    <div>Understand the critical difference: Measures vs Columns</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">5</div>
+                    <div>Create 5 essential visualizations + slicers</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.2rem;">Dataset: Birth Records (Nacidos Vivos) - 461 records</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: What is Power BI? (CONTEXT) -->
+        <div class="slide">
+            <h1>What is Power BI?</h1>
+            <div class="concept-box">
+                <p style="font-size: 1.3rem; text-align: center;">
+                    Power BI is Microsoft's business intelligence tool for creating interactive dashboards and reports.
+                </p>
+                <div class="analogy">
+                    Think of it as "Excel's powerful cousin" - it connects to data, transforms it, and creates beautiful visualizations without writing code.
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 40px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#128190;</div>
+                    <h3 style="color: white;">Power BI Desktop</h3>
+                    <p style="margin-top: 10px;">Free application for Windows. Where you build reports.</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#9729;</div>
+                    <h3 style="color: white;">Power BI Service</h3>
+                    <p style="margin-top: 10px;">Cloud platform. Where you share and collaborate.</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#128241;</div>
+                    <h3 style="color: white;">Power BI Mobile</h3>
+                    <p style="margin-top: 10px;">Apps for iOS/Android. View dashboards anywhere.</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Today's Focus:</strong> Power BI Desktop - this is where all the magic happens.
+            </div>
+        </div>
+
+        <!-- Slide 5: Power Query = Kitchen Prep Analogy (CONTEXT) -->
+        <div class="slide">
+            <h1>Power Query: The Kitchen Prep</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="font-size: 1.3rem; color: #666;">Before you cook (visualize), you prep ingredients (clean data)</p>
+            </div>
+
+            <div class="kitchen-analogy">
+                <div class="kitchen-step">
+                    <div class="icon">&#127859;</div>
+                    <h4>Get Ingredients</h4>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Import data from CSV, Excel, databases, APIs</p>
+                </div>
+                <div class="kitchen-step">
+                    <div class="icon">&#128298;</div>
+                    <h4>Wash & Chop</h4>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Remove columns, filter rows, fix data types</p>
+                </div>
+                <div class="kitchen-step">
+                    <div class="icon">&#129361;</div>
+                    <h4>Season & Mix</h4>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Merge tables, add columns, create relationships</p>
+                </div>
+                <div class="kitchen-step">
+                    <div class="icon">&#127374;</div>
+                    <h4>Ready to Serve</h4>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Clean data loaded into Power BI model</p>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 30px;">
+                <h3>Key Principle: Do as much as possible in Power Query</h3>
+                <p style="margin-top: 15px;">
+                    Power Query transformations are <strong>applied every time data refreshes</strong>.
+                    This means your cleaning is repeatable and automated.
+                </p>
+                <div class="analogy">
+                    Like a recipe that you follow every time - not just cooking once and hoping for the best.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Power Query in Action (CONTENT) -->
+        <div class="slide">
+            <h1>Power Query: Common Operations</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                These are the "prep steps" you'll use most often
+            </p>
+
+            <table class="data-table">
+                <tr>
+                    <th>Operation</th>
+                    <th>Python Equivalent</th>
+                    <th>How in Power Query</th>
+                </tr>
+                <tr>
+                    <td>Remove columns</td>
+                    <td><code>df.drop(columns=[...])</code></td>
+                    <td>Right-click column header &rarr; Remove</td>
+                </tr>
+                <tr>
+                    <td>Filter rows</td>
+                    <td><code>df[df['x'] > 10]</code></td>
+                    <td>Click filter arrow &rarr; Number Filters</td>
+                </tr>
+                <tr>
+                    <td>Change data type</td>
+                    <td><code>df['x'].astype(int)</code></td>
+                    <td>Click column type icon &rarr; Choose type</td>
+                </tr>
+                <tr>
+                    <td>Replace values</td>
+                    <td><code>df['x'].replace(...)</code></td>
+                    <td>Transform &rarr; Replace Values</td>
+                </tr>
+                <tr>
+                    <td>Split column</td>
+                    <td><code>df['x'].str.split(...)</code></td>
+                    <td>Transform &rarr; Split Column</td>
+                </tr>
+                <tr>
+                    <td>Merge tables</td>
+                    <td><code>pd.merge(df1, df2, ...)</code></td>
+                    <td>Home &rarr; Merge Queries</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-success" style="margin-top: 30px;">
+                <strong>Pro Tip:</strong> Every step you take is recorded in "Applied Steps" on the right panel. You can delete, reorder, or modify steps anytime.
+            </div>
+        </div>
+
+        <!-- Slide 7: DAX - Formulas on Steroids (CONTENT) -->
+        <div class="slide">
+            <h1>DAX: Formulas on Steroids</h1>
+            <div class="concept-box">
+                <p style="font-size: 1.2rem;">
+                    <strong>DAX</strong> = Data Analysis Expressions
+                </p>
+                <p style="margin-top: 15px;">
+                    The formula language of Power BI. Like Excel formulas, but more powerful and context-aware.
+                </p>
+                <div class="analogy">
+                    Excel: =SUM(A1:A10) works on fixed cells<br>
+                    DAX: SUM(Sales[Amount]) works on the ENTIRE column, but respects filters
+                </div>
+            </div>
+
+            <h2 style="margin-top: 40px;">The 4 Essential DAX Functions</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div>
+                    <div class="dax-formula">
+                        <span class="function-name">SUM</span>(<span class="table-name">Table</span>[<span class="column-name">Column</span>])
+                    </div>
+                    <p style="margin-top: 10px;">Adds up all values in a column</p>
+                </div>
+                <div>
+                    <div class="dax-formula">
+                        <span class="function-name">AVERAGE</span>(<span class="table-name">Table</span>[<span class="column-name">Column</span>])
+                    </div>
+                    <p style="margin-top: 10px;">Calculates the mean</p>
+                </div>
+                <div>
+                    <div class="dax-formula">
+                        <span class="function-name">COUNT</span>(<span class="table-name">Table</span>[<span class="column-name">Column</span>])
+                    </div>
+                    <p style="margin-top: 10px;">Counts non-blank values</p>
+                </div>
+                <div>
+                    <div class="dax-formula">
+                        <span class="function-name">DIVIDE</span>(Numerator, Denominator, 0)
+                    </div>
+                    <p style="margin-top: 10px;">Safe division (handles divide by zero)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: DAX Examples for Birth Records (CONTENT) -->
+        <div class="slide">
+            <h1>DAX in Practice: Birth Records</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Real measures you'll create for our dataset
+            </p>
+
+            <div style="display: grid; gap: 25px;">
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #667eea;">Total Births</h3>
+                    <div class="dax-formula">
+                        Total Births = <span class="function-name">COUNTROWS</span>(<span class="table-name">NacidosVivos</span>)
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Counts total number of birth records</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #667eea;">Average Birth Weight</h3>
+                    <div class="dax-formula">
+                        Avg Birth Weight = <span class="function-name">AVERAGE</span>(<span class="table-name">NacidosVivos</span>[<span class="column-name">peso_nacimiento</span>])
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Average weight across all filtered records</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #667eea;">Male Percentage</h3>
+                    <div class="dax-formula">
+                        Male % = <span class="function-name">DIVIDE</span>(
+    <span class="function-name">COUNTROWS</span>(<span class="function-name">FILTER</span>(<span class="table-name">NacidosVivos</span>, <span class="table-name">NacidosVivos</span>[<span class="column-name">sexo</span>] = "M")),
+    <span class="function-name">COUNTROWS</span>(<span class="table-name">NacidosVivos</span>),
+    0
+)
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Safe percentage calculation with DIVIDE</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Measures vs Columns - CRITICAL (CONTENT) -->
+        <div class="slide">
+            <h1>CRITICAL: Measures vs Columns</h1>
+            <div class="alert alert-danger" style="text-align: center; margin-bottom: 30px;">
+                <h3 style="color: white; margin-bottom: 10px;">This is the #1 source of Power BI confusion!</h3>
+                <p>Understand this now and save hours of debugging later.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="color: white; text-align: center; margin-bottom: 20px;">Calculated Column</h2>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>&#128190; <strong>Stored</strong> in the data model</li>
+                        <li>&#9201; Calculated <strong>once</strong> when data loads</li>
+                        <li>&#128206; Uses <strong>row context</strong> (one row at a time)</li>
+                        <li>&#128200; Increases file size</li>
+                        <li>&#127919; Use for: filtering, slicing, grouping</li>
+                    </ul>
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace;">
+                        Age Group = IF([age] &lt; 20, "Teen", "Adult")
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="color: white; text-align: center; margin-bottom: 20px;">Measure</h2>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>&#128171; <strong>NOT stored</strong> - calculated on demand</li>
+                        <li>&#9889; Calculated <strong>every time</strong> you interact</li>
+                        <li>&#128202; Uses <strong>filter context</strong> (respects slicers)</li>
+                        <li>&#128049; No impact on file size</li>
+                        <li>&#127919; Use for: aggregations, KPIs, percentages</li>
+                    </ul>
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace;">
+                        Total Sales = SUM(Sales[Amount])
+                    </div>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 30px;">
+                <h3>Rule of Thumb</h3>
+                <div class="analogy">
+                    <strong>Need to aggregate (SUM, AVG, COUNT)?</strong> &rarr; Use a Measure<br>
+                    <strong>Need a new category to filter by?</strong> &rarr; Use a Calculated Column
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: 5 Essential Visualizations (CONTENT) -->
+        <div class="slide">
+            <h1>5 Essential Visualizations</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Master these five and you can answer 80% of business questions
+            </p>
+
+            <div class="viz-gallery">
+                <div class="viz-card">
+                    <div class="icon">&#128179;</div>
+                    <h4>Card</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Single KPI number</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Total Births: 461</p>
+                </div>
+                <div class="viz-card">
+                    <div class="icon">&#128202;</div>
+                    <h4>Bar Chart</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Compare categories</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Births by Region</p>
+                </div>
+                <div class="viz-card">
+                    <div class="icon">&#128200;</div>
+                    <h4>Line Chart</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Trends over time</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Births by Month</p>
+                </div>
+                <div class="viz-card">
+                    <div class="icon">&#128506;</div>
+                    <h4>Map</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Geographic data</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Births by Department</p>
+                </div>
+                <div class="viz-card">
+                    <div class="icon">&#128203;</div>
+                    <h4>Table</h4>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">Detailed data</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">All Records</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="alert alert-info" style="margin: 0;">
+                    <strong>Card:</strong> Show one important number prominently
+                </div>
+                <div class="alert alert-success" style="margin: 0;">
+                    <strong>Bar/Line:</strong> Compare or show trends
+                </div>
+                <div class="alert alert-warning" style="margin: 0;">
+                    <strong>Map/Table:</strong> Geographic or detailed view
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Slicers - Making it Interactive (CONTENT) -->
+        <div class="slide">
+            <h1>Slicers: Making It Interactive</h1>
+            <div class="concept-box">
+                <p style="font-size: 1.2rem;">
+                    <strong>Slicers</strong> = Interactive filters that users can click to explore data
+                </p>
+                <div class="analogy">
+                    Like the filters on an e-commerce website: click "Size: Large" and all products filter automatically.
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0;">
+                <div>
+                    <h3 style="color: #667eea;">Common Slicer Types</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <tr><th>Slicer Type</th><th>Best For</th></tr>
+                        <tr><td>List</td><td>Few categories (Gender, Status)</td></tr>
+                        <tr><td>Dropdown</td><td>Many categories (Cities, Products)</td></tr>
+                        <tr><td>Date Range</td><td>Time periods (Year, Month)</td></tr>
+                        <tr><td>Numeric Range</td><td>Values (Age, Weight)</td></tr>
+                    </table>
+                </div>
+
+                <div>
+                    <h3 style="color: #667eea;">For Birth Records, Add Slicers For:</h3>
+                    <div style="margin-top: 15px;">
+                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                            <strong>Year</strong> - See trends over time
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                            <strong>Gender (M/F)</strong> - Compare male vs female births
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                            <strong>Area (Urban/Rural)</strong> - Geographic comparison
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Pro Tip:</strong> Hold CTRL while clicking slicers to select multiple values at once.
+            </div>
+        </div>
+
+        <!-- Slide 12: When to Use Power BI vs Python (CONTENT) -->
+        <div class="slide">
+            <h1>Power BI vs Python: When to Use Each</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Both are powerful. Choose based on the situation.
+            </p>
+
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, #ffd93d 0%, #ff9f43 100%); color: #2c3e50; padding: 30px; border-radius: 15px;">
+                    <h2 style="text-align: center; margin-bottom: 20px;">Use Power BI When...</h2>
+                    <ul style="list-style: none; line-height: 2.2;">
+                        <li>&#9989; Quick dashboard needed (hours, not days)</li>
+                        <li>&#9989; Business users will interact with it</li>
+                        <li>&#9989; Data needs to refresh automatically</li>
+                        <li>&#9989; Sharing with non-technical stakeholders</li>
+                        <li>&#9989; Standard visualizations are sufficient</li>
+                        <li>&#9989; Integration with Microsoft ecosystem</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="color: white; text-align: center; margin-bottom: 20px;">Use Python When...</h2>
+                    <ul style="list-style: none; line-height: 2.2;">
+                        <li>&#9989; Complex data transformations needed</li>
+                        <li>&#9989; Machine learning or statistical analysis</li>
+                        <li>&#9989; Custom visualizations required</li>
+                        <li>&#9989; Automation of entire data pipeline</li>
+                        <li>&#9989; Reproducible research (notebooks)</li>
+                        <li>&#9989; Version control with Git</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 30px;">
+                <h3 style="color: white; margin-bottom: 15px;">The Best Analysts Use BOTH</h3>
+                <p style="font-size: 1.1rem;">
+                    Python for heavy lifting (cleaning, ML) &rarr; Power BI for final presentation
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Power BI Interface Tour (CONTENT) -->
+        <div class="slide">
+            <h1>Power BI Desktop Interface</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Three views, each with a specific purpose
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#128202;</div>
+                    <h3 style="color: white;">Report View</h3>
+                    <p style="margin-top: 15px;">Build visualizations and design dashboard layouts. Where you spend most of your time.</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#128203;</div>
+                    <h3 style="color: white;">Data View</h3>
+                    <p style="margin-top: 15px;">See the raw data in tables. Like looking at Excel spreadsheets.</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">&#128279;</div>
+                    <h3 style="color: white;">Model View</h3>
+                    <p style="margin-top: 15px;">See relationships between tables. Important for multi-table datasets.</p>
+                </div>
+            </div>
+
+            <div class="concept-box">
+                <h3>Key Panels</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div>
+                        <strong>Fields (Right)</strong>: Your data tables and columns
+                    </div>
+                    <div>
+                        <strong>Visualizations (Right)</strong>: Chart types and formatting
+                    </div>
+                    <div>
+                        <strong>Filters (Right)</strong>: Apply filters to visuals/pages/report
+                    </div>
+                    <div>
+                        <strong>Pages (Bottom)</strong>: Like sheets in Excel
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Step-by-Step: Loading Data (CONTENT) -->
+        <div class="slide">
+            <h1>Step-by-Step: Loading Data</h1>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 40px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 15px;">1</div>
+                    <h4 style="color: white;">Get Data</h4>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Home &rarr; Get Data &rarr; Text/CSV</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 15px;">2</div>
+                    <h4 style="color: white;">Preview</h4>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Check data looks correct, encoding UTF-8</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 15px;">3</div>
+                    <h4 style="color: white;">Transform</h4>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Click "Transform Data" to open Power Query</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 15px;">4</div>
+                    <h4 style="color: white;">Close & Apply</h4>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">When done cleaning, load to model</p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Common Issue:</strong> If Spanish characters look wrong (like &#195;&#177; instead of n with tilde), change encoding to UTF-8 in the load dialog.
+            </div>
+
+            <div class="concept-box" style="margin-top: 20px;">
+                <h4>For Birth Records Dataset:</h4>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>Remove any ID columns not needed for analysis</li>
+                    <li>Ensure date columns are recognized as dates</li>
+                    <li>Check that numeric columns (weight, etc.) are detected as numbers</li>
+                    <li>Rename columns to user-friendly names if needed</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Step-by-Step: Creating a Visual (CONTENT) -->
+        <div class="slide">
+            <h1>Step-by-Step: Creating a Visual</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 30px 0;">
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Building a Bar Chart</h3>
+                    <div style="counter-reset: steps;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #667eea;">
+                            <strong>Step 1:</strong> Click the Bar Chart icon in Visualizations panel
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #74b9ff;">
+                            <strong>Step 2:</strong> Drag "Department" to Y-axis (categories)
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #00b894;">
+                            <strong>Step 3:</strong> Drag "Total Births" measure to X-axis (values)
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #f093fb;">
+                            <strong>Step 4:</strong> Format: Add title, data labels, colors
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Building a Card</h3>
+                    <div style="counter-reset: steps;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #667eea;">
+                            <strong>Step 1:</strong> Click the Card icon in Visualizations panel
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #74b9ff;">
+                            <strong>Step 2:</strong> Drag your measure to "Fields" well
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #00b894;">
+                            <strong>Step 3:</strong> Format: Increase font size, add label
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #f093fb;">
+                            <strong>Step 4:</strong> Position in top corner of dashboard
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 20px;">
+                <strong>Key Interaction:</strong> All visuals on a page are linked. Click a bar in one chart and ALL other visuals filter automatically!
+            </div>
+        </div>
+
+        <!-- Slide 16: Dashboard Layout Best Practices (CONTENT) -->
+        <div class="slide">
+            <h1>Dashboard Layout Best Practices</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <div class="comparison-card good">
+                    <h3 style="color: white; margin-bottom: 20px;">DO This</h3>
+                    <ul style="list-style: none; text-align: left; line-height: 2;">
+                        <li>&#9989; KPIs/Cards at the top</li>
+                        <li>&#9989; Slicers on left or top</li>
+                        <li>&#9989; Most important chart = largest</li>
+                        <li>&#9989; Consistent color scheme</li>
+                        <li>&#9989; Clear titles on every visual</li>
+                        <li>&#9989; White space between elements</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card bad">
+                    <h3 style="color: white; margin-bottom: 20px;">AVOID This</h3>
+                    <ul style="list-style: none; text-align: left; line-height: 2;">
+                        <li>&#10060; Too many visuals (max 6-8)</li>
+                        <li>&#10060; Rainbow of colors</li>
+                        <li>&#10060; 3D charts (ever)</li>
+                        <li>&#10060; Pie charts with many slices</li>
+                        <li>&#10060; Overlapping elements</li>
+                        <li>&#10060; Tiny fonts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 20px;">
+                <h3>The "Z Pattern" Layout</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <strong>1. Title/Logo</strong><br>
+                        Top left
+                    </div>
+                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <strong>2. KPI Cards</strong><br>
+                        Top center/right
+                    </div>
+                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <strong>3. Slicers</strong><br>
+                        Right side or top
+                    </div>
+                    <div style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); color: white; padding: 20px; border-radius: 10px; grid-column: span 2;">
+                        <strong>4. Main Chart</strong><br>
+                        Center (largest)
+                    </div>
+                    <div style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <strong>5. Supporting</strong><br>
+                        Bottom/sides
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Common Mistakes (CONTENT) -->
+        <div class="slide">
+            <h1>Common Mistakes to Avoid</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Mistake #1: Using COUNT instead of COUNTROWS</h3>
+                    <p>COUNT only works on columns with values. COUNTROWS counts all rows in a table.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                        Wrong: COUNT(Table[Column])<br>
+                        Right: COUNTROWS(Table)
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Mistake #2: Dividing without DIVIDE</h3>
+                    <p>Regular division crashes on divide-by-zero. DIVIDE handles it gracefully.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                        Wrong: [A] / [B]<br>
+                        Right: DIVIDE([A], [B], 0)
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Mistake #3: Creating Column when needing Measure</h3>
+                    <p>If you want a value that changes with filters, use a MEASURE, not a calculated column.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                        Column: Static, calculated once<br>
+                        Measure: Dynamic, respects filters
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: white; margin-bottom: 15px;">Mistake #4: Skipping Power Query</h3>
+                    <p>Trying to clean data with DAX is painful. Do it in Power Query where it's visual and repeatable.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                        Clean data = Power Query<br>
+                        Calculations = DAX
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Exercise Preview -->
+        <div class="slide">
+            <div class="demo-section">
+                <div class="demo-title">Exercise: Birth Records Dashboard</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Create a complete dashboard with 5 visualizations</div>
+
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Your Tasks:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">1. Load and clean data in Power Query</li>
+                                <li style="padding: 8px 0;">2. Create 3 DAX measures (Total, Average Weight, %)</li>
+                                <li style="padding: 8px 0;">3. Build: Card, Bar Chart, Line Chart, Map, Table</li>
+                                <li style="padding: 8px 0;">4. Add 3 slicers (Year, Gender, Area)</li>
+                                <li style="padding: 8px 0;">5. Design clean layout following best practices</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Required Measures:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">- Total Births = COUNTROWS(...)</li>
+                                <li style="padding: 8px 0;">- Avg Birth Weight = AVERAGE(...)</li>
+                                <li style="padding: 8px 0;">- Male % = DIVIDE(FILTER(...), ...)</li>
+                            </ul>
+                            <h3 style="color: white; margin-top: 30px; margin-bottom: 20px;">Bonus:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">- Add conditional formatting to table</li>
+                                <li style="padding: 8px 0;">- Create a custom tooltip</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.2rem;">
+                    <strong>Time: 45 minutes | Dataset: Nacidos Vivos (461 records)</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Summary and Key Takeaways (SUMMARY) -->
+        <div class="slide">
+            <h1>Key Takeaways</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;">
+                <div>
+                    <h2>Today You Learned:</h2>
+                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>&#127859; Power Query = Kitchen prep (clean before cooking)</li>
+                            <li>&#128200; DAX = SUM, AVERAGE, COUNT, DIVIDE</li>
+                            <li>&#9889; Measures = Dynamic, Columns = Static</li>
+                            <li>&#128202; 5 essential visuals + slicers</li>
+                            <li>&#127919; Power BI for dashboards, Python for analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Next Week (Week 10):</h2>
+                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <h3 style="color: white; margin-bottom: 15px;">Descriptive Statistics</h3>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>&#128200; Probability distributions</li>
+                            <li>&#128202; Confidence intervals</li>
+                            <li>&#128208; Hypothesis testing basics</li>
+                            <li>&#128640; Interpreting p-values</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                    <h2 style="color: white; margin-bottom: 15px;">The Golden Rule</h2>
+                    <p style="font-size: 1.5rem;">
+                        "Power Query cleans, DAX calculates.<br>
+                        Measures adapt, columns don't."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Resources and Next Steps (SUMMARY) -->
+        <div class="slide">
+            <h1>Resources and Next Steps</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0;">
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Free Learning Resources</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 15px;">
+                        <ul style="line-height: 2.2;">
+                            <li><strong>Microsoft Learn</strong>: Official Power BI learning paths</li>
+                            <li><strong>SQLBI.com</strong>: DAX patterns and best practices</li>
+                            <li><strong>Guy in a Cube</strong>: YouTube channel with tutorials</li>
+                            <li><strong>Power BI Community</strong>: Forums for questions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 20px;">For the Workshop</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 15px;">
+                        <ul style="line-height: 2.2;">
+                            <li><strong>Dataset</strong>: nacidos_vivos.csv (461 records)</li>
+                            <li><strong>Tool</strong>: Power BI Desktop (free download)</li>
+                            <li><strong>Time</strong>: 45 minutes</li>
+                            <li><strong>Deliverable</strong>: .pbix file with dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workshop-section" style="margin-top: 30px; padding: 40px;">
+                <h2 style="color: white; margin-bottom: 20px;">Your Task for Next Class</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 20px;">
+                    Complete the Birth Records Dashboard exercise.<br>
+                    Be ready to present your findings!
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                        <strong>5 Visualizations</strong>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                        <strong>3 DAX Measures</strong>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                        <strong>3 Slicers</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 16 - Course Wrap-up: Your Data Analytics Journey</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent-pink: #f093fb;
+            --accent-coral: #f5576c;
+            --success: #00b894;
+            --success-light: #00cec9;
+            --info: #0984e3;
+            --info-light: #74b9ff;
+            --warning: #fdcb6e;
+            --warning-dark: #e17055;
+            --danger: #ff7675;
+            --danger-light: #fd79a8;
+            --gold: #f1c40f;
+            --gold-dark: #f39c12;
+            --text-dark: #2c3e50;
+            --text-medium: #34495e;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+            --bg-medium: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--accent-pink));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 50%, var(--warning-dark) 100%);
+            color: white;
+        }
+
+        .title-slide::before {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-medium);
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-label.celebration {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: white;
+        }
+
+        .section-label.journey {
+            background: linear-gradient(135deg, var(--info-light), var(--info));
+            color: white;
+        }
+
+        .section-label.future {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .section-label.resources {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .section-label.feedback {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));
+            color: white;
+        }
+
+        .section-intro {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .section-intro h1 {
+            color: white;
+            font-size: 3rem;
+        }
+
+        .section-intro h1::after {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .celebration-card {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .celebration-card h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .celebration-card p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .concept-card.info {
+            border-left-color: var(--info);
+        }
+
+        .concept-card.success {
+            border-left-color: var(--success);
+        }
+
+        .concept-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .concept-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .concept-card.gold {
+            border-left-color: var(--gold);
+        }
+
+        /* Journey Timeline */
+        .journey-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .journey-phase {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: var(--bg-light);
+            transition: transform 0.3s ease;
+        }
+
+        .journey-phase:hover {
+            transform: translateX(10px);
+        }
+
+        .phase-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .phase-number.foundation {
+            background: linear-gradient(135deg, var(--info-light), var(--info));
+        }
+
+        .phase-number.exploration {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+        }
+
+        .phase-number.visualization {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));
+        }
+
+        .phase-number.advanced {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .phase-number.mastery {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        }
+
+        .phase-content {
+            flex: 1;
+        }
+
+        .phase-content h4 {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .phase-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .phase-weeks {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--primary);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .skill-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .skill-card.python { border-top-color: var(--info); }
+        .skill-card.pandas { border-top-color: var(--success); }
+        .skill-card.viz { border-top-color: var(--accent-coral); }
+        .skill-card.stats { border-top-color: var(--primary); }
+        .skill-card.ml { border-top-color: var(--gold); }
+        .skill-card.story { border-top-color: var(--accent-pink); }
+
+        /* Career Paths */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .career-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .career-card-header {
+            padding: 25px;
+            color: white;
+            text-align: center;
+        }
+
+        .career-card-header.analyst {
+            background: linear-gradient(135deg, var(--info-light), var(--info));
+        }
+
+        .career-card-header.scientist {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+        }
+
+        .career-card-header.engineer {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .career-card-body {
+            padding: 25px;
+        }
+
+        .career-card-body ul {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .career-card-body li::before {
+            content: ">";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* CRISP-DM Mastery */
+        .crisp-mastery {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .crisp-phase {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
+            padding: 20px 15px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .crisp-phase:hover {
+            transform: scale(1.05);
+        }
+
+        .crisp-phase.mastered {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .crisp-phase h4 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .crisp-phase.mastered h4 {
+            color: white;
+        }
+
+        .crisp-check {
+            font-size: 1.5rem;
+            color: var(--success);
+        }
+
+        .crisp-phase.mastered .crisp-check {
+            color: white;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .resource-category {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .resource-category h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .resource-category ul {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .resource-category li::before {
+            content: "->";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Visual Demo */
+        .visual-demo {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .visual-demo pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            text-align: left;
+            display: inline-block;
+        }
+
+        /* Key Takeaway */
+        .key-takeaway {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .key-takeaway h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        .quote-box p {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .quote-box .author {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-style: normal;
+        }
+
+        /* Feedback Section */
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feedback-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .feedback-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feedback-emoji {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Thank You Slide */
+        .thankyou-slide {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent-pink) 100%);
+            color: white;
+        }
+
+        .thankyou-slide h1 {
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 30px;
+        }
+
+        .thankyou-slide h1::after {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 30px;
+            border-radius: 15px;
+        }
+
+        .contact-item h4 {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .contact-item p {
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        /* Celebration Animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .concept-grid,
+            .career-grid,
+            .feedback-grid,
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crisp-mastery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 20</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide">
+            <h1>Congratulations, Data Analysts!</h1>
+            <h2>Course Wrap-up: Celebrating Your Journey</h2>
+            <div class="author">Data Analytics Course - Week 16 (Final Class)</div>
+            <div style="margin-top: 40px; opacity: 0.9; font-size: 1.2rem;">Universidad Cooperativa de Colombia</div>
+        </div>
+
+        <!-- Slide 2: Opening Reflection -->
+        <div class="slide">
+            <span class="section-label celebration">REFLECTION</span>
+            <h1>Look How Far You Have Come</h1>
+            <div class="concept-grid">
+                <div>
+                    <div class="visual-demo">
+                        <pre style="font-size: 1rem;">
+    Week 1 - You:
+    ============
+    "What is pandas?"
+    "What does .csv mean?"
+    "Why do we need to clean data?"
+    "Machine learning sounds impossible"
+
+
+    Week 16 - You:
+    ==============
+    "Let me train a Random Forest
+     with cross-validation and check
+     the F1 score on our test set."
+                        </pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="celebration-card" style="margin-top: 0;">
+                        <h2>16 Weeks of Growth</h2>
+                        <p>You started as beginners. You are finishing as data professionals.</p>
+                        <p style="margin-top: 20px; font-size: 1.1rem;">That transformation is something to be proud of.</p>
+                    </div>
+                    <div class="key-takeaway" style="margin-top: 20px;">
+                        <h3>Today's Goal</h3>
+                        <p>Celebrate, reflect, and plan your next steps</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Section - Your Journey -->
+        <div class="slide section-intro">
+            <h1>Part 1: Your Journey</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">From Week 1 to Week 16</p>
+        </div>
+
+        <!-- Slide 4: Journey Timeline -->
+        <div class="slide">
+            <span class="section-label journey">JOURNEY</span>
+            <h1>The Data Analytics Journey: Week by Week</h1>
+            <div class="journey-timeline">
+                <div class="journey-phase">
+                    <div class="phase-number foundation">1-3</div>
+                    <div class="phase-content">
+                        <h4>Foundation: Python and Data Handling</h4>
+                        <p>Course intro, Python basics, pandas fundamentals, data cleaning techniques</p>
+                    </div>
+                    <div class="phase-weeks">Weeks 1-3</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number exploration">4-6</div>
+                    <div class="phase-content">
+                        <h4>Exploration: Understanding Your Data</h4>
+                        <p>Univariate analysis, bivariate analysis, statistical exploration, patterns and relationships</p>
+                    </div>
+                    <div class="phase-weeks">Weeks 4-6</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number visualization">7-9</div>
+                    <div class="phase-content">
+                        <h4>Visualization: Telling Stories with Data</h4>
+                        <p>Static visualizations, interactive dashboards with Plotly, Power BI introduction</p>
+                    </div>
+                    <div class="phase-weeks">Weeks 7-9</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number advanced">10-12</div>
+                    <div class="phase-content">
+                        <h4>Advanced Analysis: Statistics and Storytelling</h4>
+                        <p>Statistical inference, data storytelling, presentation skills, midterm project</p>
+                    </div>
+                    <div class="phase-weeks">Weeks 10-12</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number mastery">13-16</div>
+                    <div class="phase-content">
+                        <h4>Mastery: Machine Learning and Projects</h4>
+                        <p>ML fundamentals, model comparison, deployment basics, final projects</p>
+                    </div>
+                    <div class="phase-weeks">Weeks 13-16</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Skills Acquired -->
+        <div class="slide">
+            <span class="section-label journey">SKILLS</span>
+            <h1>Skills You Have Mastered</h1>
+            <div class="skills-grid">
+                <div class="skill-card python">
+                    <h4>Python Programming</h4>
+                    <p>Variables, functions, loops, data structures</p>
+                </div>
+                <div class="skill-card pandas">
+                    <h4>Pandas Mastery</h4>
+                    <p>DataFrames, filtering, grouping, merging, transformations</p>
+                </div>
+                <div class="skill-card viz">
+                    <h4>Data Visualization</h4>
+                    <p>Matplotlib, Seaborn, Plotly, Power BI dashboards</p>
+                </div>
+                <div class="skill-card stats">
+                    <h4>Statistical Analysis</h4>
+                    <p>Descriptive stats, distributions, hypothesis testing</p>
+                </div>
+                <div class="skill-card ml">
+                    <h4>Machine Learning</h4>
+                    <p>Scikit-learn, model training, evaluation metrics</p>
+                </div>
+                <div class="skill-card story">
+                    <h4>Data Storytelling</h4>
+                    <p>Insights, narratives, presentations, stakeholder communication</p>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>These Are Industry-Ready Skills</h3>
+                <p>You now have the foundation that companies are actively hiring for.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: CRISP-DM Mastery -->
+        <div class="slide">
+            <span class="section-label journey">METHODOLOGY</span>
+            <h1>CRISP-DM: You Know the Process</h1>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 20px;">The industry-standard methodology for data projects</p>
+            <div class="crisp-mastery">
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Business Understanding</h4>
+                    <p style="font-size: 0.8rem;">Define the problem</p>
+                </div>
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Data Understanding</h4>
+                    <p style="font-size: 0.8rem;">Explore and assess</p>
+                </div>
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Data Preparation</h4>
+                    <p style="font-size: 0.8rem;">Clean and transform</p>
+                </div>
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Modeling</h4>
+                    <p style="font-size: 0.8rem;">Build and train</p>
+                </div>
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Evaluation</h4>
+                    <p style="font-size: 0.8rem;">Test and validate</p>
+                </div>
+                <div class="crisp-phase mastered">
+                    <div class="crisp-check">OK</div>
+                    <h4>Deployment</h4>
+                    <p style="font-size: 0.8rem;">Share and implement</p>
+                </div>
+            </div>
+            <div class="visual-demo">
+                <pre>
+    You have completed REAL projects using this methodology:
+
+    Midterm Project: Full EDA and visualization
+    Final Project:   End-to-end analysis with ML
+
+    This is exactly what you will do in your career!
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 7: Section - Career Paths -->
+        <div class="slide section-intro" style="background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);">
+            <h1>Part 2: What Is Next?</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Career paths in data</p>
+        </div>
+
+        <!-- Slide 8: Career Paths Overview -->
+        <div class="slide">
+            <span class="section-label future">CAREERS</span>
+            <h1>Three Paths in Data (All Start Here)</h1>
+            <div class="career-grid">
+                <div class="career-card">
+                    <div class="career-card-header analyst">
+                        <h3>Data Analyst</h3>
+                        <p style="opacity: 0.9;">Insights and Communication</p>
+                    </div>
+                    <div class="career-card-body">
+                        <ul>
+                            <li>Answer business questions</li>
+                            <li>Create dashboards and reports</li>
+                            <li>SQL + Python + BI tools</li>
+                            <li>Work with stakeholders</li>
+                            <li>Entry point: easiest</li>
+                        </ul>
+                        <p style="margin-top: 15px; color: var(--info); font-weight: bold;">You are ready for this!</p>
+                    </div>
+                </div>
+                <div class="career-card">
+                    <div class="career-card-header scientist">
+                        <h3>Data Scientist</h3>
+                        <p style="opacity: 0.9;">Models and Predictions</p>
+                    </div>
+                    <div class="career-card-body">
+                        <ul>
+                            <li>Build predictive models</li>
+                            <li>Advanced statistics</li>
+                            <li>Python + ML + deep learning</li>
+                            <li>Research and experimentation</li>
+                            <li>Entry point: +6-12 months</li>
+                        </ul>
+                        <p style="margin-top: 15px; color: var(--success); font-weight: bold;">Foundation built!</p>
+                    </div>
+                </div>
+                <div class="career-card">
+                    <div class="career-card-header engineer">
+                        <h3>Data Engineer</h3>
+                        <p style="opacity: 0.9;">Infrastructure and Scale</p>
+                    </div>
+                    <div class="career-card-body">
+                        <ul>
+                            <li>Build data pipelines</li>
+                            <li>Manage databases</li>
+                            <li>Python + SQL + cloud</li>
+                            <li>ETL and automation</li>
+                            <li>Entry point: +6-12 months</li>
+                        </ul>
+                        <p style="margin-top: 15px; color: var(--primary); font-weight: bold;">Python skills transfer!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: What to Learn Next by Path -->
+        <div class="slide">
+            <span class="section-label future">LEARNING PATH</span>
+            <h1>What to Learn Next (By Career Interest)</h1>
+            <div class="concept-grid">
+                <div class="concept-card info">
+                    <h3>If Data Analyst...</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> SQL (essential, start here!)</li>
+                        <li>> Advanced Power BI or Tableau</li>
+                        <li>> Excel power features</li>
+                        <li>> Business communication</li>
+                        <li>> Domain knowledge (finance, marketing, etc.)</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Timeline: 2-3 months to job-ready</p>
+                </div>
+                <div class="concept-card success">
+                    <h3>If Data Scientist...</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Advanced statistics and probability</li>
+                        <li>> More ML algorithms (XGBoost, neural nets)</li>
+                        <li>> Deep learning basics (TensorFlow, PyTorch)</li>
+                        <li>> Feature engineering techniques</li>
+                        <li>> Model deployment (Flask, FastAPI)</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Timeline: 6-12 months to job-ready</p>
+                </div>
+            </div>
+            <div class="concept-grid" style="margin-top: 20px;">
+                <div class="concept-card" style="border-left-color: var(--primary);">
+                    <h3>If Data Engineer...</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> SQL (advanced queries, optimization)</li>
+                        <li>> Cloud platforms (AWS, GCP, Azure)</li>
+                        <li>> Apache Spark basics</li>
+                        <li>> ETL tools (Airflow, dbt)</li>
+                        <li>> Docker and containerization</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Timeline: 6-12 months to job-ready</p>
+                </div>
+                <div class="concept-card warning">
+                    <h3>Universal Advice</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Build a portfolio (GitHub projects)</li>
+                        <li>> Practice on Kaggle datasets</li>
+                        <li>> Network on LinkedIn</li>
+                        <li>> Read job postings to see requirements</li>
+                        <li>> Never stop learning!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Section - Resources -->
+        <div class="slide section-intro" style="background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%);">
+            <h1>Part 3: Resources for Growth</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Your learning does not stop here</p>
+        </div>
+
+        <!-- Slide 11: Free Learning Resources -->
+        <div class="slide">
+            <span class="section-label resources">FREE RESOURCES</span>
+            <h1>Free Resources to Continue Learning</h1>
+            <div class="resources-grid">
+                <div class="resource-category">
+                    <h3>Online Courses (Free)</h3>
+                    <ul>
+                        <li>freeCodeCamp Data Analysis with Python</li>
+                        <li>Khan Academy Statistics</li>
+                        <li>Kaggle Learn (mini-courses)</li>
+                        <li>Google Data Analytics Certificate (audit free)</li>
+                        <li>Microsoft Learn - Data Fundamentals</li>
+                    </ul>
+                </div>
+                <div class="resource-category">
+                    <h3>Practice Platforms</h3>
+                    <ul>
+                        <li>Kaggle Competitions (real datasets)</li>
+                        <li>HackerRank SQL Practice</li>
+                        <li>LeetCode Database Problems</li>
+                        <li>DataCamp Practice (some free)</li>
+                        <li>Mode Analytics SQL Tutorial</li>
+                    </ul>
+                </div>
+                <div class="resource-category">
+                    <h3>Communities</h3>
+                    <ul>
+                        <li>r/datascience (Reddit)</li>
+                        <li>r/learnpython (Reddit)</li>
+                        <li>LinkedIn Data Science groups</li>
+                        <li>Discord: Python and Data Science servers</li>
+                        <li>Local meetups (check Meetup.com)</li>
+                    </ul>
+                </div>
+                <div class="resource-category">
+                    <h3>Documentation (Your Best Friend)</h3>
+                    <ul>
+                        <li>pandas.pydata.org (official docs)</li>
+                        <li>scikit-learn.org (ML reference)</li>
+                        <li>matplotlib.org (visualization)</li>
+                        <li>seaborn.pydata.org (statistical viz)</li>
+                        <li>Stack Overflow (problem solving)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Certifications -->
+        <div class="slide">
+            <span class="section-label resources">CERTIFICATIONS</span>
+            <h1>Certifications Worth Considering</h1>
+            <div class="concept-grid">
+                <div class="concept-card info">
+                    <h3>Entry Level (Recommended)</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Google Data Analytics Professional Certificate</li>
+                        <li>> IBM Data Analyst Professional Certificate</li>
+                        <li>> Microsoft Power BI Data Analyst</li>
+                        <li>> Tableau Desktop Specialist</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Cost: $40-300 USD | Time: 2-4 months</p>
+                </div>
+                <div class="concept-card success">
+                    <h3>Advanced (After More Experience)</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> AWS Certified Data Analytics</li>
+                        <li>> Google Cloud Professional Data Engineer</li>
+                        <li>> Azure Data Scientist Associate</li>
+                        <li>> Databricks Certified Associate</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Cost: $150-400 USD | Time: 3-6 months</p>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>Honest Advice on Certifications</h3>
+                <p>Certifications help with your first job, but PROJECTS and SKILLS matter more. Build your portfolio first, certify later if needed.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Building Your Portfolio -->
+        <div class="slide">
+            <span class="section-label resources">PORTFOLIO</span>
+            <h1>Your Portfolio: The Best Career Investment</h1>
+            <div class="visual-demo">
+                <pre style="font-size: 1rem;">
+    github.com/your-username/
+
+    repositories:
+    ============
+
+    student-dropout-prediction/     <- Your final project!
+       README.md                    <- Explain the problem and solution
+       notebooks/                   <- Jupyter notebooks
+       data/                        <- Sample data (or link to source)
+       results/                     <- Visualizations, model metrics
+
+    covid-data-analysis/            <- Another project
+    ecommerce-dashboard/            <- Power BI or Python viz
+    sql-practice/                   <- Your SQL exercises
+
+    Each project should have:
+    - Clear problem statement
+    - Data source documented
+    - Clean, commented code
+    - Visualizations
+    - Key findings / recommendations
+                </pre>
+            </div>
+            <div class="concept-grid">
+                <div class="concept-card gold">
+                    <h3>Portfolio Tips</h3>
+                    <ul style="list-style: none; line-height: 1.8;">
+                        <li>> Quality over quantity (3-5 good projects)</li>
+                        <li>> Write good READMEs (explain your thinking)</li>
+                        <li>> Include visualizations (recruiters love them)</li>
+                        <li>> Show variety (EDA, viz, ML)</li>
+                    </ul>
+                </div>
+                <div class="concept-card info">
+                    <h3>Project Ideas</h3>
+                    <ul style="list-style: none; line-height: 1.8;">
+                        <li>> Analyze Colombian open data (datos.gov.co)</li>
+                        <li>> Sports analytics (football, basketball)</li>
+                        <li>> Economic indicators analysis</li>
+                        <li>> Social media sentiment analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Section - Feedback -->
+        <div class="slide section-intro" style="background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-coral) 100%);">
+            <h1>Part 4: Course Retrospective</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Help us improve for future students</p>
+        </div>
+
+        <!-- Slide 15: Reflection Questions -->
+        <div class="slide">
+            <span class="section-label feedback">REFLECTION</span>
+            <h1>Let Us Reflect Together</h1>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <div class="feedback-emoji">+</div>
+                    <h4>What Worked Well?</h4>
+                    <p>Topics, activities, or methods that helped you learn effectively</p>
+                </div>
+                <div class="feedback-card">
+                    <div class="feedback-emoji">-</div>
+                    <h4>What Could Improve?</h4>
+                    <p>Areas where you struggled or wished for more support</p>
+                </div>
+                <div class="feedback-card">
+                    <div class="feedback-emoji">?</div>
+                    <h4>What Do You Wish We Covered?</h4>
+                    <p>Topics you wanted to learn but we did not have time for</p>
+                </div>
+            </div>
+            <div class="visual-demo">
+                <pre style="font-size: 1rem;">
+    Discussion Questions:
+
+    1. Which week or topic was most valuable to you? Why?
+
+    2. What was the most challenging part of the course?
+
+    3. Do you feel prepared to continue learning on your own?
+
+    4. What advice would you give to next semester's students?
+
+    5. Is there anything you wish we had done differently?
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 16: Anonymous Feedback -->
+        <div class="slide">
+            <span class="section-label feedback">FEEDBACK</span>
+            <h1>Your Feedback Matters</h1>
+            <div class="concept-grid">
+                <div class="celebration-card" style="margin: 0;">
+                    <h2>Please Complete the Survey</h2>
+                    <p style="margin-top: 20px;">Your honest feedback helps improve this course for future students.</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 15px; margin-top: 25px;">
+                        <p style="font-size: 1.3rem;">[Survey Link Will Be Shared]</p>
+                    </div>
+                    <p style="margin-top: 20px; opacity: 0.9;">Anonymous and confidential</p>
+                </div>
+                <div>
+                    <div class="concept-card success">
+                        <h3>What We Want to Know</h3>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>> Course pacing (too fast? too slow?)</li>
+                            <li>> Difficulty level of exercises</li>
+                            <li>> Quality of explanations</li>
+                            <li>> Usefulness of projects</li>
+                            <li>> Overall satisfaction</li>
+                        </ul>
+                    </div>
+                    <div class="key-takeaway" style="margin-top: 20px;">
+                        <h3>Be Honest</h3>
+                        <p>Constructive criticism helps more than polite praise!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Celebration Section -->
+        <div class="slide section-intro" style="background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);">
+            <h1>Part 5: Celebration</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">You earned this!</p>
+        </div>
+
+        <!-- Slide 18: Achievements -->
+        <div class="slide">
+            <span class="section-label celebration">ACHIEVEMENTS</span>
+            <h1>Look What You Accomplished</h1>
+            <div class="visual-demo" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: white;">
+                <pre style="color: white; font-size: 1.1rem;">
+    Your Data Analytics Achievement Log
+    ====================================
+
+    [X] Learned Python from scratch
+    [X] Mastered pandas for data manipulation
+    [X] Created professional visualizations
+    [X] Built interactive dashboards
+    [X] Applied statistical analysis
+    [X] Told stories with data
+    [X] Trained machine learning models
+    [X] Completed a full data science project
+    [X] Presented findings to stakeholders
+    [X] Survived 16 weeks of hard work!
+
+    Status: GRADUATED DATA ANALYST
+                </pre>
+            </div>
+            <div class="quote-box">
+                <p>"The expert in anything was once a beginner."</p>
+                <div class="author">- Helen Hayes</div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Staying Connected -->
+        <div class="slide">
+            <span class="section-label celebration">CONNECTIONS</span>
+            <h1>Stay Connected</h1>
+            <div class="concept-grid">
+                <div class="concept-card info">
+                    <h3>Keep in Touch</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Connect on LinkedIn</li>
+                        <li>> Share your projects and wins</li>
+                        <li>> Ask questions (I am happy to help)</li>
+                        <li>> Update me on your career progress</li>
+                    </ul>
+                </div>
+                <div class="concept-card success">
+                    <h3>Support Each Other</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Stay connected with classmates</li>
+                        <li>> Share job opportunities</li>
+                        <li>> Form study groups for new skills</li>
+                        <li>> Collaborate on projects</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>Your Network Is Your Net Worth</h3>
+                <p>The connections you made in this class can open doors throughout your career.</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 25px; border-radius: 15px; display: inline-block;">
+                    <h3 style="color: white; margin-bottom: 10px;">Mentorship Offer</h3>
+                    <p>If you ever need guidance on your data career, reach out. I am here to help.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Thank You -->
+        <div class="slide thankyou-slide">
+            <h1>Thank You</h1>
+            <p style="font-size: 1.8rem; margin-bottom: 30px; opacity: 0.95;">It has been an honor to be your instructor.</p>
+
+            <div style="background: rgba(255,255,255,0.2); padding: 40px; border-radius: 25px; margin: 30px 0;">
+                <p style="font-size: 1.3rem; line-height: 1.8;">
+                    You came in with curiosity.<br>
+                    You leave with skills.<br>
+                    You will go far.
+                </p>
+            </div>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>Email</h4>
+                    <p>[instructor email]</p>
+                </div>
+                <div class="contact-item">
+                    <h4>LinkedIn</h4>
+                    <p>[instructor LinkedIn]</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Office Hours</h4>
+                    <p>Always open for you</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <p style="font-size: 2rem; font-weight: bold;">Go make data-driven decisions!</p>
+                <p style="margin-top: 15px; opacity: 0.8; font-size: 1.1rem;">Universidad Cooperativa de Colombia - Data Analytics Course</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 11 - Data Storytelling: From Analysis to Narrative</title>
+    <style>
+        /* ===========================================
+           CSS VARIABLES - DATA STORYTELLING THEME
+           =========================================== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent: #f093fb;
+            --success: #00b894;
+            --success-dark: #00cec9;
+            --warning: #fdcb6e;
+            --warning-dark: #e17055;
+            --danger: #ff7675;
+            --danger-dark: #fd79a8;
+            --info: #74b9ff;
+            --info-dark: #0984e3;
+            --text-dark: #2c3e50;
+            --text-medium: #34495e;
+            --bg-light: #f8f9fa;
+            --bg-medium: #e9ecef;
+
+            /* Section-specific colors */
+            --hook-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --context-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --content-gradient: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            --summary-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--context-gradient);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===========================================
+           SLIDE BASE STYLES
+           =========================================== */
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--accent));
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* ===========================================
+           SECTION LABELS
+           =========================================== */
+        .section-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .section-label.hook {
+            background: var(--hook-gradient);
+        }
+
+        .section-label.context {
+            background: var(--context-gradient);
+        }
+
+        .section-label.content {
+            background: var(--content-gradient);
+        }
+
+        .section-label.summary {
+            background: var(--summary-gradient);
+        }
+
+        /* ===========================================
+           TITLE SLIDE
+           =========================================== */
+        .title-slide {
+            text-align: center;
+            background: var(--context-gradient);
+            color: white;
+        }
+
+        .title-slide::before {
+            display: none;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+            color: white;
+        }
+
+        .title-slide h1::after {
+            display: none;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+            color: white;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .title-slide .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 30px;
+            margin-top: 30px;
+            font-size: 1rem;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        /* ===========================================
+           HEADINGS
+           =========================================== */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--context-gradient);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-medium);
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        /* ===========================================
+           SECTION INTRO SLIDES
+           =========================================== */
+        .section-intro {
+            text-align: center;
+            color: white;
+        }
+
+        .section-intro.hook-section {
+            background: var(--hook-gradient);
+        }
+
+        .section-intro.context-section {
+            background: var(--context-gradient);
+        }
+
+        .section-intro.content-section {
+            background: var(--content-gradient);
+        }
+
+        .section-intro.summary-section {
+            background: var(--summary-gradient);
+        }
+
+        .section-intro::before {
+            display: none;
+        }
+
+        .section-intro h1 {
+            color: white;
+            font-size: 3rem;
+        }
+
+        .section-intro h1::after {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .section-intro p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        /* ===========================================
+           GRID LAYOUTS
+           =========================================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        /* ===========================================
+           BEFORE/AFTER COMPARISON
+           =========================================== */
+        .before-after-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .before-card {
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #b2bec3;
+        }
+
+        .before-card h3 {
+            color: #636e72;
+            margin-bottom: 20px;
+        }
+
+        .before-card h3::before {
+            content: 'BEFORE: ';
+            color: var(--danger);
+        }
+
+        .after-card {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid var(--success);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+        }
+
+        .after-card h3 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .after-card h3::before {
+            content: 'AFTER: ';
+        }
+
+        .transform-arrow {
+            font-size: 3rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* ===========================================
+           CARDS
+           =========================================== */
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-primary {
+            background: var(--context-gradient);
+            color: white;
+        }
+
+        .card-success {
+            background: var(--content-gradient);
+            color: white;
+        }
+
+        .card-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            color: white;
+        }
+
+        .card-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            color: white;
+        }
+
+        .card-info {
+            background: var(--summary-gradient);
+            color: white;
+        }
+
+        .card-light {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+            color: var(--text-dark);
+            border-left: 5px solid var(--primary);
+        }
+
+        .card h3 {
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .card-light h3 {
+            color: var(--primary);
+        }
+
+        /* ===========================================
+           NARRATIVE ARC VISUALIZATION
+           =========================================== */
+        .narrative-arc {
+            position: relative;
+            height: 300px;
+            margin: 40px 0;
+            background: var(--bg-light);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .arc-path {
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            top: 40px;
+        }
+
+        .arc-point {
+            position: absolute;
+            width: 80px;
+            text-align: center;
+        }
+
+        .arc-point .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: var(--primary);
+        }
+
+        .arc-point.situation { left: 5%; top: 70%; }
+        .arc-point.situation .dot { background: var(--info); }
+
+        .arc-point.complication { left: 35%; top: 20%; }
+        .arc-point.complication .dot { background: var(--danger); }
+
+        .arc-point.resolution { left: 70%; top: 70%; }
+        .arc-point.resolution .dot { background: var(--success); }
+
+        .arc-line {
+            position: absolute;
+            border: none;
+            height: 4px;
+            background: var(--primary);
+            transform-origin: left center;
+        }
+
+        .arc-line.line1 {
+            width: 200px;
+            left: 8%;
+            top: 50%;
+            transform: rotate(-35deg);
+        }
+
+        .arc-line.line2 {
+            width: 200px;
+            left: 45%;
+            top: 35%;
+            transform: rotate(35deg);
+        }
+
+        /* ===========================================
+           AUDIENCE CARDS
+           =========================================== */
+        .audience-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid var(--primary);
+        }
+
+        .audience-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .audience-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .audience-card ul {
+            list-style: none;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .audience-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-medium);
+        }
+
+        .audience-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* ===========================================
+           CHART JUNK EXAMPLES
+           =========================================== */
+        .chart-example {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-example pre {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            text-align: left;
+            margin: 20px 0;
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .chart-example.bad {
+            border: 3px dashed var(--danger);
+        }
+
+        .chart-example.bad h3 {
+            color: var(--danger);
+        }
+
+        .chart-example.good {
+            border: 3px solid var(--success);
+        }
+
+        .chart-example.good h3 {
+            color: var(--success);
+        }
+
+        /* ===========================================
+           PROCESS FLOW
+           =========================================== */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .process-step {
+            background: var(--context-gradient);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+        }
+
+        .process-step::after {
+            content: '\2192';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        .process-step strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* ===========================================
+           PRESENTATION DECK MOCKUP
+           =========================================== */
+        .deck-mockup {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .deck-slide {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.75rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .deck-slide:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .deck-slide .slide-num {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        /* ===========================================
+           CHECKLIST
+           =========================================== */
+        .checklist {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--bg-medium);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .check-box {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--success);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .check-box.checked {
+            background: var(--success);
+            color: white;
+        }
+
+        /* ===========================================
+           QUOTE BOX
+           =========================================== */
+        .quote-box {
+            background: var(--bg-light);
+            border-left: 5px solid var(--primary);
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 30px 0;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-medium);
+        }
+
+        .quote-box .author {
+            display: block;
+            margin-top: 15px;
+            font-size: 1rem;
+            font-style: normal;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* ===========================================
+           ALERT BOXES
+           =========================================== */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* ===========================================
+           TABLE
+           =========================================== */
+        .table-styled {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-styled thead {
+            background: var(--context-gradient);
+            color: white;
+        }
+
+        .table-styled th,
+        .table-styled td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table-styled tbody tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .table-styled tbody tr:hover {
+            background: var(--bg-medium);
+        }
+
+        /* ===========================================
+           KEY TAKEAWAY
+           =========================================== */
+        .key-takeaway {
+            background: var(--context-gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .key-takeaway h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        /* ===========================================
+           INTERACTIVE REVEAL
+           =========================================== */
+        .reveal-container {
+            margin: 30px 0;
+        }
+
+        .reveal-item {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+
+        .reveal-item:hover {
+            background: var(--bg-medium);
+            transform: translateX(10px);
+        }
+
+        .reveal-item.active {
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .reveal-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--bg-medium);
+        }
+
+        .reveal-item.active .reveal-content {
+            display: block;
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        /* Staggered animations */
+        .stagger > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger > *:nth-child(5) { animation-delay: 0.5s; }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .before-after-container {
+                grid-template-columns: 1fr;
+            }
+
+            .transform-arrow {
+                transform: rotate(90deg);
+            }
+
+            .deck-mockup {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .process-step::after {
+                content: '\2193';
+                right: auto;
+                bottom: -25px;
+                top: auto;
+                transform: none;
+            }
+        }
+
+        /* ===========================================
+           PRINT STYLES
+           =========================================== */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .slide {
+                display: flex !important;
+                page-break-after: always;
+                min-height: auto;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .nav-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 24</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+
+        <!-- =========================================
+             SLIDE 1: TITLE
+             ========================================= -->
+        <div class="slide title-slide">
+            <h1>Data Storytelling</h1>
+            <h2>Transforming Analysis into Compelling Narratives</h2>
+            <div class="author">Data Analytics Course - Week 11</div>
+            <div class="badge">Last class before Final Project Phase</div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 2: HOOK - THE PROBLEM
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label hook">HOOK</span>
+            <h1>Same Data, Different Impact</h1>
+
+            <div class="before-after-container">
+                <div class="before-card">
+                    <h3>Data Dump</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.6;">
+                        "Our analysis of 15,432 education records from datos.gov.co shows that the mean dropout rate is 4.7% with a standard deviation of 2.3%. The p-value for the urban-rural comparison was 0.003 with a confidence interval of [1.2, 2.8]. The correlation coefficient between teacher ratio and graduation rate is 0.67."
+                    </p>
+                    <div style="margin-top: 20px; color: #636e72; font-style: italic;">
+                        Audience reaction: Confused, disengaged, overwhelmed
+                    </div>
+                </div>
+
+                <div class="transform-arrow">\2192</div>
+
+                <div class="after-card">
+                    <h3>Data Story</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.6;">
+                        "Rural students are twice as likely to drop out as their urban peers. This gap costs Colombia 23,000 students per year. But schools that reduced class sizes saw dropout rates fall by 40%. Here is where we should invest."
+                    </p>
+                    <div style="margin-top: 20px; font-style: italic;">
+                        Audience reaction: Engaged, alarmed, ready to act
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-takeaway">
+                <h3>The difference is not in the data. It is in the storytelling.</h3>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 3: HOOK - WHY IT MATTERS
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label hook">HOOK</span>
+            <h1>The Career-Defining Skill</h1>
+
+            <div class="quote-box">
+                "The ability to take data, to be able to understand it, to process it, to extract value from it, to visualize it, to communicate it, is going to be a hugely important skill in the next decades."
+                <span class="author">- Hal Varian, Chief Economist at Google</span>
+            </div>
+
+            <div class="grid-3 stagger">
+                <div class="card card-danger fade-in">
+                    <h3>Technical Skills Alone</h3>
+                    <p style="font-size: 2.5rem; margin: 15px 0; text-align: center;">15%</p>
+                    <p>of the value you bring to an organization</p>
+                </div>
+                <div class="card card-warning fade-in">
+                    <h3>+ Visualization</h3>
+                    <p style="font-size: 2.5rem; margin: 15px 0; text-align: center;">45%</p>
+                    <p>People understand your findings</p>
+                </div>
+                <div class="card card-success fade-in">
+                    <h3>+ Storytelling</h3>
+                    <p style="font-size: 2.5rem; margin: 15px 0; text-align: center;">100%</p>
+                    <p>People ACT on your findings</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 30px;">
+                <strong>Reality check:</strong> Your analysis is only as valuable as the decisions it enables. If no one acts on your insights, did the analysis matter?
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 4: CONTEXT SECTION INTRO
+             ========================================= -->
+        <div class="slide section-intro context-section">
+            <h1>Why Storytelling Works</h1>
+            <p>The science behind narrative and decision-making</p>
+        </div>
+
+        <!-- =========================================
+             SLIDE 5: CONTEXT - BRAIN SCIENCE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label context">CONTEXT</span>
+            <h1>Your Brain on Stories</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2>Facts Alone</h2>
+                    <div class="card card-light" style="margin-top: 20px;">
+                        <p style="font-size: 1.1rem; margin-bottom: 15px;">
+                            When you hear statistics, only two areas of your brain activate:
+                        </p>
+                        <ul style="margin-left: 20px; line-height: 2;">
+                            <li>Broca's area (language processing)</li>
+                            <li>Wernicke's area (language comprehension)</li>
+                        </ul>
+                        <p style="margin-top: 20px; color: var(--danger); font-weight: bold;">
+                            Result: Data goes in, data goes out. No emotional connection.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h2>Facts + Story</h2>
+                    <div class="card card-success" style="margin-top: 20px;">
+                        <p style="font-size: 1.1rem; margin-bottom: 15px;">
+                            When data is wrapped in a story, your ENTIRE brain lights up:
+                        </p>
+                        <ul style="margin-left: 20px; line-height: 2; color: white;">
+                            <li>Motor cortex (action)</li>
+                            <li>Sensory cortex (feeling)</li>
+                            <li>Frontal cortex (planning)</li>
+                            <li>Limbic system (emotion)</li>
+                        </ul>
+                        <p style="margin-top: 20px; font-weight: bold;">
+                            Result: Data becomes memorable and actionable.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Stories are 22x more memorable than facts alone</h3>
+                <p>Stanford research shows narrative is the most effective way to transfer information</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 6: CONTEXT - DATA ROLES
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label context">CONTEXT</span>
+            <h1>Storytelling in Data Roles</h1>
+
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Primary Audience</th>
+                        <th>Storytelling Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Data Analyst</strong></td>
+                        <td>Business teams, managers</td>
+                        <td>Insights that drive daily decisions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Scientist</strong></td>
+                        <td>Technical + executive</td>
+                        <td>Model results translated to business impact</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BI Developer</strong></td>
+                        <td>End users, department heads</td>
+                        <td>Self-service insights with clear narrative</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Analytics Consultant</strong></td>
+                        <td>C-level executives, clients</td>
+                        <td>Strategic recommendations with ROI</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-success" style="margin-top: 30px;">
+                <strong>Common thread:</strong> In EVERY data role, you must translate technical findings into language your audience understands and cares about.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 7: CONTENT SECTION INTRO
+             ========================================= -->
+        <div class="slide section-intro content-section">
+            <h1>The Framework</h1>
+            <p>Building compelling data narratives</p>
+        </div>
+
+        <!-- =========================================
+             SLIDE 8: CONTENT - NARRATIVE ARC
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>The Data Narrative Arc</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-medium); margin-bottom: 20px;">
+                Every good data story follows a three-act structure
+            </p>
+
+            <div class="process-flow">
+                <div class="process-step" style="background: var(--summary-gradient);">
+                    <strong>SITUATION</strong>
+                    <span style="font-size: 0.9rem;">What is happening?</span>
+                </div>
+                <div class="process-step" style="background: var(--hook-gradient);">
+                    <strong>COMPLICATION</strong>
+                    <span style="font-size: 0.9rem;">Why is it a problem?</span>
+                </div>
+                <div class="process-step" style="background: var(--content-gradient);">
+                    <strong>RESOLUTION</strong>
+                    <span style="font-size: 0.9rem;">What should we do?</span>
+                </div>
+            </div>
+
+            <div class="grid-3" style="margin-top: 40px;">
+                <div class="card card-info">
+                    <h3>Situation</h3>
+                    <p style="margin-top: 10px;">"Colombia's education system serves 10 million students across 12,000 schools..."</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">Sets the context. Gives baseline numbers. Grounds the audience.</p>
+                </div>
+                <div class="card card-danger">
+                    <h3>Complication</h3>
+                    <p style="margin-top: 10px;">"But rural dropout rates are DOUBLE urban rates, and the gap is widening..."</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">Creates tension. Shows the problem. Raises stakes.</p>
+                </div>
+                <div class="card card-success">
+                    <h3>Resolution</h3>
+                    <p style="margin-top: 10px;">"Schools that implemented X saw 40% improvement. Here is how to scale it..."</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">Provides the answer. Gives actionable next steps.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 9: CONTENT - EXAMPLE NARRATIVE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Narrative Arc in Action</h1>
+
+            <div style="background: var(--bg-light); padding: 30px; border-radius: 15px;">
+                <div style="margin-bottom: 25px; padding-bottom: 25px; border-bottom: 2px solid var(--bg-medium);">
+                    <h3 style="color: var(--info-dark); margin-bottom: 10px;">SITUATION</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        "In 2024, Colombian public schools enrolled 8.2 million students. The national graduation rate is 82%, placing us 5th in Latin America."
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 25px; padding-bottom: 25px; border-bottom: 2px solid var(--bg-medium);">
+                    <h3 style="color: var(--danger); margin-bottom: 10px;">COMPLICATION</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        "However, this national average hides a critical divide. In rural Choco, only 58% of students graduate. That is 24 percentage points below Bogota. Every year, 45,000 rural students leave school before completion, often to support their families economically."
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="color: var(--success); margin-bottom: 10px;">RESOLUTION</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        "Our analysis of 200 high-performing rural schools reveals three factors that predict success: meal programs, teacher housing, and flexible schedules. Schools with all three have graduation rates matching urban schools. A 50 billion peso investment could close this gap within 5 years."
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <strong>Notice:</strong> The statistics support the narrative, they do not replace it. Each number has a purpose: context, tension, or solution.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 10: CONTENT - KNOW YOUR AUDIENCE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Know Your Audience</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-medium); margin-bottom: 30px;">
+                The same insight, presented three different ways
+            </p>
+
+            <div class="grid-3">
+                <div class="audience-card">
+                    <div class="audience-icon">C</div>
+                    <h3>Executive (CEO)</h3>
+                    <ul>
+                        <li><strong>Time:</strong> 30 seconds</li>
+                        <li><strong>Wants:</strong> Bottom line impact</li>
+                        <li><strong>Say:</strong> "This will save $2M/year"</li>
+                        <li><strong>Avoid:</strong> Technical details</li>
+                        <li><strong>Format:</strong> 1-2 slides max</li>
+                    </ul>
+                </div>
+                <div class="audience-card" style="border-top-color: var(--success);">
+                    <div class="audience-icon">M</div>
+                    <h3>Manager</h3>
+                    <ul>
+                        <li><strong>Time:</strong> 5 minutes</li>
+                        <li><strong>Wants:</strong> How to implement</li>
+                        <li><strong>Say:</strong> "Here is the 3-step plan"</li>
+                        <li><strong>Avoid:</strong> Overwhelming options</li>
+                        <li><strong>Format:</strong> 5-10 slides</li>
+                    </ul>
+                </div>
+                <div class="audience-card" style="border-top-color: var(--info);">
+                    <div class="audience-icon">T</div>
+                    <h3>Technical Team</h3>
+                    <ul>
+                        <li><strong>Time:</strong> 30 minutes</li>
+                        <li><strong>Wants:</strong> Methodology, caveats</li>
+                        <li><strong>Say:</strong> "Here is how we validated"</li>
+                        <li><strong>Avoid:</strong> Oversimplification</li>
+                        <li><strong>Format:</strong> Full report + appendix</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Rule: One presentation, one audience</h3>
+                <p>If you must present to mixed audiences, lead with the executive summary</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 11: CONTENT - AUDIENCE QUESTIONS
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Questions Each Audience Asks</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2 style="color: var(--primary);">Before You Present, Ask:</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">?</span>
+                            <div>
+                                <strong>What decision will this inform?</strong>
+                                <p style="font-size: 0.9rem; color: var(--text-medium);">If there is no decision, there is no story</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">?</span>
+                            <div>
+                                <strong>What does my audience already know?</strong>
+                                <p style="font-size: 0.9rem; color: var(--text-medium);">Do not explain what they already understand</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">?</span>
+                            <div>
+                                <strong>What do they care about most?</strong>
+                                <p style="font-size: 0.9rem; color: var(--text-medium);">Lead with what matters to THEM</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">?</span>
+                            <div>
+                                <strong>What might they resist?</strong>
+                                <p style="font-size: 0.9rem; color: var(--text-medium);">Address objections proactively</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2 style="color: var(--success);">The "So What" Test</h2>
+                    <div class="card card-light" style="margin-top: 20px;">
+                        <p style="font-size: 1.1rem; margin-bottom: 15px;">
+                            After every insight you present, ask yourself:
+                        </p>
+                        <div style="background: var(--context-gradient); color: white; padding: 20px; border-radius: 10px; text-align: center; font-size: 1.3rem; font-weight: bold;">
+                            "So what?"
+                        </div>
+                        <p style="margin-top: 15px; font-size: 1rem;">
+                            If you cannot answer why this matters to your audience, cut it or reframe it.
+                        </p>
+                    </div>
+
+                    <div class="alert alert-danger" style="margin-top: 20px;">
+                        <strong>Common mistake:</strong> Presenting everything you found instead of what matters.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 12: CONTENT - DESIGNING FOR MESSAGE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Design for Your Message</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-medium); margin-bottom: 30px;">
+                Start with the message, then choose the visual
+            </p>
+
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Your Message</th>
+                        <th>Best Chart Type</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Compare categories</td>
+                        <td>Bar chart (horizontal for many categories)</td>
+                        <td>"Dropout rates by department"</td>
+                    </tr>
+                    <tr>
+                        <td>Show change over time</td>
+                        <td>Line chart</td>
+                        <td>"Enrollment trends 2019-2024"</td>
+                    </tr>
+                    <tr>
+                        <td>Show composition</td>
+                        <td>Stacked bar or treemap</td>
+                        <td>"Budget allocation by category"</td>
+                    </tr>
+                    <tr>
+                        <td>Show relationship</td>
+                        <td>Scatter plot</td>
+                        <td>"Teacher ratio vs graduation rate"</td>
+                    </tr>
+                    <tr>
+                        <td>Show distribution</td>
+                        <td>Histogram or box plot</td>
+                        <td>"Score distribution by region"</td>
+                    </tr>
+                    <tr>
+                        <td>Show single KPI</td>
+                        <td>Big number with context</td>
+                        <td>"82% graduation rate (+3% from 2023)"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info" style="margin-top: 20px;">
+                <strong>Pro tip:</strong> If you need a legend, your chart might be too complex. Consider splitting into multiple charts.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 13: CONTENT - CHART JUNK
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Removing Chart Junk</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-medium); margin-bottom: 30px;">
+                Every non-data element competes for attention
+            </p>
+
+            <div class="grid-2">
+                <div class="chart-example bad">
+                    <h3>Before: Cluttered</h3>
+                    <pre>
+  DROPOUT RATES BY REGION (2024)
+  ================================
+
+     25% |    ####
+         |    ####  ####
+     20% |    ####  ####
+         |    ####  ####  ####
+     15% |    ####  ####  ####
+         |    ####  ####  ####  ####
+     10% |    ####  ####  ####  ####
+         |    ####  ####  ####  ####
+      5% +----+----+----+----+----+--
+         Choco Cauca Valle Bogota
+
+  Legend: #### = Dropout Rate
+  Source: datos.gov.co (2024)
+  Note: Data excludes private schools
+  Chart created by: Analytics Team
+                    </pre>
+                    <p style="color: var(--danger); margin-top: 10px;">3D effects, gridlines, redundant labels, unnecessary borders</p>
+                </div>
+
+                <div class="chart-example good">
+                    <h3>After: Clean</h3>
+                    <pre>
+  Rural vs Urban Dropout Rates
+
+
+  Choco         ||||||||||||||||| 17%
+
+  Cauca         |||||||||||| 12%
+
+  Valle         |||||||| 8%
+
+  Bogota        ||||| 5%
+
+
+        National average: 8.5%
+        ----------------------
+
+                    </pre>
+                    <p style="color: var(--success); margin-top: 10px;">Clear title, minimal ink, data speaks for itself</p>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Data-Ink Ratio: Maximize data, minimize decoration</h3>
+                <p>If you can remove it and the message stays clear, remove it</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 14: CONTENT - WHAT TO REMOVE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>The Declutter Checklist</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2 style="color: var(--danger);">Remove These</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>3D effects</strong> - Distort perception of values</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>Heavy gridlines</strong> - Use light gray or remove</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>Chart borders</strong> - Rarely necessary</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>Redundant labels</strong> - Do not label AND use a legend</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>Too many colors</strong> - Highlight only what matters</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">X</span>
+                            <div><strong>Logos on every slide</strong> - Once is enough</div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2 style="color: var(--success);">Add These</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>Action title</strong> - "Sales dropped 15%" not "Sales Chart"</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>Annotations</strong> - Call out key insights</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>Context</strong> - Comparison to target or benchmark</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>Strategic color</strong> - Red for bad, green for good</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>White space</strong> - Let the chart breathe</div>
+                        </li>
+                        <li>
+                            <span class="check-box checked">+</span>
+                            <div><strong>Source note</strong> - Builds credibility</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 15: CONTENT - PRESENTATION STRUCTURE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Building Your Data Presentation</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-medium); margin-bottom: 30px;">
+                The ideal structure for a 15-minute data presentation
+            </p>
+
+            <div class="deck-mockup">
+                <div class="deck-slide" style="background: var(--context-gradient); color: white;">
+                    <span class="slide-num">1</span>
+                    <strong>Title</strong>
+                    <span>Topic + Key Finding</span>
+                </div>
+                <div class="deck-slide">
+                    <span class="slide-num">2</span>
+                    <strong>The Hook</strong>
+                    <span>Surprising fact or question</span>
+                </div>
+                <div class="deck-slide">
+                    <span class="slide-num">3</span>
+                    <strong>Situation</strong>
+                    <span>Context and background</span>
+                </div>
+                <div class="deck-slide" style="background: #fff3cd;">
+                    <span class="slide-num">4</span>
+                    <strong>Complication</strong>
+                    <span>The problem revealed</span>
+                </div>
+                <div class="deck-slide">
+                    <span class="slide-num">5-7</span>
+                    <strong>Analysis</strong>
+                    <span>Key findings (1 per slide)</span>
+                </div>
+                <div class="deck-slide" style="background: #d4edda;">
+                    <span class="slide-num">8</span>
+                    <strong>Resolution</strong>
+                    <span>Recommendations</span>
+                </div>
+                <div class="deck-slide">
+                    <span class="slide-num">9</span>
+                    <strong>Next Steps</strong>
+                    <span>Clear actions</span>
+                </div>
+                <div class="deck-slide" style="background: var(--bg-medium);">
+                    <span class="slide-num">10</span>
+                    <strong>Appendix</strong>
+                    <span>Backup details</span>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 30px;">
+                <strong>The 1-3-1 Rule:</strong> 1 main message, supported by 3 key insights, leading to 1 recommendation.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 16: CONTENT - SLIDE DESIGN PRINCIPLES
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Slide Design Principles</h1>
+
+            <div class="grid-2">
+                <div class="card card-primary">
+                    <h3>One Idea Per Slide</h3>
+                    <p style="margin-top: 15px;">If you cannot summarize the slide in one sentence, split it.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Test: Can you "tweet" the slide's message?</p>
+                </div>
+                <div class="card card-success">
+                    <h3>Action Titles</h3>
+                    <p style="margin-top: 15px;">Titles should state the finding, not describe the chart.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">"Sales Fell 15% in Q3" not "Q3 Sales Data"</p>
+                </div>
+                <div class="card card-info">
+                    <h3>Visual Hierarchy</h3>
+                    <p style="margin-top: 15px;">Eyes should know where to look first, second, third.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Use size, color, and position to guide attention</p>
+                </div>
+                <div class="card card-warning">
+                    <h3>Annotate, Do Not Decorate</h3>
+                    <p style="margin-top: 15px;">Every element should earn its place on the slide.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Callouts guide; clip art distracts</p>
+                </div>
+            </div>
+
+            <div class="quote-box" style="margin-top: 30px;">
+                "If you cannot explain it simply, you do not understand it well enough."
+                <span class="author">- Albert Einstein</span>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 17: CONTENT - COLOR STRATEGY
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Strategic Use of Color</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2>Color as Meaning</h2>
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                            <div style="width: 50px; height: 50px; background: var(--danger); border-radius: 10px;"></div>
+                            <div>
+                                <strong>Red / Orange</strong>
+                                <p style="font-size: 0.9rem;">Negative, warning, below target</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                            <div style="width: 50px; height: 50px; background: var(--success); border-radius: 10px;"></div>
+                            <div>
+                                <strong>Green</strong>
+                                <p style="font-size: 0.9rem;">Positive, success, above target</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                            <div style="width: 50px; height: 50px; background: var(--primary); border-radius: 10px;"></div>
+                            <div>
+                                <strong>Blue</strong>
+                                <p style="font-size: 0.9rem;">Neutral, professional, primary data</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="width: 50px; height: 50px; background: #b2bec3; border-radius: 10px;"></div>
+                            <div>
+                                <strong>Gray</strong>
+                                <p style="font-size: 0.9rem;">Context, less important, background</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2>The Gray + Highlight Pattern</h2>
+                    <div class="card card-light" style="margin-top: 20px;">
+                        <p style="margin-bottom: 20px;">Make everything gray except what matters:</p>
+                        <pre style="background: white; padding: 15px; border-radius: 8px; font-family: monospace;">
+  Department Performance
+
+  Antioquia    ||||||||||  82%
+  Atlantico    ||||||||||  78%
+  Bogota       ||||||||||  85%
+  <span style="color: var(--danger); font-weight: bold;">Choco        ||||       42%  <-- FOCUS</span>
+  Valle        ||||||||||  79%
+  Cauca        ||||||||||  71%
+                        </pre>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-medium);">Gray pushes to background; color draws attention to the story.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 18: CONTENT - DATOS.GOV.CO EXAMPLE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Putting It Together: Education Story</h1>
+
+            <div style="background: var(--bg-light); padding: 30px; border-radius: 15px;">
+                <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px;">
+                    "Closing the Rural Education Gap"
+                </h2>
+
+                <div class="grid-3" style="margin-bottom: 30px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: var(--info-dark); font-weight: bold;">8.2M</div>
+                        <p>Students enrolled</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: var(--danger); font-weight: bold;">2x</div>
+                        <p>Rural dropout rate vs urban</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: var(--success); font-weight: bold;">40%</div>
+                        <p>Improvement with intervention</p>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 25px; border-radius: 10px; border-left: 5px solid var(--primary);">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">The Recommendation</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        Invest in rural teacher housing and meal programs in the 50 highest-dropout municipalities.
+                        Projected cost: 50B COP. Projected impact: 23,000 additional graduates per year.
+                        ROI: 4.2x based on increased lifetime earnings.
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 20px;">
+                <strong>Notice:</strong> Numbers tell the story. Each statistic has a purpose: scale, problem, solution.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 19: CONTENT - PRACTICE EXERCISE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Exercise: Before and After</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2>Transform This:</h2>
+                    <div class="card card-light" style="margin-top: 20px;">
+                        <p style="font-family: monospace; font-size: 0.9rem; line-height: 1.8;">
+                            "The data shows that when we analyzed the MEN_ESTADISTICAS dataset containing 15,432 records of school-level statistics from datos.gov.co for the year 2024, we found that the average (mean) dropout rate across all schools was 4.7% (SD = 2.3, 95% CI [4.5, 4.9]). When stratified by urban vs rural classification (n_urban = 8,234, n_rural = 7,198), we observed a statistically significant difference (t = 8.42, p < 0.001, Cohen's d = 0.71). The mean rural dropout rate was 6.2% compared to 3.4% for urban schools."
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h2>Into This:</h2>
+                    <div class="card card-success" style="margin-top: 20px; min-height: 200px;">
+                        <p style="font-size: 1.5rem; text-align: center; margin-bottom: 20px; padding-top: 30px;">
+                            Your turn!
+                        </p>
+                        <p style="text-align: center; font-size: 0.9rem; opacity: 0.9;">
+                            Apply: Situation-Complication-Resolution<br>
+                            Focus: What matters to the audience<br>
+                            Remove: Technical jargon
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Time: 5 minutes. Share your version with a partner.</h3>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 20: SUMMARY SECTION INTRO
+             ========================================= -->
+        <div class="slide section-intro summary-section">
+            <h1>Summary</h1>
+            <p>Key principles to remember</p>
+        </div>
+
+        <!-- =========================================
+             SLIDE 21: SUMMARY - CHECKLIST
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">SUMMARY</span>
+            <h1>Data Storytelling Checklist</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2>Before You Start</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">1</span>
+                            <div>
+                                <strong>Define your audience</strong>
+                                <p style="font-size: 0.9rem;">Executive, manager, or technical?</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">2</span>
+                            <div>
+                                <strong>State the decision</strong>
+                                <p style="font-size: 0.9rem;">What action should result from this?</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">3</span>
+                            <div>
+                                <strong>Find your "so what"</strong>
+                                <p style="font-size: 0.9rem;">Why should they care?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>While Building</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">4</span>
+                            <div>
+                                <strong>Follow the arc</strong>
+                                <p style="font-size: 0.9rem;">Situation - Complication - Resolution</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">5</span>
+                            <div>
+                                <strong>One idea per slide</strong>
+                                <p style="font-size: 0.9rem;">Can you tweet it?</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">6</span>
+                            <div>
+                                <strong>Declutter ruthlessly</strong>
+                                <p style="font-size: 0.9rem;">If in doubt, take it out</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div>
+                    <h2>For Every Chart</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">7</span>
+                            <div>
+                                <strong>Action title</strong>
+                                <p style="font-size: 0.9rem;">"Sales fell 15%" not "Sales chart"</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">8</span>
+                            <div>
+                                <strong>Gray + highlight</strong>
+                                <p style="font-size: 0.9rem;">Direct attention to what matters</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Before You Present</h2>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">9</span>
+                            <div>
+                                <strong>Practice out loud</strong>
+                                <p style="font-size: 0.9rem;">Transitions should flow naturally</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">10</span>
+                            <div>
+                                <strong>End with action</strong>
+                                <p style="font-size: 0.9rem;">Clear next steps for the audience</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 22: SUMMARY - KEY TAKEAWAYS
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">SUMMARY</span>
+            <h1>Key Takeaways</h1>
+
+            <div class="grid-3 stagger">
+                <div class="card card-primary fade-in">
+                    <h3>Data is Not the Story</h3>
+                    <p style="margin-top: 15px;">Data supports the story. The insight, the "so what," is what your audience needs.</p>
+                </div>
+                <div class="card card-success fade-in">
+                    <h3>Know Your Audience</h3>
+                    <p style="margin-top: 15px;">Executive wants the bottom line. Manager wants the how. Technical wants the proof.</p>
+                </div>
+                <div class="card card-info fade-in">
+                    <h3>Less is More</h3>
+                    <p style="margin-top: 15px;">Every element should earn its place. When in doubt, leave it out.</p>
+                </div>
+            </div>
+
+            <div class="quote-box" style="margin-top: 40px;">
+                "The goal is not to show data. The goal is to enable better decisions."
+                <span class="author">- Cole Nussbaumer Knaflic, Storytelling with Data</span>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 23: NEXT STEPS - FINAL PROJECT
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">SUMMARY</span>
+            <h1>Preparing for Your Final Project</h1>
+
+            <div class="grid-2">
+                <div>
+                    <h2>Final Project Requirements</h2>
+                    <div class="card card-primary" style="margin-top: 20px;">
+                        <ul style="list-style: none; line-height: 2.2;">
+                            <li><strong>Data Story:</strong> Full narrative arc (S-C-R)</li>
+                            <li><strong>Audience:</strong> Define who you are presenting to</li>
+                            <li><strong>Visualizations:</strong> Clean, decluttered, purposeful</li>
+                            <li><strong>Dashboard:</strong> Interactive (Power BI or Streamlit)</li>
+                            <li><strong>Presentation:</strong> 10-15 minutes, professional deck</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Evaluation Criteria</h2>
+                    <div class="card card-success" style="margin-top: 20px;">
+                        <ul style="list-style: none; line-height: 2.2;">
+                            <li><strong>30%:</strong> Technical analysis quality</li>
+                            <li><strong>30%:</strong> Data storytelling and narrative</li>
+                            <li><strong>20%:</strong> Visualization and dashboard</li>
+                            <li><strong>20%:</strong> Presentation delivery</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" style="margin-top: 30px;">
+                <strong>Start now:</strong> Your final project presentation is in Week 15. Use the remaining weeks to refine your story.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 24: CLOSING
+             ========================================= -->
+        <div class="slide section-intro context-section">
+            <h1>Data Storytelling</h1>
+            <p style="font-size: 1.8rem; margin-top: 20px;">Transform your analysis into impact</p>
+
+            <div style="margin-top: 60px; background: rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center;">
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Situation</h3>
+                        <p>Set the context</p>
+                    </div>
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Complication</h3>
+                        <p>Create tension</p>
+                    </div>
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Resolution</h3>
+                        <p>Provide the answer</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px;">
+                <p style="font-size: 1.3rem;">Questions?</p>
+                <p style="font-size: 1rem; margin-top: 15px; opacity: 0.8;">Julian Eduardo Garzon Giraldo, MsC</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">Data Analytics Course - UCC</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVIGATION SCRIPT -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.4s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Initialize reveal items
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

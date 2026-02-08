@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7 - Visualization Principles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --success-start: #00b894;
+            --success-end: #00cec9;
+            --danger-start: #ff7675;
+            --danger-end: #fd79a8;
+            --info-start: #74b9ff;
+            --info-end: #0984e3;
+            --warning-start: #fdcb6e;
+            --warning-end: #e17055;
+            --text-dark: #2c3e50;
+            --text-light: #718096;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-start);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Slide Container */
+        .slides-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            padding: 50px 60px;
+            min-height: 85vh;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Slide Types */
+        .slide-title {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-title h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-hook {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+        }
+
+        .section-context {
+            background: linear-gradient(135deg, var(--info-start), var(--info-end));
+            color: white;
+        }
+
+        .section-content {
+            background: linear-gradient(135deg, var(--success-start), var(--success-end));
+            color: white;
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, var(--warning-start), var(--warning-end));
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+        }
+
+        .card-primary { border-color: var(--primary-start); }
+        .card-success { border-color: var(--success-start); }
+        .card-danger { border-color: var(--danger-start); }
+        .card-info { border-color: var(--info-start); }
+        .card-warning { border-color: var(--warning-start); }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Comparison Layout */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .comparison-bad {
+            background: linear-gradient(135deg, rgba(255, 118, 117, 0.1), rgba(253, 121, 168, 0.1));
+            border: 2px solid var(--danger-start);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .comparison-good {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 206, 201, 0.1));
+            border: 2px solid var(--success-start);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .comparison-bad h3 { color: var(--danger-start); }
+        .comparison-good h3 { color: var(--success-start); }
+
+        /* Big Question */
+        .big-question {
+            font-size: 3rem;
+            text-align: center;
+            color: var(--text-dark);
+            padding: 60px 40px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .highlight-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+        }
+
+        /* Analogy Box */
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(116, 185, 255, 0.15), rgba(9, 132, 227, 0.15));
+            border-left: 5px solid var(--info-start);
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 25px 0;
+        }
+
+        .analogy-box .emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* List Styles */
+        ul.styled-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.styled-list li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        ul.styled-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            border-radius: 50%;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        table tr:hover td {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Chart Mock */
+        .chart-mock {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .chart-mock.bad {
+            background: linear-gradient(135deg, rgba(255, 118, 117, 0.1), rgba(253, 121, 168, 0.1));
+            border: 2px dashed var(--danger-start);
+        }
+
+        .chart-mock.good {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 206, 201, 0.1));
+            border: 2px dashed var(--success-start);
+        }
+
+        /* Bar Chart Visualization */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 180px;
+            padding: 20px;
+        }
+
+        .bar {
+            width: 50px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            transition: all 0.3s ease;
+        }
+
+        .bar-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        .bar-value {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            padding: 3px;
+        }
+
+        /* Data-ink example */
+        .data-ink-example {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .ink-ratio {
+            text-align: center;
+        }
+
+        .ink-ratio .number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Color Swatch */
+        .color-swatch {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Action Items */
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .action-content h4 {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .action-content p {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Sensitive Data Notice */
+        .sensitive-notice {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.2), rgba(225, 112, 85, 0.2));
+            border: 2px solid var(--warning-start);
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin: 20px 0;
+        }
+
+        .sensitive-notice h4 {
+            color: var(--warning-end);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .formula {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            color: var(--text-dark);
+            margin: 15px 0;
+        }
+
+        /* Quiz/Exercise Box */
+        .exercise-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid var(--primary-start);
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin: 20px 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Print styles */
+        @media print {
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                display: flex !important;
+            }
+            .nav-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Previous</button>
+        <span class="slide-counter" id="slideCounter">1 / 18</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="slides-container">
+
+        <!-- ==================== SLIDE 1: HOOK - Big Question ==================== -->
+        <div class="slide slide-title active">
+            <span class="section-label section-hook">HOOK</span>
+            <div class="big-question">
+                Why do some charts tell stories while others just confuse?
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: HOOK - The Problem ==================== -->
+        <div class="slide">
+            <span class="section-label section-hook">HOOK</span>
+            <h2>The Same Data, Two Realities</h2>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>Chart A</h3>
+                    <div class="chart-mock bad">
+                        <p style="font-size: 1rem; text-align: center;">
+                            3D pie chart with 12 slices<br>
+                            Rainbow colors<br>
+                            Rotated at 45 degrees<br>
+                            Exploded segments<br>
+                            Shadows everywhere
+                        </p>
+                    </div>
+                    <p style="margin-top: 15px; text-align: center;">
+                        "What... am I looking at?"
+                    </p>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Chart B</h3>
+                    <div class="chart-mock good">
+                        <p style="font-size: 1rem; text-align: center;">
+                            Simple bar chart<br>
+                            Two colors (gray + highlight)<br>
+                            Clear labels<br>
+                            Sorted by value<br>
+                            Title tells the story
+                        </p>
+                    </div>
+                    <p style="margin-top: 15px; text-align: center;">
+                        "Category X leads with 45%"
+                    </p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>The difference? Visualization principles.</h3>
+                <p>Today you will learn the rules that separate insight from noise.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: CONTEXT - Why Visualization ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXT</span>
+            <h2>Why Visualization Matters</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>A table with 1,000 rows is data. A chart that shows the pattern is insight.</strong></p>
+            </div>
+
+            <div class="grid-3" style="margin-top: 30px;">
+                <div class="card card-info">
+                    <h3 style="text-align: center;">Speed</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">0.1s</p>
+                    <p style="text-align: center;">Time to see a pattern in a well-designed chart</p>
+                </div>
+
+                <div class="card card-primary">
+                    <h3 style="text-align: center;">Memory</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">65%</p>
+                    <p style="text-align: center;">Information retained from visuals vs 10% from text</p>
+                </div>
+
+                <div class="card card-success">
+                    <h3 style="text-align: center;">Decisions</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">5x</p>
+                    <p style="text-align: center;">Faster decisions with visual data presentation</p>
+                </div>
+            </div>
+
+            <div class="card card-warning" style="margin-top: 30px;">
+                <p><strong>But bad visualization is worse than no visualization.</strong> It misleads, confuses, and erodes trust in your analysis.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: CONTEXT - Sensitive Data Notice ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXT</span>
+            <h2>Today's Dataset: A Note on Responsibility</h2>
+
+            <div class="sensitive-notice">
+                <h4>Sensitive Data Handling</h4>
+                <p style="color: var(--text-dark);">
+                    Today we work with child abuse cases from Palmira (391 records). This dataset is real and represents real suffering.
+                </p>
+            </div>
+
+            <div class="grid-2" style="margin-top: 25px;">
+                <div class="card card-primary">
+                    <h3>Why Use This Data?</h3>
+                    <ul class="styled-list">
+                        <li>Real social impact - data can drive policy</li>
+                        <li>Teaches ethical data handling</li>
+                        <li>Shows how visualization can advocate for change</li>
+                        <li>Prepares you for real-world complexity</li>
+                    </ul>
+                </div>
+
+                <div class="card card-danger">
+                    <h3>Our Rules Today</h3>
+                    <ul class="styled-list">
+                        <li>Focus on patterns, not individual cases</li>
+                        <li>Emphasize prevention and understanding</li>
+                        <li>No sensationalism in our visuals</li>
+                        <li>Respect the gravity of the subject</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 25px;">
+                <p>As analysts, we have a responsibility to handle sensitive data with care. Our visualizations should inform and help, never exploit.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: CONTENT - Tufte's Data-Ink Ratio ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Tufte's Data-Ink Ratio</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Edward Tufte:</strong> "The best visualization is one where removing any element would reduce the data communicated."</p>
+            </div>
+
+            <div class="formula-box">
+                <p>The Principle:</p>
+                <div class="formula">
+                    Data-Ink Ratio = Ink used for data / Total ink used
+                </div>
+                <p style="margin-top: 10px;">Goal: Maximize this ratio (get it as close to 1 as possible)</p>
+            </div>
+
+            <div class="grid-2" style="margin-top: 25px;">
+                <div>
+                    <h3 style="color: var(--danger-start);">Non-Data Ink (Remove It)</h3>
+                    <ul class="styled-list">
+                        <li>3D effects and shadows</li>
+                        <li>Decorative gridlines</li>
+                        <li>Background images</li>
+                        <li>Excessive borders</li>
+                        <li>Redundant labels</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--success-start);">Data Ink (Keep It)</h3>
+                    <ul class="styled-list">
+                        <li>Bars, lines, points (the data itself)</li>
+                        <li>Axis labels (minimum needed)</li>
+                        <li>Clear title</li>
+                        <li>Legend (only if necessary)</li>
+                        <li>Key annotations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: CONTENT - Data-Ink Examples ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Data-Ink Ratio: Before and After</h2>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>Low Data-Ink Ratio</h3>
+                    <div class="chart-mock bad" style="min-height: 220px;">
+                        <div style="text-align: left; font-size: 0.9rem;">
+                            <p style="margin-bottom: 10px;">Chart includes:</p>
+                            <p>- Heavy gridlines (both directions)</p>
+                            <p>- 3D effect on bars</p>
+                            <p>- Gradient fills</p>
+                            <p>- Drop shadows</p>
+                            <p>- Box around legend</p>
+                            <p>- Border around chart</p>
+                            <p>- Decorative background</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px; font-weight: bold; color: var(--danger-start);">
+                        Ratio: ~30% data ink
+                    </p>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>High Data-Ink Ratio</h3>
+                    <div class="chart-mock good" style="min-height: 220px;">
+                        <div style="text-align: left; font-size: 0.9rem;">
+                            <p style="margin-bottom: 10px;">Chart includes:</p>
+                            <p>- Flat bars (the data)</p>
+                            <p>- Minimal axis labels</p>
+                            <p>- Clear title</p>
+                            <p>- White background</p>
+                            <p>- No gridlines (or subtle horizontal)</p>
+                            <p>- Direct labels on bars</p>
+                            <p style="margin-top: 20px; font-style: italic;">Nothing else.</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px; font-weight: bold; color: var(--success-start);">
+                        Ratio: ~90% data ink
+                    </p>
+                </div>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <p><strong>Tufte's Test:</strong> Look at your chart. Can you remove anything without losing data? If yes, remove it.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: CONTENT - The 5-Second Rule ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>The 5-Second Rule</h2>
+
+            <div class="highlight-box">
+                <h3>If someone cannot understand your chart in 5 seconds, it is too complex.</h3>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="card card-primary">
+                    <h3>What Should Be Instant</h3>
+                    <ul class="styled-list">
+                        <li>What am I looking at? (title)</li>
+                        <li>What is being compared? (x-axis)</li>
+                        <li>What is being measured? (y-axis)</li>
+                        <li>What is the main takeaway?</li>
+                    </ul>
+                </div>
+
+                <div class="card card-warning">
+                    <h3>Signs of Complexity</h3>
+                    <ul class="styled-list">
+                        <li>More than 5-7 categories</li>
+                        <li>Multiple y-axes</li>
+                        <li>Legend with 10+ items</li>
+                        <li>Need to read fine print</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exercise-box" style="margin-top: 25px;">
+                <h3>The Test</h3>
+                <p style="margin-top: 10px;">Show your chart to someone for 5 seconds, then hide it. Ask them: "What did you see?"</p>
+                <p style="margin-top: 10px;">If they cannot answer, simplify.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: CONTENT - Chart Selection Guide ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Choosing the Right Chart</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Chart selection is like choosing transportation:</strong> You would not take a bicycle to cross an ocean or a plane to go next door.</p>
+            </div>
+
+            <table style="margin-top: 25px;">
+                <tr>
+                    <th>Question You Are Answering</th>
+                    <th>Chart Type</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>How do categories compare?</td>
+                    <td><strong>Bar chart</strong></td>
+                    <td>Cases by age group</td>
+                </tr>
+                <tr>
+                    <td>How did something change over time?</td>
+                    <td><strong>Line chart</strong></td>
+                    <td>Monthly cases 2020-2024</td>
+                </tr>
+                <tr>
+                    <td>What is the relationship between two things?</td>
+                    <td><strong>Scatter plot</strong></td>
+                    <td>Age vs. report delay</td>
+                </tr>
+                <tr>
+                    <td>What is the distribution?</td>
+                    <td><strong>Histogram</strong></td>
+                    <td>Distribution of victim ages</td>
+                </tr>
+                <tr>
+                    <td>What are the parts of a whole?</td>
+                    <td><strong>Pie / Stacked bar</strong></td>
+                    <td>Types of abuse (only if 2-5 parts!)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ==================== SLIDE 9: CONTENT - Bar Charts ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Bar Charts: The Workhorse</h2>
+
+            <p style="margin-bottom: 20px;">Use for comparing <strong>discrete categories</strong>. The most versatile chart type.</p>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>Common Mistakes</h3>
+                    <ul class="styled-list">
+                        <li>Y-axis not starting at zero (distorts comparison)</li>
+                        <li>Too many bars (more than 10-12)</li>
+                        <li>Unsorted bars (random order)</li>
+                        <li>3D effects (impossible to read values)</li>
+                        <li>Rainbow colors (no meaning)</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Best Practices</h3>
+                    <ul class="styled-list">
+                        <li>Start y-axis at zero</li>
+                        <li>Sort by value (descending usually)</li>
+                        <li>Use horizontal bars for long labels</li>
+                        <li>One color, highlight the key bar</li>
+                        <li>Direct label values on bars</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <p><strong>When to use horizontal bars:</strong> When category names are long or when you have many categories (easier to read).</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10: CONTENT - Line Charts ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Line Charts: Showing Trends</h2>
+
+            <p style="margin-bottom: 20px;">Use for <strong>continuous data over time</strong>. The line implies a connection between points.</p>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>Common Mistakes</h3>
+                    <ul class="styled-list">
+                        <li>Using for non-continuous data</li>
+                        <li>Too many lines (spaghetti chart)</li>
+                        <li>Truncated y-axis (exaggerates trends)</li>
+                        <li>Missing data points without indication</li>
+                        <li>Dual y-axes (confusing correlation)</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Best Practices</h3>
+                    <ul class="styled-list">
+                        <li>Maximum 4-5 lines</li>
+                        <li>Highlight the important line with color</li>
+                        <li>Label lines directly (not in legend)</li>
+                        <li>Show data points if few observations</li>
+                        <li>Indicate gaps or missing data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card card-warning" style="margin-top: 20px;">
+                <p><strong>Warning:</strong> A line implies continuity. Do not use lines for categorical data (months as categories) unless you mean to show the trend.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11: CONTENT - Scatter Plots ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Scatter Plots: Finding Relationships</h2>
+
+            <p style="margin-bottom: 20px;">Use to show the <strong>relationship between two numeric variables</strong>.</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card card-primary" style="margin-bottom: 20px;">
+                        <h3>What to Look For</h3>
+                        <ul class="styled-list">
+                            <li>Positive relationship (up and to the right)</li>
+                            <li>Negative relationship (down and to the right)</li>
+                            <li>No relationship (random scatter)</li>
+                            <li>Clusters (groups in the data)</li>
+                            <li>Outliers (points far from the rest)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card card-success">
+                        <h3>Best Practices</h3>
+                        <ul class="styled-list">
+                            <li>Add a trend line if appropriate</li>
+                            <li>Use transparency for overlapping points</li>
+                            <li>Color/size can encode a third variable</li>
+                            <li>Label outliers or interesting points</li>
+                            <li>Keep axes proportional to data range</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-danger" style="margin-top: 20px;">
+                <p><strong>Remember:</strong> Correlation does not imply causation. Ice cream sales and drownings both increase in summer, but ice cream does not cause drowning!</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12: CONTENT - Pie Charts ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Pie Charts: Use With Extreme Caution</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Pie charts are the most misused chart type.</strong> Humans are bad at comparing angles and areas.</p>
+            </div>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>When NOT to Use</h3>
+                    <ul class="styled-list">
+                        <li>More than 5 categories</li>
+                        <li>Similar-sized slices</li>
+                        <li>Need to compare exact values</li>
+                        <li>Data does not sum to 100%</li>
+                        <li>Comparing multiple pies</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: bold; color: var(--danger-start);">
+                        In most cases, a bar chart is better!
+                    </p>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>When Pie Charts Work</h3>
+                    <ul class="styled-list">
+                        <li>2-3 categories only</li>
+                        <li>One category dominates (showing majority)</li>
+                        <li>Parts of a whole message</li>
+                        <li>Audience expects pie (budgets, shares)</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: bold; color: var(--success-start);">
+                        "75% of cases are in category X"
+                    </p>
+                </div>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <p><strong>Alternative:</strong> Consider a stacked bar chart or waffle chart for part-to-whole relationships with more categories.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13: CONTENT - Color Principles ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Color: Highlight, Do Not Decorate</h2>
+
+            <div class="highlight-box">
+                <h3>Gray is your best friend. Color is the exception, not the rule.</h3>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div>
+                    <h3>The 7 Color Lessons</h3>
+                    <table style="font-size: 0.95rem;">
+                        <tr><td>1</td><td>Color grabs attention</td></tr>
+                        <tr><td>2</td><td>Color signals where to look</td></tr>
+                        <tr><td>3</td><td>Use color sparingly</td></tr>
+                        <tr><td>4</td><td>Color carries quantitative value</td></tr>
+                        <tr><td>5</td><td>Color carries meaning</td></tr>
+                        <tr><td>6</td><td>Not everyone sees color</td></tr>
+                        <tr><td>7</td><td>Be consistent with color</td></tr>
+                    </table>
+                </div>
+
+                <div>
+                    <div class="card card-success" style="margin-bottom: 20px;">
+                        <h3>The Strategy</h3>
+                        <p style="margin-top: 10px;">Make everything gray. Then add ONE color to highlight your key message.</p>
+                        <div class="color-swatch" style="margin-top: 15px;">
+                            <div class="swatch" style="background: #cbd5e0;"></div>
+                            <div class="swatch" style="background: #a0aec0;"></div>
+                            <div class="swatch" style="background: #718096;"></div>
+                            <div class="swatch" style="background: #667eea;"></div>
+                        </div>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Gray, gray, gray... HIGHLIGHT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14: CONTENT - Color Meanings ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>Color Meanings and Accessibility</h2>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Cultural Associations</h3>
+                    <table style="font-size: 0.95rem;">
+                        <tr>
+                            <td><div class="swatch" style="background: #0984e3; display: inline-block; vertical-align: middle;"></div></td>
+                            <td><strong>Blue</strong></td>
+                            <td>Trust, calm, professional</td>
+                        </tr>
+                        <tr>
+                            <td><div class="swatch" style="background: #00b894; display: inline-block; vertical-align: middle;"></div></td>
+                            <td><strong>Green</strong></td>
+                            <td>Good, growth, go</td>
+                        </tr>
+                        <tr>
+                            <td><div class="swatch" style="background: #ff7675; display: inline-block; vertical-align: middle;"></div></td>
+                            <td><strong>Red</strong></td>
+                            <td>Danger, error, stop</td>
+                        </tr>
+                        <tr>
+                            <td><div class="swatch" style="background: #fdcb6e; display: inline-block; vertical-align: middle;"></div></td>
+                            <td><strong>Orange/Yellow</strong></td>
+                            <td>Warning, attention</td>
+                        </tr>
+                        <tr>
+                            <td><div class="swatch" style="background: #718096; display: inline-block; vertical-align: middle;"></div></td>
+                            <td><strong>Gray</strong></td>
+                            <td>Neutral, secondary</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div>
+                    <div class="card card-danger" style="margin-bottom: 20px;">
+                        <h3>Colorblind Accessibility</h3>
+                        <p style="margin-top: 10px;">8% of men have some form of color blindness.</p>
+                        <ul class="styled-list">
+                            <li>Never rely on color ALONE</li>
+                            <li>Avoid red-green as only differentiator</li>
+                            <li>Use patterns, labels, or shapes too</li>
+                            <li>Test with colorblind simulators</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <p><strong>Safe palette:</strong> Blue + Orange is colorblind-friendly. Blue + Gray for emphasis is always safe.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 15: CONTENT - Chart Checklist ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENT</span>
+            <h2>The Visualization Checklist</h2>
+
+            <p style="margin-bottom: 20px;">Before sharing any chart, verify:</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card card-primary">
+                        <h3>Content</h3>
+                        <ul class="styled-list">
+                            <li>Title tells the story (not just describes)</li>
+                            <li>Axes are labeled clearly</li>
+                            <li>Data source is cited</li>
+                            <li>Units are specified</li>
+                            <li>Right chart type for the question</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card card-success">
+                        <h3>Design</h3>
+                        <ul class="styled-list">
+                            <li>Passes the 5-second rule</li>
+                            <li>High data-ink ratio</li>
+                            <li>Color used meaningfully</li>
+                            <li>No 3D effects or chartjunk</li>
+                            <li>Accessible for colorblind</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box" style="margin-top: 25px;">
+                <h3>Good Title vs. Bad Title</h3>
+                <div class="grid-2" style="margin-top: 15px;">
+                    <div>
+                        <p style="color: var(--danger-start);"><strong>Bad:</strong> "Cases by Year"</p>
+                        <p style="font-size: 0.95rem;">(Describes the chart)</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--success-start);"><strong>Good:</strong> "Cases doubled from 2020 to 2023"</p>
+                        <p style="font-size: 0.95rem;">(Tells the story)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 16: SUMMARY - Key Takeaways ==================== -->
+        <div class="slide">
+            <span class="section-label section-summary">SUMMARY</span>
+            <h2>Key Takeaways</h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="action-item">
+                        <div class="action-number">1</div>
+                        <div class="action-content">
+                            <h4>Maximize Data-Ink Ratio</h4>
+                            <p>Remove everything that is not data</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-number">2</div>
+                        <div class="action-content">
+                            <h4>5-Second Rule</h4>
+                            <p>If it takes longer to understand, simplify</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-number">3</div>
+                        <div class="action-content">
+                            <h4>Choose Charts by Question</h4>
+                            <p>Bar for comparison, Line for trends, Scatter for relationships</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="action-item">
+                        <div class="action-number">4</div>
+                        <div class="action-content">
+                            <h4>Color to Highlight</h4>
+                            <p>Gray everything, color only the focus</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-number">5</div>
+                        <div class="action-content">
+                            <h4>Respect Sensitive Data</h4>
+                            <p>Visualize to inform, never to sensationalize</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-number">6</div>
+                        <div class="action-content">
+                            <h4>Title Tells the Story</h4>
+                            <p>Not what the chart is, but what it means</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 17: SUMMARY - Exercise ==================== -->
+        <div class="slide">
+            <span class="section-label section-summary">SUMMARY</span>
+            <h2>In-Class Exercise: Redesign Challenge</h2>
+
+            <div class="card card-primary" style="margin-bottom: 25px;">
+                <h3>Your Task</h3>
+                <p style="margin-top: 10px;">Using the child abuse cases dataset, you will receive 3 "bad" visualizations. Apply today's principles to redesign each one.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card card-info">
+                    <h3 style="text-align: center;">Chart 1</h3>
+                    <p style="text-align: center; margin-top: 10px;">3D pie chart with 8 slices showing case types</p>
+                    <p style="text-align: center; margin-top: 15px; font-weight: bold;">Redesign as: ?</p>
+                </div>
+
+                <div class="card card-info">
+                    <h3 style="text-align: center;">Chart 2</h3>
+                    <p style="text-align: center; margin-top: 10px;">Rainbow bar chart with unsorted categories</p>
+                    <p style="text-align: center; margin-top: 15px; font-weight: bold;">Redesign as: ?</p>
+                </div>
+
+                <div class="card card-info">
+                    <h3 style="text-align: center;">Chart 3</h3>
+                    <p style="text-align: center; margin-top: 10px;">Spaghetti line chart with 10 lines</p>
+                    <p style="text-align: center; margin-top: 15px; font-weight: bold;">Redesign as: ?</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 25px;">
+                <p>For each redesign, explain: What principle did you apply and why is the new version better?</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 18: SUMMARY - Next Steps ==================== -->
+        <div class="slide">
+            <span class="section-label section-summary">SUMMARY</span>
+            <h2>Next Steps</h2>
+
+            <div class="action-item">
+                <div class="action-number">1</div>
+                <div class="action-content">
+                    <h4>Today: Complete the redesign exercise</h4>
+                    <p>Apply principles to transform 3 bad charts into good ones</p>
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-number">2</div>
+                <div class="action-content">
+                    <h4>This Week: Workshop on Budget Execution data</h4>
+                    <p>Create 5 publication-ready visualizations with proper color palette</p>
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-number">3</div>
+                <div class="action-content">
+                    <h4>Next Class: Interactive Viz with Plotly and Streamlit</h4>
+                    <p>Take your static charts and make them interactive</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>Remember</h3>
+                <p>A beautiful chart that no one understands has zero value.<br>A simple chart that delivers insight is priceless.</p>
+            </div>
+
+            <div class="card card-success" style="margin-top: 25px; text-align: center;">
+                <h3>Questions?</h3>
+                <p style="margin-top: 10px;">Email: [Institutional email] | Office hours: By appointment</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        updateCounter();
+    </script>
+</body>
+</html>

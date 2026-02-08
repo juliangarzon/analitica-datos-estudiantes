@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6 - Milestone 1: Project Proposal Presentations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide::before {
+            display: none;
+        }
+
+        .title-slide h1 {
+            font-size: 3.2rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .card-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .card-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .card-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .card-light {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            border-left: 5px solid #667eea;
+        }
+
+        .card h3 {
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .card-light h3 {
+            color: #667eea;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .objectives-list {
+            display: grid;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.1);
+        }
+
+        .check-icon {
+            width: 28px;
+            height: 28px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .timeline-time {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .milestone-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .team-slot {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .team-slot:nth-child(odd) {
+            border-left-color: #00b894;
+        }
+
+        .rubric-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .rubric-criteria {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .rubric-weight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Previous</button>
+        <span class="slide-counter" id="slideCounter">1 / 12</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide">
+            <div class="milestone-badge">MILESTONE 1</div>
+            <h1>Project Proposal Presentations</h1>
+            <h2>Week 6 - Data Analytics</h2>
+            <div class="author">Julian Eduardo Garzon Giraldo, MsC</div>
+            <div style="margin-top: 40px; opacity: 0.8;">Universidad Cooperativa de Colombia - I/2025</div>
+        </div>
+
+        <!-- Slide 2: Today's Agenda -->
+        <div class="slide">
+            <h1>Today's Session</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>What We'll Do</h2>
+                    <div class="objectives-list">
+                        <div class="objective-item">
+                            <div class="check-icon">1</div>
+                            <div>Quick recap: What makes a strong proposal</div>
+                        </div>
+                        <div class="objective-item">
+                            <div class="check-icon">2</div>
+                            <div>Presentation format and expectations</div>
+                        </div>
+                        <div class="objective-item">
+                            <div class="check-icon">3</div>
+                            <div>Team presentations (8-10 min each)</div>
+                        </div>
+                        <div class="objective-item">
+                            <div class="check-icon">4</div>
+                            <div>Peer feedback and Q&A</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2>This is Important Because...</h2>
+                    <div class="card card-primary">
+                        <p style="font-size: 1.2rem; margin-bottom: 20px;">
+                            Your project proposal sets the foundation for the entire semester.
+                        </p>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>A clear problem = focused analysis</li>
+                            <li>Good questions = meaningful insights</li>
+                            <li>Solid methodology = credible results</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Recap - Strong Proposal Elements -->
+        <div class="slide">
+            <h1>What Makes a Strong Proposal?</h1>
+            <div class="grid-3">
+                <div class="card card-info">
+                    <h3>Dataset Selection</h3>
+                    <ul style="list-style: none; margin-top: 15px; line-height: 1.8;">
+                        <li>From datos.gov.co</li>
+                        <li>Sufficient rows (1000+)</li>
+                        <li>Multiple variables (8+)</li>
+                        <li>Mix of numeric & categorical</li>
+                        <li>Recent and relevant</li>
+                    </ul>
+                </div>
+                <div class="card card-success">
+                    <h3>Problem Statement</h3>
+                    <ul style="list-style: none; margin-top: 15px; line-height: 1.8;">
+                        <li>Clear and specific</li>
+                        <li>Real-world relevance</li>
+                        <li>Answerable with data</li>
+                        <li>Not too broad</li>
+                        <li>Stakeholder identified</li>
+                    </ul>
+                </div>
+                <div class="card card-warning">
+                    <h3>Research Questions</h3>
+                    <ul style="list-style: none; margin-top: 15px; line-height: 1.8;">
+                        <li>Exactly 3 questions</li>
+                        <li>Specific and measurable</li>
+                        <li>Connected to problem</li>
+                        <li>Answerable with EDA</li>
+                        <li>Progressive complexity</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="concept-box">
+                <strong>Remember:</strong> Your proposal is a contract with yourself. The clearer you are now, the easier your analysis will be later.
+            </div>
+        </div>
+
+        <!-- Slide 4: Research Questions - Good vs Bad -->
+        <div class="slide">
+            <h1>Research Questions: Good vs. Weak</h1>
+            <div class="grid-2">
+                <div class="card card-danger" style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);">
+                    <h3 style="color: white;">Weak Questions</h3>
+                    <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                        <li>"What is the data about?"</li>
+                        <li>"Is there any pattern?"</li>
+                        <li>"What can we learn?"</li>
+                        <li>"How does everything relate?"</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic;">Too vague - no clear direction</p>
+                </div>
+                <div class="card card-success">
+                    <h3 style="color: white;">Strong Questions</h3>
+                    <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                        <li>"Which municipalities have the highest water consumption per capita?"</li>
+                        <li>"Is there a correlation between population density and crime rates?"</li>
+                        <li>"How has air quality changed in Bogota from 2018-2023?"</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic;">Specific, measurable, actionable</p>
+                </div>
+            </div>
+            <div class="alert alert-info" style="margin-top: 30px;">
+                <strong>Pro Tip:</strong> If you can't immediately think of HOW to answer a question with your data, it needs to be more specific.
+            </div>
+        </div>
+
+        <!-- Slide 5: Presentation Format -->
+        <div class="slide">
+            <h1>Presentation Format</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>Time Allocation</h2>
+                    <div class="card card-primary">
+                        <table style="width: 100%; color: white;">
+                            <tr>
+                                <td style="padding: 10px 0;"><strong>Presentation:</strong></td>
+                                <td style="text-align: right;">8 minutes</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px 0;"><strong>Q&A:</strong></td>
+                                <td style="text-align: right;">2 minutes</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px 0;"><strong>Transition:</strong></td>
+                                <td style="text-align: right;">1 minute</td>
+                            </tr>
+                            <tr style="border-top: 1px solid rgba(255,255,255,0.3);">
+                                <td style="padding: 10px 0;"><strong>Total per team:</strong></td>
+                                <td style="text-align: right;"><strong>11 minutes</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="alert alert-warning" style="margin-top: 20px;">
+                        <strong>Warning:</strong> Presentations will be stopped at 8 minutes. Practice your timing!
+                    </div>
+                </div>
+                <div>
+                    <h2>Required Slides</h2>
+                    <div class="objectives-list">
+                        <div class="objective-item" style="border-left-color: #667eea;">
+                            <div class="check-icon" style="background: #667eea;">1</div>
+                            <div>Title + Team Members</div>
+                        </div>
+                        <div class="objective-item" style="border-left-color: #74b9ff;">
+                            <div class="check-icon" style="background: #74b9ff;">2</div>
+                            <div>Dataset Overview (source, size, variables)</div>
+                        </div>
+                        <div class="objective-item" style="border-left-color: #00b894;">
+                            <div class="check-icon" style="background: #00b894;">3</div>
+                            <div>Problem Statement & Motivation</div>
+                        </div>
+                        <div class="objective-item" style="border-left-color: #fdcb6e;">
+                            <div class="check-icon" style="background: #fdcb6e;">4</div>
+                            <div>Three Research Questions</div>
+                        </div>
+                        <div class="objective-item" style="border-left-color: #f093fb;">
+                            <div class="check-icon" style="background: #f093fb;">5</div>
+                            <div>Methodology Plan (CRISP-DM phases)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Evaluation Criteria Overview -->
+        <div class="slide">
+            <h1>Evaluation Criteria</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Each criterion is scored 1-5. Total: 25 points</p>
+
+            <div class="rubric-row">
+                <div class="rubric-criteria">
+                    <h3>1. Dataset Selection</h3>
+                    <p>Relevance to Colombia, data quality, feasibility for analysis</p>
+                </div>
+                <div class="rubric-weight">20%</div>
+            </div>
+
+            <div class="rubric-row">
+                <div class="rubric-criteria">
+                    <h3>2. Problem Statement</h3>
+                    <p>Clarity, specificity, real-world importance</p>
+                </div>
+                <div class="rubric-weight">20%</div>
+            </div>
+
+            <div class="rubric-row">
+                <div class="rubric-criteria">
+                    <h3>3. Research Questions</h3>
+                    <p>Well-formed, answerable, progressive complexity</p>
+                </div>
+                <div class="rubric-weight">25%</div>
+            </div>
+
+            <div class="rubric-row">
+                <div class="rubric-criteria">
+                    <h3>4. Methodology Plan</h3>
+                    <p>CRISP-DM alignment, appropriate techniques planned</p>
+                </div>
+                <div class="rubric-weight">20%</div>
+            </div>
+
+            <div class="rubric-row">
+                <div class="rubric-criteria">
+                    <h3>5. Presentation Quality</h3>
+                    <p>Clarity, organization, visual aids, time management</p>
+                </div>
+                <div class="rubric-weight">15%</div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 30px;">
+                <strong>Full rubric available:</strong> Check the course repository for detailed scoring criteria.
+            </div>
+        </div>
+
+        <!-- Slide 7: Presentation Schedule -->
+        <div class="slide">
+            <h1>Presentation Schedule</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Teams present in the order shown below</p>
+
+            <div class="grid-2">
+                <div>
+                    <h2>First Half</h2>
+                    <div class="team-slot">
+                        <span><strong>Team 1:</strong> [Team Name]</span>
+                        <span style="color: #667eea;">0:00 - 0:11</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 2:</strong> [Team Name]</span>
+                        <span style="color: #00b894;">0:11 - 0:22</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 3:</strong> [Team Name]</span>
+                        <span style="color: #667eea;">0:22 - 0:33</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 4:</strong> [Team Name]</span>
+                        <span style="color: #00b894;">0:33 - 0:44</span>
+                    </div>
+                </div>
+                <div>
+                    <h2>Second Half</h2>
+                    <div class="team-slot">
+                        <span><strong>Team 5:</strong> [Team Name]</span>
+                        <span style="color: #667eea;">0:50 - 1:01</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 6:</strong> [Team Name]</span>
+                        <span style="color: #00b894;">1:01 - 1:12</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 7:</strong> [Team Name]</span>
+                        <span style="color: #667eea;">1:12 - 1:23</span>
+                    </div>
+                    <div class="team-slot">
+                        <span><strong>Team 8:</strong> [Team Name]</span>
+                        <span style="color: #00b894;">1:23 - 1:34</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 30px; text-align: center;">
+                <strong>5-minute break</strong> between first and second half
+            </div>
+        </div>
+
+        <!-- Slide 8: Peer Feedback Guidelines -->
+        <div class="slide">
+            <h1>Peer Feedback Guidelines</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Your feedback helps your classmates improve their projects</p>
+
+            <div class="grid-2">
+                <div class="card card-success">
+                    <h3 style="color: white;">Good Feedback</h3>
+                    <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                        <li>"Your research question about X could be more specific by adding Y"</li>
+                        <li>"I suggest visualizing the relationship between A and B"</li>
+                        <li>"Consider whether Z might be a confounding variable"</li>
+                        <li>"The problem statement was very clear and compelling"</li>
+                    </ul>
+                </div>
+                <div class="card card-danger" style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);">
+                    <h3 style="color: white;">Unhelpful Feedback</h3>
+                    <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                        <li>"It was good" (too vague)</li>
+                        <li>"I don't like the topic" (not constructive)</li>
+                        <li>"The slides were boring" (subjective)</li>
+                        <li>"You should change everything" (overwhelming)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 30px;">
+                <h3>Feedback Framework: WWW</h3>
+                <ul style="margin-top: 15px; line-height: 2;">
+                    <li><strong>What</strong> worked well? (Be specific)</li>
+                    <li><strong>What</strong> could be improved? (Be constructive)</li>
+                    <li><strong>What</strong> question do you have? (Show engagement)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Q&A Tips -->
+        <div class="slide">
+            <h1>Handling Q&A</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>As a Presenter</h2>
+                    <div class="card card-info">
+                        <ul style="list-style: none; line-height: 2;">
+                            <li><strong>Listen fully</strong> before responding</li>
+                            <li><strong>It's OK to say</strong> "We haven't considered that yet, but we will"</li>
+                            <li><strong>Be honest</strong> about limitations</li>
+                            <li><strong>Thank</strong> the questioner for their input</li>
+                            <li><strong>Keep answers</strong> brief (30-60 seconds)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>As an Audience Member</h2>
+                    <div class="card card-primary">
+                        <ul style="list-style: none; line-height: 2;">
+                            <li><strong>Ask clarifying questions</strong>, not gotchas</li>
+                            <li><strong>Focus on</strong> methodology and feasibility</li>
+                            <li><strong>Be respectful</strong> of time limits</li>
+                            <li><strong>One question</strong> at a time</li>
+                            <li><strong>Build on</strong> others' questions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning" style="margin-top: 30px;">
+                <strong>Remember:</strong> This is a learning environment. Questions should help, not embarrass.
+            </div>
+        </div>
+
+        <!-- Slide 10: What Happens Next -->
+        <div class="slide">
+            <h1>After Today: Next Steps</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>This Week</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-time">Day 1-2</div>
+                            <div class="timeline-content">
+                                <strong>Incorporate Feedback</strong>
+                                <p>Refine research questions based on today's discussion</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">Day 3-4</div>
+                            <div class="timeline-content">
+                                <strong>Begin Data Cleaning</strong>
+                                <p>Apply Week 3 techniques to your dataset</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">Day 5-7</div>
+                            <div class="timeline-content">
+                                <strong>Start EDA</strong>
+                                <p>Univariate analysis of key variables</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2>Coming Up</h2>
+                    <div class="card card-primary">
+                        <h3 style="color: white;">Week 7: Data Visualization</h3>
+                        <p style="margin-top: 15px;">Advanced matplotlib and seaborn for compelling visualizations</p>
+                    </div>
+                    <div class="card card-warning" style="margin-top: 20px;">
+                        <h3 style="color: white;">Week 12: Milestone 2</h3>
+                        <p style="margin-top: 15px;">Complete EDA with visualizations and initial insights</p>
+                    </div>
+                    <div class="card card-success" style="margin-top: 20px;">
+                        <h3 style="color: white;">Week 16: Final Project</h3>
+                        <p style="margin-top: 15px;">Full analysis, storytelling, and recommendations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Before We Begin -->
+        <div class="slide">
+            <h1>Before We Begin</h1>
+            <div style="text-align: center;">
+                <div class="card card-light" style="display: inline-block; max-width: 700px; text-align: left;">
+                    <h2>Final Checklist for Presenters</h2>
+                    <ul style="list-style: none; margin-top: 20px; line-height: 2.5;">
+                        <li><input type="checkbox" style="transform: scale(1.5); margin-right: 15px;"> Slides are ready and tested</li>
+                        <li><input type="checkbox" style="transform: scale(1.5); margin-right: 15px;"> All team members know their parts</li>
+                        <li><input type="checkbox" style="transform: scale(1.5); margin-right: 15px;"> Dataset link is accessible</li>
+                        <li><input type="checkbox" style="transform: scale(1.5); margin-right: 15px;"> Practiced within 8 minutes</li>
+                        <li><input type="checkbox" style="transform: scale(1.5); margin-right: 15px;"> Prepared for potential questions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="grid-3" style="margin-top: 40px;">
+                <div class="alert alert-info">
+                    <strong>Technical Issues?</strong><br>
+                    Raise your hand immediately. We'll troubleshoot quickly.
+                </div>
+                <div class="alert alert-success">
+                    <strong>Nervous?</strong><br>
+                    That's normal! Take a breath. You know your project better than anyone.
+                </div>
+                <div class="alert alert-warning">
+                    <strong>Running Late?</strong><br>
+                    Skip to your most important points. Cover research questions first.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Let's Begin -->
+        <div class="slide title-slide">
+            <div class="milestone-badge">MILESTONE 1</div>
+            <h1>Let the Presentations Begin!</h1>
+            <h2>First Team, Please Come Forward</h2>
+            <div style="margin-top: 50px;">
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 15px; display: inline-block;">
+                    <p style="font-size: 1.3rem; margin-bottom: 15px;">Remember:</p>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">8 minutes presentation + 2 minutes Q&A</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px; opacity: 0.8;">
+                Good luck to all teams!
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

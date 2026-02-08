@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 15 - Milestone 3: Final Project Presentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --background: #ffffff;
+            --text: #1e293b;
+            --code-bg: #f1f5f9;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .slides {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.title {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .slide.title h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide.title .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .slide.title .meta {
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        .slide.section {
+            text-align: center;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+        }
+
+        .slide.section h1 {
+            font-size: 3rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 1rem;
+        }
+
+        p code, li code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .columns-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .highlight.success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+        }
+
+        .highlight.info {
+            background: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+
+        .card {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-top: 4px solid var(--primary);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .card ul {
+            margin-left: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        .card li {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            left: 5%;
+            right: 5%;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-item .number {
+            width: 3rem;
+            height: 3rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 0.5rem;
+        }
+
+        .timeline-item .label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .rubric-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .rubric-item {
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .rubric-item .percentage {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .rubric-item .name {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '[ ]';
+            position: absolute;
+            left: 0;
+            font-family: monospace;
+            color: var(--secondary);
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 60vh;
+            margin: 1rem auto;
+            display: block;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .nav-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            color: var(--secondary);
+            font-size: 0.875rem;
+        }
+
+        @media print {
+            .slides {
+                overflow: visible;
+                height: auto;
+            }
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+            .progress, .nav-hint {
+                display: none;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--code-bg);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .do-box {
+            background: #d1fae5;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-top: 4px solid #10b981;
+        }
+
+        .dont-box {
+            background: #fee2e2;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-top: 4px solid #ef4444;
+        }
+
+        .do-box h3, .dont-box h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .do-box h3 { color: #059669; }
+        .dont-box h3 { color: #dc2626; }
+
+        .do-box ul, .dont-box ul {
+            margin-left: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        .do-box li, .dont-box li {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="slides" id="slides">
+        <!-- Title Slide -->
+        <section class="slide title">
+            <h1>Milestone 3: Final Presentation</h1>
+            <p class="subtitle">Your Data Analytics Journey - From Raw Data to Business Impact</p>
+            <p class="meta">Data Analytics Course | Week 15<br>Universidad Cooperativa de Colombia</p>
+        </section>
+
+        <!-- Objectives -->
+        <section class="slide">
+            <h1>Today's Session</h1>
+            <ul>
+                <li>Understand final presentation expectations and structure</li>
+                <li>Review the complete CRISP-DM project lifecycle</li>
+                <li>Master storytelling techniques for data presentations</li>
+                <li>Prepare for Q&A and technical questions</li>
+                <li>Review grading rubric and success criteria</li>
+            </ul>
+            <div class="highlight success">
+                <strong>Congratulations!</strong> You have completed an end-to-end data analytics project using real Colombian government data.
+            </div>
+        </section>
+
+        <!-- Journey Recap -->
+        <section class="slide">
+            <h1>Your Journey: 15 Weeks of Growth</h1>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="number">1-3</div>
+                    <div class="label">Python &<br>Foundations</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="number">4-5</div>
+                    <div class="label">EDA &<br>Milestone 1</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="number">6-9</div>
+                    <div class="label">Visualization<br>& Power BI</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="number">10</div>
+                    <div class="label">Milestone 2</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="number">11-14</div>
+                    <div class="label">Machine<br>Learning</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="number">15</div>
+                    <div class="label">Final<br>Presentation</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem;">You started with a dataset from datos.gov.co. Now you deliver actionable insights.</p>
+        </section>
+
+        <!-- Section: Presentation Structure -->
+        <section class="slide section">
+            <h1>Presentation Structure</h1>
+            <p class="subtitle">The Complete Project Story</p>
+        </section>
+
+        <!-- Required Sections -->
+        <section class="slide">
+            <h1>Required Presentation Sections</h1>
+            <div class="columns">
+                <div>
+                    <h2>Part 1: Foundation (5 min)</h2>
+                    <ul>
+                        <li>Problem statement & business context</li>
+                        <li>Data source and relevance</li>
+                        <li>Stakeholder identification</li>
+                        <li>Project objectives</li>
+                    </ul>
+                    <h2>Part 2: Exploration (5 min)</h2>
+                    <ul>
+                        <li>Dataset overview</li>
+                        <li>Key EDA findings</li>
+                        <li>Data quality challenges</li>
+                        <li>Feature engineering decisions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Part 3: Modeling (5 min)</h2>
+                    <ul>
+                        <li>Model selection rationale</li>
+                        <li>Training process</li>
+                        <li>Evaluation metrics</li>
+                        <li>Model comparison</li>
+                    </ul>
+                    <h2>Part 4: Impact (5 min)</h2>
+                    <ul>
+                        <li>Key insights discovered</li>
+                        <li>Actionable recommendations</li>
+                        <li>Limitations & future work</li>
+                        <li>Business value proposition</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CRISP-DM Alignment -->
+        <section class="slide">
+            <h1>CRISP-DM: Your Project Framework</h1>
+            <pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                     CRISP-DM in Your Project                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   1. Business Understanding     -->  Problem & Stakeholders     │
+│          |                                                      │
+│          v                                                      │
+│   2. Data Understanding         -->  EDA & Pattern Discovery    │
+│          |                                                      │
+│          v                                                      │
+│   3. Data Preparation           -->  Cleaning & Features        │
+│          |                                                      │
+│          v                                                      │
+│   4. Modeling                   -->  ML Algorithms              │
+│          |                                                      │
+│          v                                                      │
+│   5. Evaluation                 -->  Metrics & Validation       │
+│          |                                                      │
+│          v                                                      │
+│   6. Deployment                 -->  Recommendations & Impact   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+        </section>
+
+        <!-- Grading Overview -->
+        <section class="slide">
+            <h1>Grading Rubric Overview</h1>
+            <div class="rubric-preview">
+                <div class="rubric-item">
+                    <div class="percentage">10%</div>
+                    <div class="name">Business Understanding</div>
+                </div>
+                <div class="rubric-item">
+                    <div class="percentage">15%</div>
+                    <div class="name">Data Understanding</div>
+                </div>
+                <div class="rubric-item">
+                    <div class="percentage">10%</div>
+                    <div class="name">Data Preparation</div>
+                </div>
+                <div class="rubric-item">
+                    <div class="percentage">20%</div>
+                    <div class="name">Modeling</div>
+                </div>
+            </div>
+            <div class="rubric-preview" style="margin-top: 1rem;">
+                <div class="rubric-item">
+                    <div class="percentage">15%</div>
+                    <div class="name">Evaluation</div>
+                </div>
+                <div class="rubric-item">
+                    <div class="percentage">15%</div>
+                    <div class="name">Insights & Recommendations</div>
+                </div>
+                <div class="rubric-item">
+                    <div class="percentage">15%</div>
+                    <div class="name">Storytelling & Presentation</div>
+                </div>
+                <div class="rubric-item" style="background: #dbeafe; border-top: 4px solid #3b82f6;">
+                    <div class="percentage">100%</div>
+                    <div class="name">Total</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Storytelling -->
+        <section class="slide section">
+            <h1>Storytelling for Impact</h1>
+            <p class="subtitle">Transform Data into Decisions</p>
+        </section>
+
+        <!-- The Data Story Arc -->
+        <section class="slide">
+            <h1>The Data Story Arc</h1>
+            <pre><code>                    ┌─────────────────────┐
+                    │   CLIMAX: Insight   │
+                   /│   "We discovered    │\
+                  / │    that..."         │ \
+                 /  └─────────────────────┘  \
+                /                             \
+    ┌──────────┐                               ┌──────────────┐
+    │ CONTEXT  │                               │  RESOLUTION  │
+    │ "There   │                               │ "Therefore   │
+    │  is a    │                               │  we should..." │
+    │  problem"│                               └──────────────┘
+    └──────────┘
+
+    Beginning ──────────────────────────────────────────> End
+    (Why it matters)                            (What to do)</code></pre>
+            <p style="text-align: center; margin-top: 1rem;">Every great data presentation follows this narrative structure.</p>
+        </section>
+
+        <!-- Opening Strong -->
+        <section class="slide">
+            <h1>Open with Impact</h1>
+            <div class="do-dont">
+                <div class="do-box">
+                    <h3>DO: Lead with the Problem</h3>
+                    <ul>
+                        <li>"In 2024, Colombian hospitals faced a 23% increase in patient readmissions..."</li>
+                        <li>"Municipal budget allocation affects 2.3 million citizens in Bogota..."</li>
+                        <li>Start with a compelling statistic or question</li>
+                        <li>Make the audience care immediately</li>
+                    </ul>
+                </div>
+                <div class="dont-box">
+                    <h3>DON'T: Lead with Technical Details</h3>
+                    <ul>
+                        <li>"We used pandas to load a CSV file..."</li>
+                        <li>"Our dataset has 50,000 rows and 25 columns..."</li>
+                        <li>Starting with tools or data structure</li>
+                        <li>Jumping into methodology first</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualization Tips -->
+        <section class="slide">
+            <h1>Visual Excellence</h1>
+            <div class="columns-3">
+                <div class="card">
+                    <h3>Clarity First</h3>
+                    <ul>
+                        <li>One message per chart</li>
+                        <li>Clear titles that state the insight</li>
+                        <li>Labeled axes with units</li>
+                        <li>Appropriate chart types</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Consistent Design</h3>
+                    <ul>
+                        <li>Same color scheme throughout</li>
+                        <li>Consistent font sizes</li>
+                        <li>Aligned elements</li>
+                        <li>Professional formatting</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Meaningful Highlights</h3>
+                    <ul>
+                        <li>Emphasize key data points</li>
+                        <li>Use annotations</li>
+                        <li>Show trends clearly</li>
+                        <li>Include context (benchmarks)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight info" style="margin-top: 2rem;">
+                <strong>Pro Tip:</strong> Before showing a visualization, state what the audience should see. "This chart shows that sales peak in December..." guides their attention.
+            </div>
+        </section>
+
+        <!-- Explaining Models -->
+        <section class="slide">
+            <h1>Explaining Your ML Models</h1>
+            <table>
+                <tr>
+                    <th>Technical Term</th>
+                    <th>Business Translation</th>
+                </tr>
+                <tr>
+                    <td>Random Forest with 100 estimators</td>
+                    <td>"An ensemble method that combines multiple decision rules"</td>
+                </tr>
+                <tr>
+                    <td>Accuracy of 87%</td>
+                    <td>"Correctly predicts the outcome 87 times out of 100"</td>
+                </tr>
+                <tr>
+                    <td>Precision of 0.92</td>
+                    <td>"When the model says 'yes', it's right 92% of the time"</td>
+                </tr>
+                <tr>
+                    <td>Feature importance</td>
+                    <td>"The factors that most influence the prediction"</td>
+                </tr>
+                <tr>
+                    <td>Cross-validation</td>
+                    <td>"We tested the model on different data slices to ensure reliability"</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Recommendations Framework -->
+        <section class="slide">
+            <h1>Making Recommendations Actionable</h1>
+            <div class="columns">
+                <div>
+                    <h2>The SMART Framework</h2>
+                    <ul>
+                        <li><strong>S</strong>pecific - Clear and detailed</li>
+                        <li><strong>M</strong>easurable - Quantifiable outcomes</li>
+                        <li><strong>A</strong>chievable - Realistic to implement</li>
+                        <li><strong>R</strong>elevant - Tied to business goals</li>
+                        <li><strong>T</strong>ime-bound - With a timeline</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Example Transformation</h2>
+                    <div class="dont-box" style="margin-bottom: 1rem;">
+                        <h3>Weak</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">"The city should improve transportation."</p>
+                    </div>
+                    <div class="do-box">
+                        <h3>Strong</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">"Add 3 bus routes to District 5 by Q2 2025, reducing average commute time by 15 minutes for 12,000 residents."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Q&A Preparation -->
+        <section class="slide section">
+            <h1>Q&A Preparation</h1>
+            <p class="subtitle">Anticipate, Prepare, Deliver</p>
+        </section>
+
+        <!-- Common Questions -->
+        <section class="slide">
+            <h1>Anticipate These Questions</h1>
+            <div class="columns">
+                <div class="card">
+                    <h3>Technical Questions</h3>
+                    <ul>
+                        <li>Why did you choose this model over alternatives?</li>
+                        <li>How did you handle missing values?</li>
+                        <li>What was your train/test split ratio?</li>
+                        <li>How would you improve the model?</li>
+                        <li>What are the model's limitations?</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Business Questions</h3>
+                    <ul>
+                        <li>Who are the main stakeholders?</li>
+                        <li>How much would this cost to implement?</li>
+                        <li>What's the expected ROI?</li>
+                        <li>What are the risks of your recommendations?</li>
+                        <li>How did you validate your findings?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Handling Tough Questions -->
+        <section class="slide">
+            <h1>Handling Difficult Questions</h1>
+            <div class="columns-3">
+                <div class="card">
+                    <h3>"I Don't Know"</h3>
+                    <ul>
+                        <li>It's okay to say it</li>
+                        <li>Offer to follow up</li>
+                        <li>Share related knowledge</li>
+                        <li>Never make up answers</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Clarifying</h3>
+                    <ul>
+                        <li>"Could you elaborate?"</li>
+                        <li>"Do you mean X or Y?"</li>
+                        <li>Ensure you understand</li>
+                        <li>Paraphrase the question</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Redirecting</h3>
+                    <ul>
+                        <li>"That's beyond our scope"</li>
+                        <li>Acknowledge the point</li>
+                        <li>Suggest future research</li>
+                        <li>Stay focused on project</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 2rem;">
+                <strong>Golden Rule:</strong> It's better to confidently say "I don't know, but I would investigate by..." than to guess and undermine your credibility.
+            </div>
+        </section>
+
+        <!-- Section: Presentation Tips -->
+        <section class="slide section">
+            <h1>Delivery Excellence</h1>
+            <p class="subtitle">How You Present Matters</p>
+        </section>
+
+        <!-- Presentation Dos -->
+        <section class="slide">
+            <h1>Presentation Best Practices</h1>
+            <div class="columns">
+                <div>
+                    <h2>Before the Presentation</h2>
+                    <ul class="checklist">
+                        <li>Practice at least 3 times</li>
+                        <li>Time yourself (stay within 20 min)</li>
+                        <li>Test all technical demos</li>
+                        <li>Prepare backup slides</li>
+                        <li>Have slides accessible offline</li>
+                        <li>Know your first 2 sentences by heart</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>During the Presentation</h2>
+                    <ul class="checklist">
+                        <li>Make eye contact with audience</li>
+                        <li>Speak slowly and clearly</li>
+                        <li>Pause after key points</li>
+                        <li>Don't read from slides</li>
+                        <li>Use the slides as prompts</li>
+                        <li>Show enthusiasm for your findings</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Time Management -->
+        <section class="slide">
+            <h1>Time Management: 20 Minutes</h1>
+            <pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    Suggested Time Allocation                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Introduction & Problem Statement    ████░░░░░░░░  3 min       │
+│                                                                 │
+│   Data & EDA Overview                 █████░░░░░░░  4 min       │
+│                                                                 │
+│   Methodology & Modeling              ██████░░░░░░  5 min       │
+│                                                                 │
+│   Results & Evaluation                █████░░░░░░░  4 min       │
+│                                                                 │
+│   Recommendations & Conclusion        ███░░░░░░░░░  2 min       │
+│                                                                 │
+│   Q&A Buffer                          ██░░░░░░░░░░  2 min       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+    Total: 20 minutes | Keep 2 minutes as buffer</code></pre>
+        </section>
+
+        <!-- Common Pitfalls -->
+        <section class="slide">
+            <h1>Common Pitfalls to Avoid</h1>
+            <div class="columns">
+                <div>
+                    <h2>Content Issues</h2>
+                    <ul>
+                        <li>Too much technical jargon</li>
+                        <li>Showing code without context</li>
+                        <li>Cluttered visualizations</li>
+                        <li>No clear call to action</li>
+                        <li>Ignoring limitations</li>
+                        <li>Recommendations without evidence</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Delivery Issues</h2>
+                    <ul>
+                        <li>Reading directly from slides</li>
+                        <li>Going over time</li>
+                        <li>Speaking too fast when nervous</li>
+                        <li>Not practicing transitions</li>
+                        <li>Apologizing for your work</li>
+                        <li>Defensive during Q&A</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Checklist -->
+        <section class="slide">
+            <h1>Pre-Presentation Checklist</h1>
+            <div class="columns">
+                <div>
+                    <h2>Technical</h2>
+                    <ul class="checklist">
+                        <li>Slides load correctly</li>
+                        <li>All images display</li>
+                        <li>Code snippets are readable</li>
+                        <li>Power BI dashboard works</li>
+                        <li>Notebook runs without errors</li>
+                        <li>Backup on USB or cloud</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Content</h2>
+                    <ul class="checklist">
+                        <li>Clear problem statement</li>
+                        <li>Data source cited</li>
+                        <li>EDA findings highlighted</li>
+                        <li>Model metrics explained</li>
+                        <li>At least 3 recommendations</li>
+                        <li>Limitations acknowledged</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight success" style="margin-top: 2rem;">
+                <strong>You are ready!</strong> You have spent 15 weeks building expertise. Trust your preparation and share your discoveries with confidence.
+            </div>
+        </section>
+
+        <!-- Celebration -->
+        <section class="slide">
+            <h1>Celebrate Your Achievement</h1>
+            <p style="text-align: center; font-size: 1.5rem; margin-bottom: 2rem;">You have completed a full data analytics project lifecycle:</p>
+            <div class="columns-3">
+                <div class="card" style="border-top-color: #10b981;">
+                    <h3>Technical Skills</h3>
+                    <ul>
+                        <li>Python programming</li>
+                        <li>Data manipulation</li>
+                        <li>Machine learning</li>
+                        <li>Visualization tools</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top-color: #f59e0b;">
+                    <h3>Analytical Thinking</h3>
+                    <ul>
+                        <li>Problem framing</li>
+                        <li>Pattern recognition</li>
+                        <li>Hypothesis testing</li>
+                        <li>Critical evaluation</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top-color: #3b82f6;">
+                    <h3>Communication</h3>
+                    <ul>
+                        <li>Data storytelling</li>
+                        <li>Visual design</li>
+                        <li>Business translation</li>
+                        <li>Stakeholder focus</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule -->
+        <section class="slide">
+            <h1>Presentation Schedule</h1>
+            <table>
+                <tr>
+                    <th>Time Slot</th>
+                    <th>Duration</th>
+                    <th>Activity</th>
+                </tr>
+                <tr>
+                    <td>Each team</td>
+                    <td>20 min</td>
+                    <td>Project presentation</td>
+                </tr>
+                <tr>
+                    <td>After each</td>
+                    <td>5 min</td>
+                    <td>Q&A from panel and peers</td>
+                </tr>
+                <tr>
+                    <td>Between teams</td>
+                    <td>2 min</td>
+                    <td>Transition time</td>
+                </tr>
+                <tr>
+                    <td>End of session</td>
+                    <td>15 min</td>
+                    <td>Closing remarks and feedback overview</td>
+                </tr>
+            </table>
+            <div class="highlight info" style="margin-top: 1rem;">
+                <strong>Arrival:</strong> Please arrive 10 minutes before your scheduled time to set up and test equipment.
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="slide">
+            <h1>Helpful Resources</h1>
+            <div class="columns">
+                <div>
+                    <h2>Presentation Design</h2>
+                    <ul>
+                        <li>Storytelling with Data (book)</li>
+                        <li>The Pyramid Principle (Minto)</li>
+                        <li>Presentation Zen (Reynolds)</li>
+                        <li>Made to Stick (Heath & Heath)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Technical Reference</h2>
+                    <ul>
+                        <li>scikit-learn documentation</li>
+                        <li>Matplotlib gallery</li>
+                        <li>Power BI best practices</li>
+                        <li>datos.gov.co metadata</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 2rem;">
+                <strong>Final Submission:</strong> Upload your slides, notebook, and Power BI file to the course portal by the deadline specified in the syllabus.
+            </div>
+        </section>
+
+        <!-- Closing -->
+        <section class="slide title" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+            <h1>Good Luck!</h1>
+            <p class="subtitle">Present with confidence. You have earned it.</p>
+            <p class="meta">Questions before we begin?</p>
+        </section>
+    </div>
+
+    <div class="progress" id="progress">1 / 22</div>
+    <div class="nav-hint">Scroll or use arrow keys</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const container = document.getElementById('slides');
+
+        container.addEventListener('scroll', () => {
+            const scrollPos = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const current = Math.round(scrollPos / slideHeight) + 1;
+            progress.textContent = `${current} / ${slides.length}`;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const slideHeight = window.innerHeight;
+            if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                container.scrollBy({ top: slideHeight, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                container.scrollBy({ top: -slideHeight, behavior: 'smooth' });
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

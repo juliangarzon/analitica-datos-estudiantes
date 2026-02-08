@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 2 - Python y Pandas Fundamentales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --success-start: #00b894;
+            --success-end: #00cec9;
+            --danger-start: #ff7675;
+            --danger-end: #fd79a8;
+            --info-start: #74b9ff;
+            --info-end: #0984e3;
+            --warning-start: #fdcb6e;
+            --warning-end: #e17055;
+            --text-dark: #2c3e50;
+            --text-light: #718096;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-start);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Slide Container */
+        .slides-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            padding: 50px 60px;
+            min-height: 85vh;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Slide Types */
+        .slide-title {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-title h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-hook {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+        }
+
+        .section-context {
+            background: linear-gradient(135deg, var(--info-start), var(--info-end));
+            color: white;
+        }
+
+        .section-content {
+            background: linear-gradient(135deg, var(--success-start), var(--success-end));
+            color: white;
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, var(--warning-start), var(--warning-end));
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+        }
+
+        .card-primary { border-color: var(--primary-start); }
+        .card-success { border-color: var(--success-start); }
+        .card-danger { border-color: var(--danger-start); }
+        .card-info { border-color: var(--info-start); }
+        .card-warning { border-color: var(--warning-start); }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+
+        /* Comparison Layout */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .comparison-bad {
+            background: linear-gradient(135deg, rgba(255, 118, 117, 0.1), rgba(253, 121, 168, 0.1));
+            border: 2px solid var(--danger-start);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .comparison-good {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 206, 201, 0.1));
+            border: 2px solid var(--success-start);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .comparison-bad h3 { color: var(--danger-start); }
+        .comparison-good h3 { color: var(--success-start); }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px 30px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .code-block code {
+            color: #d4d4d4;
+            white-space: pre;
+        }
+
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+        .code-block .comment { color: #6a9955; }
+        .code-block .number { color: #b5cea8; }
+
+        /* Big Question */
+        .big-question {
+            font-size: 3rem;
+            text-align: center;
+            color: var(--text-dark);
+            padding: 60px 40px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .highlight-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+        }
+
+        /* Analogy Box */
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(116, 185, 255, 0.15), rgba(9, 132, 227, 0.15));
+            border-left: 5px solid var(--info-start);
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 25px 0;
+        }
+
+        .analogy-box .emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Icons */
+        .icon-large {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* List Styles */
+        ul.styled-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.styled-list li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        ul.styled-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            border-radius: 50%;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+            transform: translateY(-50%);
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--primary-start);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        table tr:hover td {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Visual DataFrame */
+        .dataframe-visual {
+            border: 3px solid var(--info-start);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .dataframe-visual .header-row {
+            background: linear-gradient(135deg, var(--info-start), var(--info-end));
+            display: grid;
+            grid-template-columns: 80px repeat(3, 1fr);
+            color: white;
+            font-weight: 600;
+        }
+
+        .dataframe-visual .data-row {
+            display: grid;
+            grid-template-columns: 80px repeat(3, 1fr);
+            border-bottom: 1px solid #eee;
+        }
+
+        .dataframe-visual .data-row:nth-child(even) {
+            background: rgba(116, 185, 255, 0.05);
+        }
+
+        .dataframe-visual .cell {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .dataframe-visual .index-cell {
+            background: rgba(102, 126, 234, 0.1);
+            font-weight: 600;
+            color: var(--primary-start);
+        }
+
+        /* Professor Intro Slide Styles (from prototype) */
+        .professor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .professor-header-left h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .professor-header-left .subtitle {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .professor-header-right {
+            display: flex;
+            gap: 25px;
+        }
+
+        .personal-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 10px 18px;
+            border-radius: 25px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .personal-badge span {
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .journey-container {
+            position: relative;
+            padding: 35px 0;
+        }
+
+        .path-line {
+            position: absolute;
+            top: 50%;
+            left: 3%;
+            right: 3%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .path-line-progress {
+            position: absolute;
+            top: 50%;
+            left: 3%;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            z-index: 2;
+            animation: drawPath 3.5s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes drawPath {
+            to { width: 94%; }
+        }
+
+        .journey-stops {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stop:nth-child(1) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 0.7s; }
+        .stop:nth-child(2) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 1.2s; }
+        .stop:nth-child(3) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 1.7s; }
+        .stop:nth-child(4) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 2.2s; }
+        .stop:nth-child(5) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 2.7s; }
+        .stop:nth-child(6) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 3.2s; }
+
+        @keyframes fadeInStop {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stop-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            color: white;
+        }
+
+        .stop:hover .stop-icon {
+            transform: scale(1.15);
+        }
+
+        .stop-icon.dev { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+        .stop-icon.arch { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .stop-icon.agile { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+        .stop-icon.data { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+        .stop-icon.dataeng { background: linear-gradient(135deg, #fd79a8, #e84393); }
+        .stop-icon.now { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .stop-year {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .stop-title {
+            color: #666;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .revelation {
+            margin-top: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInStop 0.6s ease-out forwards;
+            animation-delay: 3.8s;
+        }
+
+        .revelation p {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: white;
+        }
+
+        .revelation .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .why-here {
+            margin-top: 30px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInStop 0.5s ease-out forwards;
+            animation-delay: 4.3s;
+        }
+
+        .why-here p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Milestone Cards */
+        .milestone-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .milestone-card.m1 { border-color: var(--info-start); }
+        .milestone-card.m2 { border-color: var(--warning-start); }
+        .milestone-card.m3 { border-color: var(--success-start); }
+
+        .milestone-week {
+            display: inline-block;
+            background: var(--bg-light);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        /* Action Items */
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .action-content h4 {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .action-content p {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Output Box */
+        .output-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin: 15px 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Print styles */
+        @media print {
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                display: flex !important;
+            }
+            .nav-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Anterior</button>
+        <span class="slide-counter" id="slideCounter">1 / 16</span>
+        <button class="nav-btn" onclick="nextSlide()">Siguiente</button>
+    </div>
+
+    <div class="slides-container">
+
+        <!-- ==================== SLIDE 1: HOOK - Big Question ==================== -->
+        <div class="slide slide-title active">
+            <span class="section-label section-hook">HOOK</span>
+            <div class="big-question">
+                Como sabe Netflix que quieres ver a continuacion?
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: HOOK - The Problem ==================== -->
+        <div class="slide">
+            <span class="section-label section-hook">HOOK</span>
+            <h2>Decisiones: Con vs Sin Datos</h2>
+
+            <div class="comparison">
+                <div class="comparison-bad">
+                    <h3>Sin Datos</h3>
+                    <p style="font-size: 3rem; text-align: center; margin: 15px 0;">X</p>
+                    <ul class="styled-list">
+                        <li>"Yo creo que los clientes prefieren..."</li>
+                        <li>"Siempre lo hemos hecho asi..."</li>
+                        <li>"Mi intuicion me dice..."</li>
+                    </ul>
+                    <div style="background: rgba(255,118,117,0.15); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <strong>Resultado:</strong> Decisiones basadas en opiniones, sesgos y suerte.
+                    </div>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Con Datos</h3>
+                    <p style="font-size: 3rem; text-align: center; margin: 15px 0;">+</p>
+                    <ul class="styled-list">
+                        <li>"El 73% de los clientes abandonan en..."</li>
+                        <li>"Los datos muestran una tendencia..."</li>
+                        <li>"El analisis revela que..."</li>
+                    </ul>
+                    <div style="background: rgba(0,184,148,0.15); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <strong>Resultado:</strong> Decisiones informadas, medibles y replicables.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>En este curso, aprenderan a transformar datos en decisiones.</h3>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: CONTEXT - Professor Intro ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXTO</span>
+
+            <div class="professor-header">
+                <div class="professor-header-left">
+                    <h1>Julian Eduardo Garzon Giraldo, MsC</h1>
+                    <p class="subtitle">20 anos en tecnologia</p>
+                </div>
+                <div class="professor-header-right">
+                    <div class="personal-badge">
+                        <span>+</span>
+                        <div>Casado, 2 hijos</div>
+                    </div>
+                    <div class="personal-badge">
+                        <span>~</span>
+                        <div>7 gatos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-container">
+                <div class="path-line"></div>
+                <div class="path-line-progress"></div>
+
+                <div class="journey-stops">
+                    <div class="stop">
+                        <div class="stop-icon dev">&lt;/&gt;</div>
+                        <div class="stop-year">2006</div>
+                        <div class="stop-title">Developer</div>
+                    </div>
+
+                    <div class="stop">
+                        <div class="stop-icon arch">{ }</div>
+                        <div class="stop-year">2010</div>
+                        <div class="stop-title">Arquitecto</div>
+                    </div>
+
+                    <div class="stop">
+                        <div class="stop-icon agile">&amp;</div>
+                        <div class="stop-year">2014</div>
+                        <div class="stop-title">Agile Coach</div>
+                    </div>
+
+                    <div class="stop">
+                        <div class="stop-icon data">||</div>
+                        <div class="stop-year">2018</div>
+                        <div class="stop-title">Data</div>
+                    </div>
+
+                    <div class="stop">
+                        <div class="stop-icon dataeng">*</div>
+                        <div class="stop-year">2021</div>
+                        <div class="stop-title">Data Engineer</div>
+                    </div>
+
+                    <div class="stop">
+                        <div class="stop-icon now">!</div>
+                        <div class="stop-year">2026</div>
+                        <div class="stop-title">Hoy</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revelation">
+                <p>
+                    Empece escribiendo codigo. Despues de explorar arquitectura, equipos y datos,
+                    <span class="highlight">volvi al codigo</span> - pero ahora entiendo <span class="highlight">por que</span> lo escribo.
+                </p>
+            </div>
+
+            <div class="why-here">
+                <p>
+                    Estoy aqui porque quiero compartir ese "por que" con ustedes.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: CONTEXT - What is Data Analytics ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXTO</span>
+            <h2>Que es Data Analytics?</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Data Analytics es como ser detective.</strong> Tienes pistas (datos), buscas patrones, y resuelves misterios del negocio.</p>
+            </div>
+
+            <div class="grid-3" style="margin-top: 30px;">
+                <div class="card card-info">
+                    <h3 style="text-align: center;">BI</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">||</p>
+                    <p><strong>Business Intelligence</strong></p>
+                    <p style="margin-top: 10px;">Que paso?</p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        Reportes, dashboards, KPIs. El marcador despues del partido.
+                    </p>
+                </div>
+
+                <div class="card card-primary">
+                    <h3 style="text-align: center;">Analytics</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">?</p>
+                    <p><strong>Data Analytics</strong></p>
+                    <p style="margin-top: 10px;">Por que paso?</p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        Analisis, correlaciones, insights. Ver la repeticion del partido.
+                    </p>
+                </div>
+
+                <div class="card card-success">
+                    <h3 style="text-align: center;">Data Science</h3>
+                    <p style="text-align: center; font-size: 2.5rem; margin: 15px 0;">&gt;</p>
+                    <p><strong>Ciencia de Datos</strong></p>
+                    <p style="margin-top: 10px;">Que pasara?</p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        ML, predicciones, modelos. Predecir la siguiente jugada.
+                    </p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p>En este curso nos enfocamos en <strong>Analytics</strong>, con una introduccion a <strong>Data Science</strong></p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: CONTEXT - Course Journey ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXTO</span>
+            <h2>El Viaje: 16 Semanas, 3 Hitos</h2>
+
+            <div class="timeline" style="margin: 40px 0;">
+                <div class="timeline-item">
+                    <div class="timeline-icon">1</div>
+                    <div class="timeline-label">Sem 1-5</div>
+                    <div class="timeline-desc">Python + EDA</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="background: linear-gradient(135deg, var(--info-start), var(--info-end)); color: white; border: none;">H1</div>
+                    <div class="timeline-label">Sem 6</div>
+                    <div class="timeline-desc">Hito 1</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">2</div>
+                    <div class="timeline-label">Sem 7-11</div>
+                    <div class="timeline-desc">Viz + BI</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="background: linear-gradient(135deg, var(--warning-start), var(--warning-end)); color: white; border: none;">H2</div>
+                    <div class="timeline-label">Sem 12</div>
+                    <div class="timeline-desc">Hito 2</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">3</div>
+                    <div class="timeline-label">Sem 13-14</div>
+                    <div class="timeline-desc">ML Intro</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="background: linear-gradient(135deg, var(--success-start), var(--success-end)); color: white; border: none;">H3</div>
+                    <div class="timeline-label">Sem 15</div>
+                    <div class="timeline-desc">Final</div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="milestone-card m1">
+                    <span class="milestone-week">Semana 6</span>
+                    <h3>Hito 1: EDA Completo</h3>
+                    <p>Analisis exploratorio de su dataset elegido</p>
+                </div>
+
+                <div class="milestone-card m2">
+                    <span class="milestone-week">Semana 12</span>
+                    <h3>Hito 2: Dashboard + Historia</h3>
+                    <p>Visualizacion interactiva con storytelling</p>
+                </div>
+
+                <div class="milestone-card m3">
+                    <span class="milestone-week">Semana 15</span>
+                    <h3>Hito 3: Presentacion Final</h3>
+                    <p>Proyecto completo con componente ML</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: CONTEXT - The Project ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXTO</span>
+            <h2>El Proyecto: datos.gov.co</h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card card-primary" style="margin-bottom: 20px;">
+                        <h3>Que es?</h3>
+                        <p style="margin-top: 10px;">Portal de datos abiertos del gobierno colombiano. Miles de datasets reales sobre educacion, salud, finanzas, transporte y mas.</p>
+                    </div>
+
+                    <div class="card card-info">
+                        <h3>Por que datos reales?</h3>
+                        <ul class="styled-list">
+                            <li>Datos sucios (como en la vida real)</li>
+                            <li>Problemas reales de Colombia</li>
+                            <li>Portfolio para su carrera</li>
+                            <li>Impacto social potencial</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card card-success">
+                        <h3>Datasets del curso:</h3>
+                        <table style="margin-top: 15px;">
+                            <tr>
+                                <td><strong>Estados Financieros</strong></td>
+                                <td>1,665 registros</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Estadisticas Educacion</strong></td>
+                                <td>14,585 registros</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Consumo de Agua</strong></td>
+                                <td>21,816 registros</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ejecucion Presupuestal</strong></td>
+                                <td>136 registros</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nacidos Vivos</strong></td>
+                                <td>461 registros</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 25px;">
+                <p>Hoy trabajaremos con <strong>Estados Financieros</strong> - perfecto para empezar!</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: CONTEXT - Expectations ==================== -->
+        <div class="slide">
+            <span class="section-label section-context">CONTEXTO</span>
+            <h2>Expectativas y Reglas</h2>
+
+            <div class="grid-2">
+                <div class="comparison-good">
+                    <h3>Lo que SI espero</h3>
+                    <ul class="styled-list">
+                        <li>Preguntas (muchas!)</li>
+                        <li>Errores (asi aprendemos)</li>
+                        <li>Colaboracion entre companeros</li>
+                        <li>Curiosidad y experimentacion</li>
+                        <li>Entregar a tiempo</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-bad">
+                    <h3>Lo que NO tolero</h3>
+                    <ul class="styled-list">
+                        <li>Copia (codigo o analisis)</li>
+                        <li>Excusas sin comunicacion</li>
+                        <li>No intentar antes de preguntar</li>
+                        <li>Celulares durante clase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card card-warning" style="margin-top: 30px;">
+                <h3>Regla de Oro</h3>
+                <p style="font-size: 1.3rem; margin-top: 10px;">
+                    <strong>Si tienen un problema, comuniquenlo ANTES de la fecha limite.</strong>
+                    Puedo ser flexible si me avisan. No puedo ayudar despues.
+                </p>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <h3>Contacto</h3>
+                <p style="margin-top: 10px;">Correo institucional para dudas. Respondo en 24-48 horas habiles.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: CONTENT - pandas = Excel on steroids ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>pandas = Excel con superpoderes</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Si los datos son un menu de restaurante:</strong></p>
+                <div class="grid-3" style="margin-top: 20px;">
+                    <div style="text-align: center;">
+                        <p style="font-size: 2rem;">[ ]</p>
+                        <p><strong>DataFrame</strong></p>
+                        <p style="font-size: 0.95rem;">El menu completo</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="font-size: 2rem;">|</p>
+                        <p><strong>Series</strong></p>
+                        <p style="font-size: 0.95rem;">Solo los precios</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="font-size: 2rem;">-</p>
+                        <p><strong>Row</strong></p>
+                        <p style="font-size: 0.95rem;">Un plato con toda su info</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison" style="margin-top: 30px;">
+                <div class="comparison-bad">
+                    <h3>Excel</h3>
+                    <ul class="styled-list">
+                        <li>Manual, click por click</li>
+                        <li>Dificil de repetir</li>
+                        <li>Lento con datos grandes</li>
+                        <li>Propenso a errores humanos</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>pandas</h3>
+                    <ul class="styled-list">
+                        <li>Automatizado con codigo</li>
+                        <li>100% reproducible</li>
+                        <li>Millones de filas sin problema</li>
+                        <li>Errores detectables y corregibles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 25px;">
+                <code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd  <span class="comment"># La convencion universal</span></code>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 9: CONTENT - DataFrame vs Series ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>DataFrame vs Series</h2>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="color: var(--info-start);">DataFrame (2D)</h3>
+                    <p style="margin-bottom: 15px;">Tabla completa con filas y columnas</p>
+
+                    <div class="dataframe-visual">
+                        <div class="header-row">
+                            <div class="cell">idx</div>
+                            <div class="cell">nombre</div>
+                            <div class="cell">precio</div>
+                            <div class="cell">categoria</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell">Arroz</div>
+                            <div class="cell">5000</div>
+                            <div class="cell">Granos</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell">Leche</div>
+                            <div class="cell">4500</div>
+                            <div class="cell">Lacteos</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell">Pan</div>
+                            <div class="cell">3000</div>
+                            <div class="cell">Panaderia</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <code>df = pd.<span class="function">read_csv</span>(<span class="string">'datos.csv'</span>)</code>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: var(--primary-start);">Series (1D)</h3>
+                    <p style="margin-bottom: 15px;">Una sola columna (o fila)</p>
+
+                    <div class="dataframe-visual" style="max-width: 200px;">
+                        <div class="header-row" style="grid-template-columns: 80px 1fr;">
+                            <div class="cell">idx</div>
+                            <div class="cell">precio</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 80px 1fr;">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell">5000</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 80px 1fr;">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell">4500</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 80px 1fr;">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell">3000</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <code>precios = df[<span class="string">'precio'</span>]</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-info" style="margin-top: 20px;">
+                <p><strong>Regla simple:</strong> DataFrame = muchas Series pegadas lado a lado</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10: CONTENT - Loading Data ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>Cargando Datos: read_csv</h2>
+
+            <div class="code-block">
+                <code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Forma basica</span>
+df = pd.<span class="function">read_csv</span>(<span class="string">'estados_financieros.csv'</span>)
+
+<span class="comment"># Con opciones comunes</span>
+df = pd.<span class="function">read_csv</span>(
+    <span class="string">'estados_financieros.csv'</span>,
+    encoding=<span class="string">'utf-8'</span>,        <span class="comment"># Para tildes y enes</span>
+    sep=<span class="string">';'</span>,                   <span class="comment"># Separador (a veces es ;)</span>
+    decimal=<span class="string">','</span>               <span class="comment"># Decimales con coma</span>
+)</code>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="card card-warning">
+                    <h3>Problemas comunes</h3>
+                    <ul class="styled-list">
+                        <li>Encoding incorrecto (caracteres raros)</li>
+                        <li>Separador incorrecto (todo en una columna)</li>
+                        <li>Decimales con coma (numeros como texto)</li>
+                    </ul>
+                </div>
+
+                <div class="card card-success">
+                    <h3>Tip: Abrir en VSCode primero</h3>
+                    <p style="margin-top: 10px;">Antes de cargar, abre el CSV en VSCode para ver:</p>
+                    <ul class="styled-list">
+                        <li>Cual es el separador?</li>
+                        <li>Tiene encabezados?</li>
+                        <li>Como son los numeros?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11: CONTENT - The Big 3 ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>Los "3 Grandes": head(), info(), describe()</h2>
+
+            <p style="margin-bottom: 25px;">Siempre ejecutar estos 3 al cargar datos nuevos:</p>
+
+            <div class="grid-3">
+                <div class="card card-info">
+                    <h3 style="text-align: center;">df.head()</h3>
+                    <p style="text-align: center; font-size: 2rem; margin: 15px 0;">[ ]</p>
+                    <p><strong>Ver las primeras filas</strong></p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        "Como se ven los datos?"
+                    </p>
+                    <div class="output-box" style="margin-top: 15px; font-size: 0.8rem;">
+                        Muestra primeras 5 filas por defecto
+                    </div>
+                </div>
+
+                <div class="card card-primary">
+                    <h3 style="text-align: center;">df.info()</h3>
+                    <p style="text-align: center; font-size: 2rem; margin: 15px 0;">i</p>
+                    <p><strong>Resumen de estructura</strong></p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        "Que columnas hay y de que tipo?"
+                    </p>
+                    <div class="output-box" style="margin-top: 15px; font-size: 0.8rem;">
+                        Columnas, tipos, valores no nulos
+                    </div>
+                </div>
+
+                <div class="card card-success">
+                    <h3 style="text-align: center;">df.describe()</h3>
+                    <p style="text-align: center; font-size: 2rem; margin: 15px 0;">#</p>
+                    <p><strong>Estadisticas basicas</strong></p>
+                    <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 10px;">
+                        "Cual es el rango de valores?"
+                    </p>
+                    <div class="output-box" style="margin-top: 15px; font-size: 0.8rem;">
+                        count, mean, std, min, 25%, 50%, 75%, max
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 25px;">
+                <code>df.<span class="function">head</span>()        <span class="comment"># Primeras 5 filas</span>
+df.<span class="function">head</span>(<span class="number">10</span>)      <span class="comment"># Primeras 10 filas</span>
+df.<span class="function">info</span>()        <span class="comment"># Estructura del DataFrame</span>
+df.<span class="function">describe</span>()    <span class="comment"># Estadisticas de columnas numericas</span></code>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12: CONTENT - Selecting Data ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>Seleccionando Datos</h2>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Una columna (Series)</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># Notacion de corchetes</span>
+df[<span class="string">'nombre_columna'</span>]
+
+<span class="comment"># Notacion de punto (si no hay espacios)</span>
+df.nombre_columna</code>
+                    </div>
+
+                    <h3 style="margin-top: 25px;">Multiples columnas (DataFrame)</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># Lista de columnas</span>
+df[[<span class="string">'col1'</span>, <span class="string">'col2'</span>, <span class="string">'col3'</span>]]</code>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Filas por posicion</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># Fila 0 (primera)</span>
+df.<span class="function">iloc</span>[<span class="number">0</span>]
+
+<span class="comment"># Filas 0 a 4</span>
+df.<span class="function">iloc</span>[<span class="number">0</span>:<span class="number">5</span>]
+
+<span class="comment"># Ultima fila</span>
+df.<span class="function">iloc</span>[-<span class="number">1</span>]</code>
+                    </div>
+
+                    <h3 style="margin-top: 25px;">Filas y columnas</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># Filas 0-4, columnas 1-3</span>
+df.<span class="function">iloc</span>[<span class="number">0</span>:<span class="number">5</span>, <span class="number">1</span>:<span class="number">4</span>]
+
+<span class="comment"># Por nombre de columna</span>
+df.<span class="function">loc</span>[<span class="number">0</span>:<span class="number">5</span>, [<span class="string">'col1'</span>, <span class="string">'col2'</span>]]</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-warning" style="margin-top: 25px;">
+                <p><strong>iloc</strong> = por posicion (i de integer) | <strong>loc</strong> = por etiqueta (label)</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13: CONTENT - Filtering Data ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>Filtrando Datos</h2>
+
+            <div class="analogy-box">
+                <span class="emoji">*</span>
+                <p><strong>Filtrar es como buscar en Amazon:</strong> Quiero productos con precio menor a $50,000 Y categoria "Electronica"</p>
+            </div>
+
+            <div class="grid-2" style="margin-top: 25px;">
+                <div>
+                    <h3>Filtro simple</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># Valores mayores a 1 millon</span>
+df[df[<span class="string">'valor'</span>] > <span class="number">1000000</span>]
+
+<span class="comment"># Categoria especifica</span>
+df[df[<span class="string">'categoria'</span>] == <span class="string">'Activo'</span>]</code>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Multiples condiciones</h3>
+                    <div class="code-block">
+                        <code><span class="comment"># AND: ambas condiciones</span>
+df[(df[<span class="string">'valor'</span>] > <span class="number">1000000</span>) &amp;
+   (df[<span class="string">'categoria'</span>] == <span class="string">'Activo'</span>)]
+
+<span class="comment"># OR: cualquier condicion</span>
+df[(df[<span class="string">'anio'</span>] == <span class="number">2023</span>) |
+   (df[<span class="string">'anio'</span>] == <span class="number">2024</span>)]</code>
+            </div>
+                </div>
+            </div>
+
+            <div class="comparison" style="margin-top: 25px;">
+                <div class="comparison-bad">
+                    <h3>Error comun</h3>
+                    <div class="code-block" style="background: #2d1515;">
+                        <code><span class="comment"># MAL: usar and/or de Python</span>
+df[df[<span class="string">'a'</span>] > <span class="number">5</span> and df[<span class="string">'b'</span>] &lt; <span class="number">10</span>]</code>
+                    </div>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Forma correcta</h3>
+                    <div class="code-block" style="background: #152d15;">
+                        <code><span class="comment"># BIEN: usar &amp; y | con parentesis</span>
+df[(df[<span class="string">'a'</span>] > <span class="number">5</span>) &amp; (df[<span class="string">'b'</span>] &lt; <span class="number">10</span>)]</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14: CONTENT - Demo ==================== -->
+        <div class="slide">
+            <span class="section-label section-content">CONTENIDO</span>
+            <h2>Demo: Estados Financieros</h2>
+
+            <p style="margin-bottom: 20px;">Practiquemos con datos reales de datos.gov.co</p>
+
+            <div class="code-block">
+                <code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 1. Cargar datos</span>
+df = pd.<span class="function">read_csv</span>(<span class="string">'estados_financieros.csv'</span>)
+
+<span class="comment"># 2. Explorar estructura</span>
+<span class="function">print</span>(<span class="string">"Filas y columnas:"</span>, df.shape)
+df.<span class="function">head</span>()
+df.<span class="function">info</span>()
+df.<span class="function">describe</span>()
+
+<span class="comment"># 3. Preguntas de negocio</span>
+<span class="comment"># Cuales son las categorias unicas?</span>
+df[<span class="string">'CATEGORIA'</span>].<span class="function">unique</span>()
+
+<span class="comment"># Top 5 por valor</span>
+df.<span class="function">nlargest</span>(<span class="number">5</span>, <span class="string">'VALOR'</span>)
+
+<span class="comment"># Filtrar solo activos mayores a 1M</span>
+activos_grandes = df[(df[<span class="string">'CATEGORIA'</span>] == <span class="string">'Activo'</span>) &amp;
+                      (df[<span class="string">'VALOR'</span>] > <span class="number">1000000</span>)]</code>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 25px;">
+                <h3>Ahora, en vivo!</h3>
+                <p>Abramos VS Code y exploremos juntos...</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 15: SUMMARY - Workshop ==================== -->
+        <div class="slide">
+            <span class="section-label section-summary">RESUMEN</span>
+            <h2>Taller: Exploracion de Estados Financieros</h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card card-primary" style="margin-bottom: 20px;">
+                        <h3>Objetivo</h3>
+                        <p style="margin-top: 10px;">Completar un analisis exploratorio basico del dataset de Estados Financieros usando pandas.</p>
+                    </div>
+
+                    <div class="card card-info">
+                        <h3>Entregable</h3>
+                        <p style="margin-top: 10px;">Notebook (.ipynb) con:</p>
+                        <ul class="styled-list">
+                            <li>Codigo ejecutado y documentado</li>
+                            <li>Respuestas a las 3 preguntas</li>
+                            <li>Una visualizacion basica</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card card-success">
+                        <h3>Preguntas a responder</h3>
+                        <div class="action-item" style="margin-top: 15px;">
+                            <div class="action-number">1</div>
+                            <div class="action-content">
+                                <h4>Cuantas categorias unicas hay?</h4>
+                                <p>Listar todas las categorias</p>
+                            </div>
+                        </div>
+                        <div class="action-item">
+                            <div class="action-number">2</div>
+                            <div class="action-content">
+                                <h4>Cual es el valor total por categoria?</h4>
+                                <p>Usar groupby y sum</p>
+                            </div>
+                        </div>
+                        <div class="action-item">
+                            <div class="action-number">3</div>
+                            <div class="action-content">
+                                <h4>Cuales son los 10 items de mayor valor?</h4>
+                                <p>Ordenar y seleccionar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-warning" style="margin-top: 20px;">
+                <p><strong>Fecha limite:</strong> Antes de la proxima clase | <strong>Donde:</strong> Subir al repositorio de GitHub del curso</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 16: SUMMARY - Next Steps ==================== -->
+        <div class="slide">
+            <span class="section-label section-summary">RESUMEN</span>
+            <h2>Proximos Pasos</h2>
+
+            <div class="action-item">
+                <div class="action-number">1</div>
+                <div class="action-content">
+                    <h4>Hoy: Completar el ejercicio en clase</h4>
+                    <p>Practica guiada con Estados Financieros</p>
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-number">2</div>
+                <div class="action-content">
+                    <h4>Esta semana: Terminar el taller</h4>
+                    <p>Subir notebook a GitHub antes de la proxima clase</p>
+                </div>
+            </div>
+
+            <div class="action-item">
+                <div class="action-number">3</div>
+                <div class="action-content">
+                    <h4>Proxima clase: Manipulacion y Limpieza</h4>
+                    <p>Valores nulos, tipos de datos, groupby, y mas</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>Recuerden</h3>
+                <p>Los datos no mienten, pero tampoco hablan solos.<br>Nuestro trabajo es hacerlos contar su historia.</p>
+            </div>
+
+            <div class="card card-success" style="margin-top: 25px; text-align: center;">
+                <h3>Preguntas?</h3>
+                <p style="margin-top: 10px;">Correo institucional | Horario de oficina: Por cita</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        updateCounter();
+    </script>
+</body>
+</html>

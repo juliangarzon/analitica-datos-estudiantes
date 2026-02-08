@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 03 - Data Manipulation & Cleaning</title>
+    <style>
+        /* ===========================================
+           DATA ANALYTICS COURSE - WEEK 3
+           Data Manipulation & Cleaning
+           Universidad Cooperativa de Colombia
+           Instructor: Julian Eduardo Garzon Giraldo, MsC
+           =========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===========================================
+           SLIDE BASE STYLES
+           =========================================== */
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide:first-of-type {
+            display: flex;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* ===========================================
+           TITLE SLIDE
+           =========================================== */
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide::before {
+            display: none;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .title-slide h1::after {
+            display: none;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .title-slide .info {
+            font-size: 1.3rem;
+            opacity: 0.8;
+        }
+
+        /* ===========================================
+           HEADINGS
+           =========================================== */
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin: 20px 0 15px 0;
+        }
+
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* ===========================================
+           GRID LAYOUTS
+           =========================================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        /* ===========================================
+           CARDS
+           =========================================== */
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .card-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .card-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .card-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .card-light {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            border-left: 5px solid #667eea;
+        }
+
+        .card h3 {
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .card-white h3,
+        .card-light h3 {
+            color: #667eea;
+        }
+
+        /* ===========================================
+           CODE BLOCKS
+           =========================================== */
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            white-space: pre;
+        }
+
+        .code-inline {
+            background: #e2e8f0;
+            color: #1a202c;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        /* Syntax highlighting colors */
+        .code-block .keyword { color: #f687b3; }
+        .code-block .string { color: #68d391; }
+        .code-block .comment { color: #718096; font-style: italic; }
+        .code-block .function { color: #63b3ed; }
+        .code-block .number { color: #f6ad55; }
+
+        /* ===========================================
+           LISTS
+           =========================================== */
+        .list-styled {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .list-styled li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .list-styled li:last-child {
+            border-bottom: none;
+        }
+
+        .list-check li::before {
+            content: '';
+            background: #00b894;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ===========================================
+           CONCEPT BOX (Explanations like for 10-year-olds)
+           =========================================== */
+        .concept-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .concept-box p {
+            margin: 10px 0;
+        }
+
+        .concept-box strong {
+            color: #667eea;
+        }
+
+        .concept-box .analogy {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        /* ===========================================
+           COMPARISON BOXES
+           =========================================== */
+        .comparison-good {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .comparison-bad {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        /* ===========================================
+           ALERT BOXES
+           =========================================== */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* ===========================================
+           TABLES
+           =========================================== */
+        .table-styled {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-styled thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table-styled th,
+        .table-styled td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table-styled tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .table-styled tbody tr:hover {
+            background: #e9ecef;
+        }
+
+        /* ===========================================
+           PROCESS FLOW
+           =========================================== */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 150px;
+            position: relative;
+        }
+
+        .process-step::after {
+            content: '';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .process-step::after {
+                content: '';
+                right: auto;
+                bottom: -25px;
+                top: auto;
+                transform: none;
+            }
+        }
+
+        /* ===========================================
+           PRINT STYLES
+           =========================================== */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .slide {
+                display: flex !important;
+                page-break-after: always;
+                min-height: auto;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .nav-container {
+                display: none;
+            }
+        }
+
+        /* ===========================================
+           CUSTOM STYLES FOR THIS PRESENTATION
+           =========================================== */
+        .laundry-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .data-quality-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .data-quality-item .icon {
+            font-size: 2rem;
+        }
+
+        .hook-question {
+            font-size: 2rem;
+            text-align: center;
+            color: #667eea;
+            margin: 40px 0;
+            font-weight: 600;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 14</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+
+        <!-- =========================================
+             SLIDE 1: TITLE (HOOK)
+             ========================================= -->
+        <div class="slide title-slide">
+            <h1>Data Manipulation & Cleaning</h1>
+            <h2>Week 3 - From Messy to Meaningful</h2>
+            <div class="info">
+                <div>Julian Eduardo Garzon Giraldo, MsC</div>
+                <div style="margin-top: 10px; opacity: 0.8;">Data Analytics Course - UCC</div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 2: HOOK - Why Should You Care?
+             ========================================= -->
+        <div class="slide">
+            <h1>The Dirty Truth About Data</h1>
+
+            <p class="hook-question">How much of a data scientist's time is spent cleaning data?</p>
+
+            <div class="grid-3">
+                <div class="stat-box card card-light">
+                    <div class="stat-number">80%</div>
+                    <div class="stat-label">Time spent cleaning & preparing data</div>
+                </div>
+                <div class="stat-box card card-light">
+                    <div class="stat-number">20%</div>
+                    <div class="stat-label">Time spent on actual analysis</div>
+                </div>
+                <div class="stat-box card card-light">
+                    <div class="stat-number">$15M</div>
+                    <div class="stat-label">Annual cost of bad data per company (IBM)</div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" style="text-align: center; font-size: 1.2rem;">
+                <strong>Master data cleaning = Become 5x more valuable as an analyst</strong>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 3: LEARNING OBJECTIVES (HOOK)
+             ========================================= -->
+        <div class="slide">
+            <h1>What You'll Learn Today</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>Objectives</h2>
+                    <ul class="list-styled list-check">
+                        <li>Detect and handle missing values (NaN)</li>
+                        <li>Convert data types correctly</li>
+                        <li>Filter with multiple conditions</li>
+                        <li>Aggregate data with GroupBy</li>
+                        <li>Create new calculated columns</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>By the end you'll be able to:</h2>
+                    <div class="card card-primary">
+                        <p style="font-size: 1.2rem;">
+                            Transform a messy dataset with 14,000+ rows into clean, analysis-ready data using pandas.
+                        </p>
+                    </div>
+                    <div class="alert alert-info" style="margin-top: 20px;">
+                        <strong>Dataset:</strong> Education Statistics (MEN) - 14,585 records, 41+ columns
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 4: CONTEXT - The Laundry Analogy
+             ========================================= -->
+        <div class="slide">
+            <h1>Understanding Data Cleaning</h1>
+
+            <div class="concept-box">
+                <div class="laundry-icon">&#128090;</div>
+                <p><strong>Data cleaning is like sorting dirty laundry.</strong></p>
+                <p>Before you can wear your clothes, you need to:</p>
+
+                <div class="grid-4" style="margin-top: 30px;">
+                    <div class="data-quality-item">
+                        <span class="icon">&#128269;</span>
+                        <div><strong>Check</strong><br>Find what's dirty</div>
+                    </div>
+                    <div class="data-quality-item">
+                        <span class="icon">&#128083;</span>
+                        <div><strong>Separate</strong><br>Whites from colors</div>
+                    </div>
+                    <div class="data-quality-item">
+                        <span class="icon">&#128167;</span>
+                        <div><strong>Clean</strong><br>Remove stains</div>
+                    </div>
+                    <div class="data-quality-item">
+                        <span class="icon">&#128230;</span>
+                        <div><strong>Organize</strong><br>Fold and store</div>
+                    </div>
+                </div>
+
+                <div class="analogy">
+                    In data terms: Check for problems, categorize issues, fix errors, then structure your clean data for analysis.
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 5: CONTEXT - Data Problems Mapped
+             ========================================= -->
+        <div class="slide">
+            <h1>Common Data Problems</h1>
+
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Laundry Problem</th>
+                        <th>Data Problem</th>
+                        <th>Example</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&#129510; Socks without a pair</td>
+                        <td><strong>Missing values (NaN)</strong></td>
+                        <td>Empty cells, null values</td>
+                        <td><code class="code-inline">fillna()</code>, <code class="code-inline">dropna()</code></td>
+                    </tr>
+                    <tr>
+                        <td>&#128094; Shoe in the shirt pile</td>
+                        <td><strong>Wrong data types</strong></td>
+                        <td>Numbers stored as text</td>
+                        <td><code class="code-inline">astype()</code></td>
+                    </tr>
+                    <tr>
+                        <td>&#128085; Same shirt counted twice</td>
+                        <td><strong>Duplicates</strong></td>
+                        <td>Repeated rows</td>
+                        <td><code class="code-inline">drop_duplicates()</code></td>
+                    </tr>
+                    <tr>
+                        <td>&#129534; Stained clothes</td>
+                        <td><strong>Invalid values</strong></td>
+                        <td>Age = -5, Email without @</td>
+                        <td>Validation & filtering</td>
+                    </tr>
+                    <tr>
+                        <td>&#129466; Inconsistent folding</td>
+                        <td><strong>Format inconsistencies</strong></td>
+                        <td>"NY", "N.Y.", "New York"</td>
+                        <td><code class="code-inline">str.replace()</code>, mapping</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- =========================================
+             SLIDE 6: CONTENT - Detecting Missing Values
+             ========================================= -->
+        <div class="slide">
+            <h1>Detecting Missing Values</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>The Code</h2>
+                    <div class="code-block"><span class="comment"># Check for missing values (count the missing socks)</span>
+
+<span class="comment"># How many missing per column?</span>
+df.<span class="function">isnull</span>().<span class="function">sum</span>()
+
+<span class="comment"># Percentage missing per column</span>
+(df.<span class="function">isnull</span>().<span class="function">sum</span>() / <span class="function">len</span>(df)) * <span class="number">100</span>
+
+<span class="comment"># Total missing in entire dataset</span>
+df.<span class="function">isnull</span>().<span class="function">sum</span>().<span class="function">sum</span>()
+
+<span class="comment"># Rows with ANY missing value</span>
+df[df.<span class="function">isnull</span>().<span class="function">any</span>(axis=<span class="number">1</span>)]</div>
+                </div>
+                <div>
+                    <h2>What It Does</h2>
+                    <div class="card card-light">
+                        <p><strong>isnull()</strong> returns True/False for each cell</p>
+                        <p><strong>.sum()</strong> counts True values (missing)</p>
+                        <p><strong>.any(axis=1)</strong> checks if ANY column in a row is missing</p>
+                    </div>
+                    <div class="alert alert-warning" style="margin-top: 20px;">
+                        <strong>Pro tip:</strong> Always check missing values FIRST before any analysis!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 7: CONTENT - Handling Missing Values
+             ========================================= -->
+        <div class="slide">
+            <h1>Handling Missing Values</h1>
+
+            <div class="grid-2">
+                <div class="comparison-bad">
+                    <h3>Option 1: Remove (dropna)</h3>
+                    <div class="code-block" style="background: rgba(0,0,0,0.3); font-size: 0.9rem;"><span class="comment"># Drop rows with ANY missing</span>
+df_clean = df.<span class="function">dropna</span>()
+
+<span class="comment"># Drop rows missing specific column</span>
+df_clean = df.<span class="function">dropna</span>(subset=[<span class="string">'grade'</span>])
+
+<span class="comment"># Drop columns with missing</span>
+df_clean = df.<span class="function">dropna</span>(axis=<span class="number">1</span>)</div>
+                    <p style="margin-top: 15px;"><strong>Use when:</strong> Missing is rare (&lt;5%) or row is useless without the value</p>
+                </div>
+
+                <div class="comparison-good">
+                    <h3>Option 2: Fill (fillna)</h3>
+                    <div class="code-block" style="background: rgba(0,0,0,0.3); font-size: 0.9rem;"><span class="comment"># Fill with a specific value</span>
+df[<span class="string">'grade'</span>].<span class="function">fillna</span>(<span class="number">0</span>)
+
+<span class="comment"># Fill with column mean</span>
+df[<span class="string">'grade'</span>].<span class="function">fillna</span>(df[<span class="string">'grade'</span>].<span class="function">mean</span>())
+
+<span class="comment"># Fill with previous value</span>
+df[<span class="string">'grade'</span>].<span class="function">fillna</span>(method=<span class="string">'ffill'</span>)</div>
+                    <p style="margin-top: 15px;"><strong>Use when:</strong> You need to keep all rows and have a reasonable replacement</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 30px;">
+                <strong>Decision Guide:</strong> If &gt;50% missing in a column, consider dropping the column. If &lt;5% missing, dropping rows is usually safe.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 8: CONTENT - Data Type Conversion
+             ========================================= -->
+        <div class="slide">
+            <h1>Converting Data Types</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>The Problem</h2>
+                    <div class="concept-box" style="margin: 0;">
+                        <p>Numbers stored as text cannot be used for math:</p>
+                        <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># This fails if 'price' is text!</span>
+df[<span class="string">'price'</span>].<span class="function">mean</span>()  <span class="comment"># Error!</span>
+
+<span class="comment"># Check current types</span>
+df.<span class="function">dtypes</span>
+<span class="comment"># price    object  (text!)</span>
+<span class="comment"># year     object  (text!)</span></div>
+                    </div>
+                </div>
+                <div>
+                    <h2>The Solution</h2>
+                    <div class="code-block"><span class="comment"># Convert to integer</span>
+df[<span class="string">'year'</span>] = df[<span class="string">'year'</span>].<span class="function">astype</span>(<span class="function">int</span>)
+
+<span class="comment"># Convert to float (decimal)</span>
+df[<span class="string">'price'</span>] = df[<span class="string">'price'</span>].<span class="function">astype</span>(<span class="function">float</span>)
+
+<span class="comment"># Convert to datetime</span>
+df[<span class="string">'date'</span>] = pd.<span class="function">to_datetime</span>(df[<span class="string">'date'</span>])
+
+<span class="comment"># Convert to category (saves memory)</span>
+df[<span class="string">'region'</span>] = df[<span class="string">'region'</span>].<span class="function">astype</span>(<span class="string">'category'</span>)</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" style="margin-top: 20px;">
+                <strong>Common Error:</strong> <code class="code-inline">astype(int)</code> fails if column has NaN values. Fill or drop NaN first!
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 9: CONTENT - The M&Ms Analogy (GroupBy)
+             ========================================= -->
+        <div class="slide">
+            <h1>GroupBy: Sorting Candy by Color</h1>
+
+            <div class="concept-box">
+                <div class="laundry-icon">&#127852;</div>
+                <p><strong>GroupBy is like sorting M&Ms by color.</strong></p>
+
+                <div class="analogy">
+                    You have a bag of M&Ms. You want to know how many of each color.<br>
+                    GroupBy = "Put all red ones together, count them. Then blue ones, count them..."
+                </div>
+
+                <div class="grid-3" style="margin-top: 30px; text-align: center;">
+                    <div class="card card-danger">
+                        <h3 style="font-size: 2rem;">&#128308;</h3>
+                        <p>Red: 12</p>
+                    </div>
+                    <div class="card card-info">
+                        <h3 style="font-size: 2rem;">&#128309;</h3>
+                        <p>Blue: 18</p>
+                    </div>
+                    <div class="card card-success">
+                        <h3 style="font-size: 2rem;">&#128994;</h3>
+                        <p>Green: 15</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 10: CONTENT - GroupBy Code
+             ========================================= -->
+        <div class="slide">
+            <h1>GroupBy in Action</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>Basic GroupBy</h2>
+                    <div class="code-block"><span class="comment"># Count students by department</span>
+df.<span class="function">groupby</span>(<span class="string">'department'</span>)[<span class="string">'student_id'</span>].<span class="function">count</span>()
+
+<span class="comment"># Average grade by department</span>
+df.<span class="function">groupby</span>(<span class="string">'department'</span>)[<span class="string">'grade'</span>].<span class="function">mean</span>()
+
+<span class="comment"># Total enrollment by year</span>
+df.<span class="function">groupby</span>(<span class="string">'year'</span>)[<span class="string">'students'</span>].<span class="function">sum</span>()</div>
+                </div>
+                <div>
+                    <h2>Advanced GroupBy</h2>
+                    <div class="code-block"><span class="comment"># Group by MULTIPLE columns</span>
+df.<span class="function">groupby</span>([<span class="string">'year'</span>, <span class="string">'department'</span>])[<span class="string">'students'</span>].<span class="function">sum</span>()
+
+<span class="comment"># Multiple aggregations at once</span>
+df.<span class="function">groupby</span>(<span class="string">'department'</span>).<span class="function">agg</span>({
+    <span class="string">'students'</span>: <span class="string">'sum'</span>,
+    <span class="string">'grade'</span>: <span class="string">'mean'</span>,
+    <span class="string">'school_id'</span>: <span class="string">'count'</span>
+})</div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Pattern:</strong> <code class="code-inline">df.groupby('CATEGORY')['VALUE'].AGGREGATION()</code>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 11: CONTENT - Filtering with Conditions
+             ========================================= -->
+        <div class="slide">
+            <h1>Filtering with Multiple Conditions</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>Single Condition</h2>
+                    <div class="code-block"><span class="comment"># Students with grade > 80</span>
+df[df[<span class="string">'grade'</span>] > <span class="number">80</span>]
+
+<span class="comment"># Only Bogota</span>
+df[df[<span class="string">'city'</span>] == <span class="string">'Bogota'</span>]
+
+<span class="comment"># Exclude nulls</span>
+df[df[<span class="string">'grade'</span>].<span class="function">notna</span>()]</div>
+                </div>
+                <div>
+                    <h2>Multiple Conditions</h2>
+                    <div class="code-block"><span class="comment"># AND: Both must be true</span>
+df[(df[<span class="string">'grade'</span>] > <span class="number">80</span>) & (df[<span class="string">'year'</span>] == <span class="number">2023</span>)]
+
+<span class="comment"># OR: Either can be true</span>
+df[(df[<span class="string">'city'</span>] == <span class="string">'Bogota'</span>) | (df[<span class="string">'city'</span>] == <span class="string">'Medellin'</span>)]
+
+<span class="comment"># IN: Match any in list</span>
+cities = [<span class="string">'Bogota'</span>, <span class="string">'Medellin'</span>, <span class="string">'Cali'</span>]
+df[df[<span class="string">'city'</span>].<span class="function">isin</span>(cities)]</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" style="margin-top: 20px;">
+                <strong>Common Mistake:</strong> Using <code class="code-inline">and</code> instead of <code class="code-inline">&</code>. Always use <code class="code-inline">&</code> (and) and <code class="code-inline">|</code> (or) in pandas!
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 12: CONTENT - Complete Cleaning Workflow
+             ========================================= -->
+        <div class="slide">
+            <h1>The 5-Step Cleaning Process</h1>
+
+            <div class="process-flow">
+                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                    <strong>1. Inspect</strong><br>
+                    <code style="font-size: 0.8rem;">df.info()</code>
+                </div>
+                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                    <strong>2. Missing</strong><br>
+                    <code style="font-size: 0.8rem;">isnull().sum()</code>
+                </div>
+                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                    <strong>3. Types</strong><br>
+                    <code style="font-size: 0.8rem;">astype()</code>
+                </div>
+                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                    <strong>4. Filter</strong><br>
+                    <code style="font-size: 0.8rem;">df[condition]</code>
+                </div>
+                <div class="process-step" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
+                    <strong>5. Aggregate</strong><br>
+                    <code style="font-size: 0.8rem;">groupby()</code>
+                </div>
+            </div>
+
+            <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Complete example with Education data</span>
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 1. Load and inspect</span>
+df = pd.<span class="function">read_csv</span>(<span class="string">'education_stats.csv'</span>)
+<span class="function">print</span>(df.<span class="function">shape</span>, df.<span class="function">dtypes</span>)
+
+<span class="comment"># 2. Handle missing</span>
+df[<span class="string">'dropout_rate'</span>].<span class="function">fillna</span>(df[<span class="string">'dropout_rate'</span>].<span class="function">mean</span>(), inplace=<span class="keyword">True</span>)
+
+<span class="comment"># 3. Fix types</span>
+df[<span class="string">'year'</span>] = df[<span class="string">'year'</span>].<span class="function">astype</span>(<span class="function">int</span>)
+
+<span class="comment"># 4. Filter to recent years</span>
+df = df[df[<span class="string">'year'</span>] >= <span class="number">2020</span>]
+
+<span class="comment"># 5. Aggregate by department</span>
+summary = df.<span class="function">groupby</span>(<span class="string">'department'</span>).<span class="function">agg</span>({<span class="string">'students'</span>: <span class="string">'sum'</span>, <span class="string">'dropout_rate'</span>: <span class="string">'mean'</span>})</div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 13: SUMMARY - Key Functions
+             ========================================= -->
+        <div class="slide">
+            <h1>Your Data Cleaning Toolkit</h1>
+
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Function</th>
+                        <th>Quick Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Find missing values</td>
+                        <td><code class="code-inline">isnull().sum()</code></td>
+                        <td><code>df.isnull().sum()</code></td>
+                    </tr>
+                    <tr>
+                        <td>Fill missing values</td>
+                        <td><code class="code-inline">fillna(value)</code></td>
+                        <td><code>df['col'].fillna(0)</code></td>
+                    </tr>
+                    <tr>
+                        <td>Remove missing rows</td>
+                        <td><code class="code-inline">dropna()</code></td>
+                        <td><code>df.dropna(subset=['col'])</code></td>
+                    </tr>
+                    <tr>
+                        <td>Change data type</td>
+                        <td><code class="code-inline">astype(type)</code></td>
+                        <td><code>df['year'].astype(int)</code></td>
+                    </tr>
+                    <tr>
+                        <td>Group and aggregate</td>
+                        <td><code class="code-inline">groupby().agg()</code></td>
+                        <td><code>df.groupby('cat')['val'].mean()</code></td>
+                    </tr>
+                    <tr>
+                        <td>Filter rows</td>
+                        <td><code class="code-inline">df[condition]</code></td>
+                        <td><code>df[df['col'] > 10]</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- =========================================
+             SLIDE 14: SUMMARY - Next Steps
+             ========================================= -->
+        <div class="slide">
+            <h1>Summary & Next Steps</h1>
+            <div class="grid-2">
+                <div>
+                    <h2>What We Learned</h2>
+                    <div class="card card-info">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">Data cleaning = sorting dirty laundry</li>
+                            <li style="padding: 8px 0;"><code class="code-inline">isnull()</code> finds missing values</li>
+                            <li style="padding: 8px 0;"><code class="code-inline">fillna()</code> / <code class="code-inline">dropna()</code> handles them</li>
+                            <li style="padding: 8px 0;"><code class="code-inline">astype()</code> fixes data types</li>
+                            <li style="padding: 8px 0;"><code class="code-inline">groupby()</code> = sorting M&Ms by color</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Your Tasks</h2>
+                    <div class="card card-primary">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">1. Complete the in-class exercise</li>
+                            <li style="padding: 8px 0;">2. Finish the workshop notebook</li>
+                            <li style="padding: 8px 0;">3. Apply cleaning to YOUR project dataset</li>
+                            <li style="padding: 8px 0;">4. Document your cleaning decisions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 30px; text-align: center;">
+                <strong>Remember:</strong> 80% of data work is cleaning. Master this, and you're 80% of the way to being a great analyst!
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <div class="card card-success" style="display: inline-block;">
+                    <h3 style="margin: 0;">Questions?</h3>
+                    <p style="margin: 10px 0 0 0;">Let's discuss before the exercise!</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVIGATION SCRIPT -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.4s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

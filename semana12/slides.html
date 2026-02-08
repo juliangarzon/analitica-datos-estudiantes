@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 12 - Milestone 2: Analysis Complete</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --background: #ffffff;
+            --text: #1e293b;
+            --code-bg: #f1f5f9;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .slides {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.title {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .slide.title h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide.title .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .slide.title .meta {
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        .slide.section-header {
+            text-align: center;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .slide.section-header h1 {
+            font-size: 3rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 1rem;
+        }
+
+        p code, li code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .columns-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .highlight.success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+        }
+
+        .highlight.info {
+            background: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+
+        .card {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .card ul {
+            margin-left: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        .card li {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .timeline-item.completed::before {
+            background: var(--success);
+            box-shadow: 0 0 0 2px var(--success);
+        }
+
+        .timeline-item.current::before {
+            background: var(--warning);
+            box-shadow: 0 0 0 2px var(--warning);
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '[ ]';
+            position: absolute;
+            left: 0;
+            font-family: monospace;
+            color: var(--secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--code-bg);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .nav-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            color: var(--secondary);
+            font-size: 0.875rem;
+        }
+
+        @media print {
+            .slides {
+                overflow: visible;
+                height: auto;
+            }
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+            .progress, .nav-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides" id="slides">
+        <!-- Title Slide -->
+        <section class="slide title">
+            <h1>Milestone 2: Analysis Complete</h1>
+            <p class="subtitle">Data Analytics Course - Week 12</p>
+            <p class="meta">Universidad Cooperativa de Colombia</p>
+        </section>
+
+        <!-- Objectives -->
+        <section class="slide">
+            <h1>Today's Objectives</h1>
+            <ul>
+                <li>Present your complete exploratory data analysis</li>
+                <li>Demonstrate visualization and statistical findings</li>
+                <li>Receive feedback on analysis quality</li>
+                <li>Identify opportunities for machine learning phase</li>
+            </ul>
+            <div class="highlight info">
+                <strong>Milestone 2</strong> marks the transition from exploration to prediction. Your analysis foundation determines your ML success.
+            </div>
+        </section>
+
+        <!-- Course Timeline -->
+        <section class="slide">
+            <h1>Where We Are</h1>
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <strong>Weeks 1-4:</strong> Python Fundamentals and Data Handling
+                </div>
+                <div class="timeline-item completed">
+                    <strong>Week 5:</strong> Milestone 1 - Data Acquired
+                </div>
+                <div class="timeline-item completed">
+                    <strong>Weeks 6-11:</strong> EDA, Visualization, Power BI, Statistics
+                </div>
+                <div class="timeline-item current">
+                    <strong>Week 12:</strong> Milestone 2 - Analysis Complete
+                </div>
+                <div class="timeline-item">
+                    <strong>Weeks 13-15:</strong> Machine Learning Phase
+                </div>
+                <div class="timeline-item">
+                    <strong>Week 16:</strong> Final Presentation
+                </div>
+            </div>
+        </section>
+
+        <!-- What Analysis Complete Means -->
+        <section class="slide section-header">
+            <h1>What Does "Analysis Complete" Mean?</h1>
+        </section>
+
+        <!-- Analysis Complete Definition -->
+        <section class="slide">
+            <h1>Analysis Complete Checklist</h1>
+            <div class="columns">
+                <div>
+                    <h2>Data Preparation</h2>
+                    <ul class="checklist">
+                        <li>Missing values handled</li>
+                        <li>Outliers identified and addressed</li>
+                        <li>Data types corrected</li>
+                        <li>Transformations documented</li>
+                        <li>Clean dataset ready for ML</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Analysis Depth</h2>
+                    <ul class="checklist">
+                        <li>All variables explored</li>
+                        <li>Distributions understood</li>
+                        <li>Relationships mapped</li>
+                        <li>Patterns documented</li>
+                        <li>Research questions answered</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Analysis Journey -->
+        <section class="slide">
+            <h1>The Analysis Journey</h1>
+            <pre><code>Raw Data                    Clean Data                    Insights
+    |                           |                             |
+    v                           v                             v
++--------+    +--------+    +--------+    +--------+    +--------+
+|  Mess  | -> | Clean  | -> |  EDA   | -> | Stats  | -> | Story  |
++--------+    +--------+    +--------+    +--------+    +--------+
+    |             |             |             |             |
+ Missing      Transform     Visualize     Test         Recommend
+ Outliers     Engineer      Patterns      Hypotheses   Actions
+ Types        Features      Correlate     Validate     Predict (ML)</code></pre>
+            <div class="highlight success">
+                By today, you should have completed everything up to "Story" and be ready for ML.
+            </div>
+        </section>
+
+        <!-- Presentation Format -->
+        <section class="slide section-header">
+            <h1>Presentation Format</h1>
+        </section>
+
+        <!-- Presentation Structure -->
+        <section class="slide">
+            <h1>Your 15-Minute Presentation</h1>
+            <table>
+                <tr>
+                    <th>Section</th>
+                    <th>Time</th>
+                    <th>Content</th>
+                </tr>
+                <tr>
+                    <td>Context Recap</td>
+                    <td>2 min</td>
+                    <td>Problem, data source, research questions</td>
+                </tr>
+                <tr>
+                    <td>Data Preparation</td>
+                    <td>3 min</td>
+                    <td>Cleaning decisions, transformations made</td>
+                </tr>
+                <tr>
+                    <td>Key Visualizations</td>
+                    <td>5 min</td>
+                    <td>3-5 most insightful charts with explanations</td>
+                </tr>
+                <tr>
+                    <td>Statistical Findings</td>
+                    <td>3 min</td>
+                    <td>Correlations, tests, significant results</td>
+                </tr>
+                <tr>
+                    <td>Insights and ML Plan</td>
+                    <td>2 min</td>
+                    <td>Key discoveries, prediction opportunities</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- What Makes a Good Presentation -->
+        <section class="slide">
+            <h1>Presentation Best Practices</h1>
+            <div class="columns">
+                <div>
+                    <h2>Do This</h2>
+                    <ul>
+                        <li>Lead with insights, not process</li>
+                        <li>Explain why you made each decision</li>
+                        <li>Show the most interesting findings</li>
+                        <li>Connect findings to your questions</li>
+                        <li>Be honest about limitations</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Avoid This</h2>
+                    <ul>
+                        <li>Listing every step you took</li>
+                        <li>Showing every chart you made</li>
+                        <li>Reading code line by line</li>
+                        <li>Hiding problems or gaps</li>
+                        <li>Rushing through statistics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluation Criteria -->
+        <section class="slide section-header">
+            <h1>Evaluation Criteria</h1>
+        </section>
+
+        <!-- Rubric Overview -->
+        <section class="slide">
+            <h1>How You Will Be Evaluated</h1>
+            <div class="columns-3">
+                <div class="card">
+                    <h3>Data Preparation (20%)</h3>
+                    <ul>
+                        <li>Cleaning documented</li>
+                        <li>Decisions justified</li>
+                        <li>Data ready for ML</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Exploratory Analysis (20%)</h3>
+                    <ul>
+                        <li>Comprehensive EDA</li>
+                        <li>Patterns identified</li>
+                        <li>Relationships explored</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Visualizations (20%)</h3>
+                    <ul>
+                        <li>Appropriate charts</li>
+                        <li>Clear and labeled</li>
+                        <li>Insightful design</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="columns-3" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <h3>Statistical Analysis (15%)</h3>
+                    <ul>
+                        <li>Correct methods</li>
+                        <li>Valid interpretation</li>
+                        <li>Assumptions checked</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Insights Quality (15%)</h3>
+                    <ul>
+                        <li>Actionable findings</li>
+                        <li>Answers questions</li>
+                        <li>ML opportunities</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Presentation (10%)</h3>
+                    <ul>
+                        <li>Clear storytelling</li>
+                        <li>Time management</li>
+                        <li>Handles questions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualization Standards -->
+        <section class="slide">
+            <h1>Visualization Excellence</h1>
+            <div class="columns">
+                <div>
+                    <h2>Chart Selection</h2>
+                    <ul>
+                        <li><strong>Distribution:</strong> Histogram, box plot, violin</li>
+                        <li><strong>Comparison:</strong> Bar chart, grouped bars</li>
+                        <li><strong>Relationship:</strong> Scatter, pair plot, heatmap</li>
+                        <li><strong>Trend:</strong> Line chart, area chart</li>
+                        <li><strong>Composition:</strong> Stacked bar, pie (sparingly)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Quality Indicators</h2>
+                    <ul>
+                        <li>Title describes the insight</li>
+                        <li>Axes are labeled with units</li>
+                        <li>Legend is clear and positioned well</li>
+                        <li>Colors are meaningful, not decorative</li>
+                        <li>No chart junk or 3D effects</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistical Analysis Standards -->
+        <section class="slide">
+            <h1>Statistical Analysis Standards</h1>
+            <table>
+                <tr>
+                    <th>Question Type</th>
+                    <th>Appropriate Method</th>
+                    <th>Report</th>
+                </tr>
+                <tr>
+                    <td>Is there a relationship?</td>
+                    <td>Correlation (Pearson/Spearman)</td>
+                    <td>r value, p-value, interpretation</td>
+                </tr>
+                <tr>
+                    <td>Are groups different?</td>
+                    <td>t-test, ANOVA, Mann-Whitney</td>
+                    <td>Test statistic, p-value, effect size</td>
+                </tr>
+                <tr>
+                    <td>Does X predict Y?</td>
+                    <td>Linear regression</td>
+                    <td>Coefficients, R-squared, significance</td>
+                </tr>
+                <tr>
+                    <td>Are variables associated?</td>
+                    <td>Chi-square test</td>
+                    <td>Chi-square value, p-value, interpretation</td>
+                </tr>
+            </table>
+            <div class="highlight">
+                <strong>Remember:</strong> Always check assumptions before applying a test. Report effect sizes, not just p-values.
+            </div>
+        </section>
+
+        <!-- Preparing for ML -->
+        <section class="slide section-header">
+            <h1>Preparing for the ML Phase</h1>
+        </section>
+
+        <!-- EDA to ML Connection -->
+        <section class="slide">
+            <h1>From EDA to Machine Learning</h1>
+            <div class="columns">
+                <div>
+                    <h2>Your EDA Should Reveal</h2>
+                    <ul>
+                        <li>Which features correlate with target</li>
+                        <li>Potential feature engineering ideas</li>
+                        <li>Data quality issues to address</li>
+                        <li>Class imbalance problems</li>
+                        <li>Outliers that may affect models</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>ML Preparation Needs</h2>
+                    <ul>
+                        <li>Define your target variable clearly</li>
+                        <li>Identify classification vs regression</li>
+                        <li>Plan feature selection strategy</li>
+                        <li>Consider train/test split approach</li>
+                        <li>Note baseline metrics to beat</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Questions to Answer -->
+        <section class="slide">
+            <h1>Questions Your Analysis Should Answer</h1>
+            <ol>
+                <li><strong>What are you predicting?</strong> (target variable, type of problem)</li>
+                <li><strong>What features look promising?</strong> (correlations, domain relevance)</li>
+                <li><strong>How much data do you have?</strong> (sample size, class balance)</li>
+                <li><strong>What preprocessing is needed?</strong> (scaling, encoding, imputation)</li>
+                <li><strong>What baseline would you beat?</strong> (mean predictor, majority class)</li>
+            </ol>
+            <div class="highlight info">
+                <strong>Tip:</strong> Document these answers in your notebook. They will guide your Week 13-15 work.
+            </div>
+        </section>
+
+        <!-- Common Issues -->
+        <section class="slide">
+            <h1>Common Issues to Address Before ML</h1>
+            <div class="columns">
+                <div>
+                    <h2>Data Issues</h2>
+                    <ul>
+                        <li>High cardinality categoricals</li>
+                        <li>Multicollinearity between features</li>
+                        <li>Heavily skewed distributions</li>
+                        <li>Missing data patterns</li>
+                        <li>Date/time feature extraction</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Analysis Gaps</h2>
+                    <ul>
+                        <li>Unexplored variable relationships</li>
+                        <li>Untested hypotheses</li>
+                        <li>Unclear target definition</li>
+                        <li>Feature engineering opportunities</li>
+                        <li>Segmentation not considered</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Presentation Schedule -->
+        <section class="slide">
+            <h1>Today's Schedule</h1>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Activity</th>
+                </tr>
+                <tr>
+                    <td>First 10 min</td>
+                    <td>Review expectations (this presentation)</td>
+                </tr>
+                <tr>
+                    <td>15 min per team</td>
+                    <td>Team presentation + Q&A</td>
+                </tr>
+                <tr>
+                    <td>5 min between</td>
+                    <td>Transition and feedback notes</td>
+                </tr>
+                <tr>
+                    <td>Final 15 min</td>
+                    <td>General feedback and Week 13 preview</td>
+                </tr>
+            </table>
+            <div class="highlight success">
+                <strong>Presentation order:</strong> Teams will present in the order determined at the start of class.
+            </div>
+        </section>
+
+        <!-- Final Reminders -->
+        <section class="slide">
+            <h1>Final Reminders</h1>
+            <ul>
+                <li><strong>Be ready:</strong> Have your notebook and slides open before your turn</li>
+                <li><strong>Time yourself:</strong> Practice staying within 15 minutes</li>
+                <li><strong>Know your data:</strong> Be prepared to answer questions about any analysis decision</li>
+                <li><strong>Show your code:</strong> Have key code cells ready to demonstrate if asked</li>
+                <li><strong>Accept feedback:</strong> Use suggestions to improve before Milestone 3</li>
+            </ul>
+            <div class="highlight">
+                <strong>Rubric:</strong> The detailed evaluation rubric is available in the course materials. Review it before presenting.
+            </div>
+        </section>
+
+        <!-- Q&A -->
+        <section class="slide title" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+            <h1>Questions?</h1>
+            <p class="subtitle">Before we begin presentations</p>
+            <p class="meta">Good luck to all teams!</p>
+        </section>
+    </div>
+
+    <div class="progress" id="progress">1 / 17</div>
+    <div class="nav-hint">Scroll or use arrow keys</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const container = document.getElementById('slides');
+
+        container.addEventListener('scroll', () => {
+            const scrollPos = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const current = Math.round(scrollPos / slideHeight) + 1;
+            progress.textContent = `${current} / ${slides.length}`;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const slideHeight = window.innerHeight;
+            if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                container.scrollBy({ top: slideHeight, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                container.scrollBy({ top: -slideHeight, behavior: 'smooth' });
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

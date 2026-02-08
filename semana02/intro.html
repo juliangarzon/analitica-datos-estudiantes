@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo - Intro Profesor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px 60px;
+            max-width: 1200px;
+            width: 100%;
+            min-height: 80vh;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header with name and personal */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .header-left h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .header-left .subtitle {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 25px;
+        }
+
+        .personal-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 10px 18px;
+            border-radius: 25px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .personal-badge span {
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* The Journey Path */
+        .journey-container {
+            position: relative;
+            padding: 35px 0;
+        }
+
+        .path-line {
+            position: absolute;
+            top: 50%;
+            left: 3%;
+            right: 3%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .path-line-progress {
+            position: absolute;
+            top: 50%;
+            left: 3%;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            z-index: 2;
+            animation: drawPath 3.5s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes drawPath {
+            to { width: 94%; }
+        }
+
+        .journey-stops {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stop:nth-child(1) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 0.7s; }
+        .stop:nth-child(2) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 1.2s; }
+        .stop:nth-child(3) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 1.7s; }
+        .stop:nth-child(4) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 2.2s; }
+        .stop:nth-child(5) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 2.7s; }
+        .stop:nth-child(6) { animation: fadeInStop 0.5s ease-out forwards; animation-delay: 3.2s; }
+
+        @keyframes fadeInStop {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stop-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .stop:hover .stop-icon {
+            transform: scale(1.15);
+        }
+
+        .stop-icon.dev { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+        .stop-icon.arch { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .stop-icon.agile { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+        .stop-icon.data { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+        .stop-icon.dataeng { background: linear-gradient(135deg, #fd79a8, #e84393); }
+        .stop-icon.now { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .stop-year {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .stop-title {
+            color: #666;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Revelation */
+        .revelation {
+            margin-top: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInStop 0.6s ease-out forwards;
+            animation-delay: 3.8s;
+        }
+
+        .revelation p {
+            font-size: 1.15rem;
+            line-height: 1.6;
+        }
+
+        .revelation .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Why I'm here */
+        .why-here {
+            margin-top: 30px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInStop 0.5s ease-out forwards;
+            animation-delay: 4.3s;
+        }
+
+        .why-here p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .why-here .emoji {
+            font-size: 1.3rem;
+        }
+
+        /* Replay */
+        .replay-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .replay-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="header">
+            <div class="header-left">
+                <h1>Julian Eduardo Garzon Giraldo, MsC</h1>
+                <p class="subtitle">20 anos en tecnologia</p>
+            </div>
+            <div class="header-right">
+                <div class="personal-badge">
+                    <span>👨‍👩‍👧‍👦</span>
+                    <div>Casado, 2 hijos</div>
+                </div>
+                <div class="personal-badge">
+                    <span>🐱</span>
+                    <div>7 gatos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="journey-container">
+            <div class="path-line"></div>
+            <div class="path-line-progress"></div>
+
+            <div class="journey-stops">
+                <div class="stop">
+                    <div class="stop-icon dev">💻</div>
+                    <div class="stop-year">2006</div>
+                    <div class="stop-title">Developer</div>
+                </div>
+
+                <div class="stop">
+                    <div class="stop-icon arch">🏗️</div>
+                    <div class="stop-year">2010</div>
+                    <div class="stop-title">Arquitecto</div>
+                </div>
+
+                <div class="stop">
+                    <div class="stop-icon agile">👥</div>
+                    <div class="stop-year">2014</div>
+                    <div class="stop-title">Agile Coach</div>
+                </div>
+
+                <div class="stop">
+                    <div class="stop-icon data">📊</div>
+                    <div class="stop-year">2018</div>
+                    <div class="stop-title">Data</div>
+                </div>
+
+                <div class="stop">
+                    <div class="stop-icon dataeng">⚙️</div>
+                    <div class="stop-year">2021</div>
+                    <div class="stop-title">Data Engineer</div>
+                </div>
+
+                <div class="stop">
+                    <div class="stop-icon now">🎯</div>
+                    <div class="stop-year">2026</div>
+                    <div class="stop-title">Hoy</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="revelation">
+            <p>
+                Empece escribiendo codigo. Despues de explorar arquitectura, equipos y datos,
+                <span class="highlight">volvi al codigo</span> — pero ahora entiendo <span class="highlight">por que</span> lo escribo.
+            </p>
+        </div>
+
+        <div class="why-here">
+            <p>
+                <span class="emoji">🎓</span> Estoy aqui porque quiero compartir ese "por que" con ustedes.
+            </p>
+        </div>
+    </div>
+
+    <button class="replay-btn" onclick="location.reload()">↻ Replay</button>
+</body>
+</html>

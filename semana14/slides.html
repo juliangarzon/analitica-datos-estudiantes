@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 14 - Machine Learning Models and Evaluation</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent-pink: #f093fb;
+            --accent-coral: #f5576c;
+            --success: #00b894;
+            --success-light: #00cec9;
+            --info: #0984e3;
+            --info-light: #74b9ff;
+            --warning: #fdcb6e;
+            --warning-dark: #e17055;
+            --danger: #ff7675;
+            --danger-light: #fd79a8;
+            --text-dark: #2c3e50;
+            --text-medium: #34495e;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+            --bg-medium: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--accent-pink));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .title-slide::before {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-medium);
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-label.hook {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));
+            color: white;
+        }
+
+        .section-label.context {
+            background: linear-gradient(135deg, var(--info-light), var(--info));
+            color: white;
+        }
+
+        .section-label.content {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .section-label.summary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .section-intro {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .section-intro h1 {
+            color: white;
+            font-size: 3rem;
+        }
+
+        .section-intro h1::after {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .hook-card {
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-coral) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .hook-card h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .hook-card p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .concept-card.info {
+            border-left-color: var(--info);
+        }
+
+        .concept-card.success {
+            border-left-color: var(--success);
+        }
+
+        .concept-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .concept-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .analogy-box h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .analogy-box p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .comparison-card.good {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            color: white;
+        }
+
+        .comparison-card.bad {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-light) 100%);
+            color: white;
+        }
+
+        .comparison-card h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            white-space: pre;
+        }
+
+        .code-example .comment {
+            color: #68d391;
+            font-style: italic;
+        }
+
+        .code-example .keyword {
+            color: #f093fb;
+            font-weight: bold;
+        }
+
+        .code-example .string {
+            color: #ffd93d;
+        }
+
+        .code-example .function {
+            color: #4fd1c7;
+        }
+
+        .code-example .number {
+            color: #fc8181;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.03);
+        }
+
+        .feature-card h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .stat-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-item .formula {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        .visual-demo {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .visual-demo pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .alert-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .alert-box.info {
+            background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%);
+            color: white;
+        }
+
+        .alert-box.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            color: white;
+        }
+
+        .alert-box.success {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            color: white;
+        }
+
+        .alert-box.danger {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-light) 100%);
+            color: white;
+        }
+
+        .key-takeaway {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .key-takeaway h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .objectives-list {
+            display: grid;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-medium);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        /* Confusion Matrix Visual */
+        .confusion-matrix {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 5px;
+            max-width: 500px;
+            margin: 20px auto;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .cm-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .cm-label {
+            background: var(--primary-dark);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .cm-cell {
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .cm-cell.tp {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .cm-cell.tn {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .cm-cell.fp {
+            background: linear-gradient(135deg, var(--danger), var(--danger-light));
+            color: white;
+        }
+
+        .cm-cell.fn {
+            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+            color: white;
+        }
+
+        .cm-corner {
+            background: transparent;
+        }
+
+        /* Model Cards */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-card-header {
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .model-card-header.linear {
+            background: linear-gradient(135deg, var(--info-light), var(--info));
+        }
+
+        .model-card-header.tree {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+        }
+
+        .model-card-header.knn {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));
+        }
+
+        .model-card-header.forest {
+            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+        }
+
+        .model-card-body {
+            padding: 20px;
+        }
+
+        .model-card-body ul {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .model-card-body li::before {
+            content: ">";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .workshop-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 40px 0;
+        }
+
+        .demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 40px 0;
+        }
+
+        /* Four column grid for metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .metric-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .metric-card .formula {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .metric-card p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .concept-grid,
+            .comparison-grid,
+            .stat-box,
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 30</span>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide">
+            <h1>Machine Learning Models and Evaluation</h1>
+            <h2>Comparing Models, Metrics, and Making the Right Choice</h2>
+            <div class="author">Data Analytics Course - Week 14</div>
+            <div style="margin-top: 40px; opacity: 0.8;">Building on Week 13: Decision Trees and ML Fundamentals</div>
+        </div>
+
+        <!-- Slide 2: HOOK - Same Data, Different Models -->
+        <div class="slide">
+            <span class="section-label hook">HOOK</span>
+            <h1>Same Data, Three Models, Three Different Answers</h1>
+            <div class="visual-demo">
+                <pre style="font-size: 1rem;">
+    PREDICTING STUDENT DROPOUT
+
+    Dataset: 1,000 students with grades, attendance, socioeconomic data
+
+    Model A (Logistic Regression):  "Student X will NOT drop out" (75% confident)
+    Model B (Decision Tree):        "Student X WILL drop out"     (82% confident)
+    Model C (Random Forest):        "Student X will NOT drop out" (91% confident)
+
+    Who is right? How do we decide?
+                </pre>
+            </div>
+            <div class="hook-card">
+                <h2>The Model You Choose Changes Your Answer</h2>
+                <p>Different algorithms see patterns differently. Choosing the "best" model requires understanding how they work and how to evaluate them.</p>
+            </div>
+            <div class="key-takeaway">
+                <h3>Today's Question</h3>
+                <p>How do we compare models fairly and choose the right one for our problem?</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Learning Objectives -->
+        <div class="slide">
+            <span class="section-label context">CONTEXT</span>
+            <h1>What You Will Learn Today</h1>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <div class="check-icon">1</div>
+                    <div><strong>Model Comparison Philosophy</strong> - Why one model is never enough</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">2</div>
+                    <div><strong>New Models</strong> - Linear/Logistic Regression, Random Forest, K-Nearest Neighbors</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">3</div>
+                    <div><strong>Classification Metrics</strong> - Accuracy, Precision, Recall, F1, Confusion Matrix</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">4</div>
+                    <div><strong>Regression Metrics</strong> - MAE, MSE, R-squared</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">5</div>
+                    <div><strong>Cross-Validation</strong> - Getting reliable performance estimates</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">6</div>
+                    <div><strong>Feature Importance</strong> - Understanding what drives predictions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Week 13 Recap -->
+        <div class="slide">
+            <span class="section-label context">CONTEXT</span>
+            <h1>Quick Recap: What We Know from Week 13</h1>
+            <div class="concept-grid">
+                <div class="concept-card success">
+                    <h3>Supervised Learning</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> We have labeled data (X, y)</li>
+                        <li>> Model learns mapping X -> y</li>
+                        <li>> Classification: predict categories</li>
+                        <li>> Regression: predict numbers</li>
+                    </ul>
+                </div>
+                <div class="concept-card info">
+                    <h3>Train/Test Split</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Never evaluate on training data</li>
+                        <li>> Split: 80% train, 20% test</li>
+                        <li>> Prevents overfitting</li>
+                        <li>> Gives honest performance estimate</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="concept-grid">
+                <div class="concept-card warning">
+                    <h3>Decision Trees</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Series of if-then rules</li>
+                        <li>> Easy to interpret</li>
+                        <li>> Can overfit if too deep</li>
+                        <li>> Basis for more powerful models</li>
+                    </ul>
+                </div>
+                <div class="concept-card danger">
+                    <h3>The Problem</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> We only know ONE model</li>
+                        <li>> How do we know it is the best?</li>
+                        <li>> What metrics should we use?</li>
+                        <li>> Today: expand our toolkit!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Section - Model Comparison Philosophy -->
+        <div class="slide section-intro">
+            <h1>Part 1: Model Comparison Philosophy</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">No model is universally best</p>
+        </div>
+
+        <!-- Slide 6: No Free Lunch -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>The "No Free Lunch" Theorem</h1>
+            <div class="analogy-box">
+                <h3>There Is No Universal Best Model</h3>
+                <p>Every model makes assumptions about the data. A model that works great on one dataset might fail on another. The "best" model depends on YOUR specific data and problem.</p>
+            </div>
+            <div class="comparison-grid">
+                <div class="visual-demo">
+                    <h3 style="margin-bottom: 15px;">Linear Data</h3>
+                    <pre>
+    y
+    |           *
+    |         *
+    |       *
+    |     *
+    |   *
+    | *
+    +--------------> x
+
+    Linear Regression wins!
+                    </pre>
+                </div>
+                <div class="visual-demo">
+                    <h3 style="margin-bottom: 15px;">Complex Boundaries</h3>
+                    <pre>
+    y
+    |  * *     o o
+    | * * *   o o o
+    |  * *     o o
+    |     o o o
+    |    o   o
+    +--------------> x
+
+    Decision Tree wins!
+                    </pre>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>The Solution: Try Multiple Models, Compare Fairly</h3>
+                <p>Always test several algorithms and use proper evaluation metrics to choose.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Section - Linear and Logistic Regression -->
+        <div class="slide section-intro">
+            <h1>Part 2: Linear and Logistic Regression</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">The simplest, most interpretable models</p>
+        </div>
+
+        <!-- Slide 8: Linear Regression Concept -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Linear Regression: Drawing the Best Line</h1>
+            <div class="concept-grid">
+                <div>
+                    <div class="visual-demo">
+                        <pre style="font-size: 0.9rem;">
+    Final Grade
+    |
+    |              *    *
+    |           *   *
+    |        *   *
+    |      *  *
+    |    *  *
+    |  * *
+    +-----------------------> Study Hours
+
+    Goal: Find the line that best fits the data
+    Prediction: grade = a + b * study_hours
+                        </pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-card info">
+                        <h3>The Idea</h3>
+                        <p>Find the straight line that minimizes the distance between predictions and actual values.</p>
+                        <p style="margin-top: 15px;"><strong>Output:</strong> A continuous number (price, grade, salary)</p>
+                    </div>
+                    <div class="concept-card success" style="margin-top: 20px;">
+                        <h3>Strengths</h3>
+                        <ul style="list-style: none; line-height: 1.8;">
+                            <li>> Very interpretable (coefficients have meaning)</li>
+                            <li>> Fast to train</li>
+                            <li>> Works well when relationship is linear</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Linear Regression Code -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Linear Regression in scikit-learn</h1>
+            <div class="code-example"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Load and prepare data</span>
+df = pd.read_csv(<span class="string">'student_data.csv'</span>)
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'prev_grade'</span>]]
+y = df[<span class="string">'final_grade'</span>]
+
+<span class="comment"># Split data</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># Train model</span>
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+<span class="comment"># Make predictions</span>
+y_pred = model.predict(X_test)
+
+<span class="comment"># Evaluate</span>
+<span class="function">print</span>(<span class="string">f"R-squared: {r2_score(y_test, y_pred):.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"MSE: {mean_squared_error(y_test, y_pred):.3f}"</span>)
+
+<span class="comment"># Interpret coefficients</span>
+<span class="keyword">for</span> feature, coef <span class="keyword">in</span> zip(X.columns, model.coef_):
+    <span class="function">print</span>(<span class="string">f"{feature}: {coef:.3f}"</span>)</div>
+            <div class="alert-box info">
+                <strong>Interpretation:</strong> Each coefficient tells you how much y changes when that feature increases by 1, holding other features constant.
+            </div>
+        </div>
+
+        <!-- Slide 10: Logistic Regression Concept -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Logistic Regression: Classification, Not Regression</h1>
+            <div class="analogy-box">
+                <h3>Despite the Name, It Is for Classification</h3>
+                <p>Logistic regression predicts the PROBABILITY of belonging to a class. Output is between 0 and 1, then converted to a class label.</p>
+            </div>
+            <div class="concept-grid">
+                <div class="visual-demo">
+                    <pre style="font-size: 0.9rem;">
+    P(dropout)
+    1 |                 ------
+      |               /
+    0.5|             /
+      |           /
+    0 | ---------
+      +-----------------------> Risk Score
+
+    The S-curve (sigmoid) maps any input
+    to a probability between 0 and 1
+                    </pre>
+                </div>
+                <div>
+                    <div class="concept-card warning">
+                        <h3>How It Works</h3>
+                        <ul style="list-style: none; line-height: 1.8;">
+                            <li>> Combines features linearly</li>
+                            <li>> Passes through sigmoid function</li>
+                            <li>> Output: probability (0 to 1)</li>
+                            <li>> Threshold (usually 0.5) -> class</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card success" style="margin-top: 20px;">
+                        <h3>Use When</h3>
+                        <ul style="list-style: none; line-height: 1.8;">
+                            <li>> Binary classification (yes/no)</li>
+                            <li>> You need probability estimates</li>
+                            <li>> Interpretability matters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Logistic Regression Code -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Logistic Regression in scikit-learn</h1>
+            <div class="code-example"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, classification_report
+
+<span class="comment"># Prepare data (binary classification)</span>
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>]]
+y = df[<span class="string">'dropped_out'</span>]  <span class="comment"># 0 = stayed, 1 = dropped out</span>
+
+<span class="comment"># Split</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># Train</span>
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+<span class="comment"># Predict classes</span>
+y_pred = model.predict(X_test)
+
+<span class="comment"># Predict probabilities</span>
+y_proba = model.predict_proba(X_test)[:, <span class="number">1</span>]  <span class="comment"># P(dropout)</span>
+
+<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nStudent 1 dropout probability: {y_proba[0]:.1%}"</span>)</div>
+            <div class="alert-box success">
+                <strong>Key Feature:</strong> predict_proba() gives you the actual probability, not just the class. Useful for ranking or setting custom thresholds.
+            </div>
+        </div>
+
+        <!-- Slide 12: Section - K-Nearest Neighbors -->
+        <div class="slide section-intro">
+            <h1>Part 3: K-Nearest Neighbors (KNN)</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">You are the average of your neighbors</p>
+        </div>
+
+        <!-- Slide 13: KNN Concept -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>KNN: The "Neighborhood" Algorithm</h1>
+            <div class="analogy-box">
+                <h3>Tell Me Your Neighbors, I Will Tell You Who You Are</h3>
+                <p>To classify a new point, find the K closest points in the training data. The new point gets the majority class of its neighbors.</p>
+            </div>
+            <div class="concept-grid">
+                <div class="visual-demo">
+                    <pre style="font-size: 0.9rem;">
+         o o
+       o   o      ? = new point
+         o   ?    Find 5 nearest neighbors:
+       *       *    3 circles (o), 2 stars (*)
+         * *
+       *   *      Prediction: circle (o)
+
+    K=5: Look at 5 nearest neighbors
+    Majority vote: 3 circles > 2 stars
+                    </pre>
+                </div>
+                <div>
+                    <div class="concept-card info">
+                        <h3>Key Idea</h3>
+                        <ul style="list-style: none; line-height: 1.8;">
+                            <li>> No training phase (lazy learning)</li>
+                            <li>> Stores all data, compares at prediction time</li>
+                            <li>> K is a hyperparameter you choose</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card warning" style="margin-top: 20px;">
+                        <h3>Choosing K</h3>
+                        <ul style="list-style: none; line-height: 1.8;">
+                            <li>> Small K: flexible, but noisy</li>
+                            <li>> Large K: smooth, but may miss local patterns</li>
+                            <li>> Common choices: 3, 5, 7 (odd to avoid ties)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: KNN Code -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>KNN in scikit-learn</h1>
+            <div class="code-example"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier
+<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
+<span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline
+
+<span class="comment"># IMPORTANT: KNN is distance-based, so scale features!</span>
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'age'</span>]]
+y = df[<span class="string">'dropped_out'</span>]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># Create pipeline: scale -> KNN</span>
+pipeline = Pipeline([
+    (<span class="string">'scaler'</span>, StandardScaler()),   <span class="comment"># Normalize features</span>
+    (<span class="string">'knn'</span>, KNeighborsClassifier(n_neighbors=<span class="number">5</span>))
+])
+
+<span class="comment"># Train and predict</span>
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)</div>
+            <div class="alert-box danger">
+                <strong>Critical:</strong> Always scale features for KNN! Without scaling, features with large values (like age in years) will dominate distance calculations over features with small values (like GPA 0-5).
+            </div>
+        </div>
+
+        <!-- Slide 15: Section - Random Forest -->
+        <div class="slide section-intro">
+            <h1>Part 4: Random Forest</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">The wisdom of many trees</p>
+        </div>
+
+        <!-- Slide 16: Random Forest Concept -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Random Forest: Ensemble of Decision Trees</h1>
+            <div class="analogy-box">
+                <h3>Ask 100 Experts, Trust the Majority</h3>
+                <p>A single decision tree can be wrong. But if you build 100 different trees and let them vote, the collective wisdom is often better than any individual tree.</p>
+            </div>
+            <div class="visual-demo">
+                <pre style="font-size: 0.9rem;">
+                   Random Forest (100 trees)
+                   ========================
+
+    Tree 1:        Tree 2:        Tree 3:       ...    Tree 100:
+      [A]            [B]            [A]                   [A]
+     /   \          /   \          /   \                 /   \
+   [A]   [B]      [A]   [A]      [B]   [A]             [A]   [B]
+
+    Vote: A        Vote: A        Vote: A                Vote: A
+
+    Final Answer: A wins (majority vote)
+
+    Why different trees? Each tree sees:
+    - Random subset of data (bagging)
+    - Random subset of features at each split
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 17: Random Forest Code -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Random Forest in scikit-learn</h1>
+            <div class="code-example"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+
+<span class="comment"># Prepare data</span>
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>, <span class="string">'prev_grade'</span>]]
+y = df[<span class="string">'dropped_out'</span>]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># Train Random Forest</span>
+rf_model = RandomForestClassifier(
+    n_estimators=<span class="number">100</span>,      <span class="comment"># Number of trees</span>
+    max_depth=<span class="number">10</span>,          <span class="comment"># Limit tree depth (prevent overfitting)</span>
+    random_state=<span class="number">42</span>
+)
+rf_model.fit(X_train, y_train)
+
+<span class="comment"># Predict</span>
+y_pred = rf_model.predict(X_test)
+<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
+
+<span class="comment"># Feature importance (bonus!)</span>
+<span class="keyword">for</span> feature, importance <span class="keyword">in</span> zip(X.columns, rf_model.feature_importances_):
+    <span class="function">print</span>(<span class="string">f"{feature}: {importance:.3f}"</span>)</div>
+            <div class="alert-box success">
+                <strong>Bonus:</strong> Random Forest automatically calculates feature importance, telling you which variables matter most for predictions.
+            </div>
+        </div>
+
+        <!-- Slide 18: Model Comparison Summary -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Model Comparison: When to Use What</h1>
+            <div class="model-grid">
+                <div class="model-card">
+                    <div class="model-card-header linear">
+                        <h3>Linear/Logistic Regression</h3>
+                    </div>
+                    <div class="model-card-body">
+                        <ul>
+                            <li>Interpretable coefficients</li>
+                            <li>Fast training</li>
+                            <li>Works when relationship is linear</li>
+                            <li>Good baseline model</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-card-header tree">
+                        <h3>Decision Tree</h3>
+                    </div>
+                    <div class="model-card-body">
+                        <ul>
+                            <li>Easy to visualize and explain</li>
+                            <li>Handles non-linear relationships</li>
+                            <li>No feature scaling needed</li>
+                            <li>Can overfit (limit depth)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-card-header knn">
+                        <h3>K-Nearest Neighbors</h3>
+                    </div>
+                    <div class="model-card-body">
+                        <ul>
+                            <li>Simple and intuitive</li>
+                            <li>No training phase</li>
+                            <li>Works well with small datasets</li>
+                            <li>Requires feature scaling</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-card-header forest">
+                        <h3>Random Forest</h3>
+                    </div>
+                    <div class="model-card-body">
+                        <ul>
+                            <li>Usually high accuracy</li>
+                            <li>Handles complex patterns</li>
+                            <li>Built-in feature importance</li>
+                            <li>Less interpretable</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Section - Evaluation Metrics -->
+        <div class="slide section-intro">
+            <h1>Part 5: Evaluation Metrics</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Accuracy is not enough</p>
+        </div>
+
+        <!-- Slide 20: The Accuracy Trap -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>The Accuracy Trap: Why 95% Can Be Terrible</h1>
+            <div class="hook-card" style="background: linear-gradient(135deg, var(--danger), var(--danger-light));">
+                <h2>Scenario: Predicting Rare Diseases</h2>
+                <p>Out of 1,000 patients, only 10 have the disease (1%).</p>
+                <p style="margin-top: 15px;">A model that ALWAYS predicts "healthy" gets 99% accuracy!</p>
+            </div>
+            <div class="comparison-grid" style="margin-top: 30px;">
+                <div class="comparison-card bad">
+                    <h3>"Lazy" Model</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">Always predicts "No Disease"</p>
+                    <p style="font-size: 2rem; font-weight: bold;">99% Accuracy</p>
+                    <p style="margin-top: 15px;">But misses ALL 10 sick patients!</p>
+                    <p>They do not get treatment.</p>
+                </div>
+                <div class="comparison-card good">
+                    <h3>"Useful" Model</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">Catches 8 of 10 sick patients</p>
+                    <p style="font-size: 2rem; font-weight: bold;">92% Accuracy</p>
+                    <p style="margin-top: 15px;">20 false alarms, but 8 lives saved!</p>
+                    <p>Lower accuracy, better outcome.</p>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>Lesson: Accuracy Alone Is Misleading for Imbalanced Data</h3>
+                <p>We need metrics that capture what REALLY matters.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Confusion Matrix -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>The Confusion Matrix: Understanding Errors</h1>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 20px;">A table showing all possible prediction outcomes</p>
+
+            <div class="confusion-matrix">
+                <div class="cm-corner"></div>
+                <div class="cm-header">Predicted: No</div>
+                <div class="cm-header">Predicted: Yes</div>
+
+                <div class="cm-label">Actual: No</div>
+                <div class="cm-cell tn"><strong>TN</strong><br>True Negative<br>(Correct)</div>
+                <div class="cm-cell fp"><strong>FP</strong><br>False Positive<br>(Type I Error)</div>
+
+                <div class="cm-label">Actual: Yes</div>
+                <div class="cm-cell fn"><strong>FN</strong><br>False Negative<br>(Type II Error)</div>
+                <div class="cm-cell tp"><strong>TP</strong><br>True Positive<br>(Correct)</div>
+            </div>
+
+            <div class="concept-grid" style="margin-top: 30px;">
+                <div class="concept-card danger">
+                    <h3>False Positive (FP)</h3>
+                    <p>Model said YES, reality was NO</p>
+                    <p style="margin-top: 10px; color: var(--text-light);">Example: Flagged as dropout, but student stayed</p>
+                </div>
+                <div class="concept-card warning">
+                    <h3>False Negative (FN)</h3>
+                    <p>Model said NO, reality was YES</p>
+                    <p style="margin-top: 10px; color: var(--text-light);">Example: Predicted to stay, but student dropped out</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Precision vs Recall -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Precision vs Recall: The Critical Trade-off</h1>
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, var(--info-light), var(--info)); padding: 30px; border-radius: 15px; color: white;">
+                    <h3 style="color: white; text-align: center;">Precision</h3>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 20px 0;">"Of all I predicted YES, how many were actually YES?"</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center; font-family: monospace;">
+                        Precision = TP / (TP + FP)
+                    </div>
+                    <p style="margin-top: 20px; text-align: center;">High precision = Few false alarms</p>
+                </div>
+                <div style="background: linear-gradient(135deg, var(--success), var(--success-light)); padding: 30px; border-radius: 15px; color: white;">
+                    <h3 style="color: white; text-align: center;">Recall (Sensitivity)</h3>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 20px 0;">"Of all actual YES, how many did I catch?"</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center; font-family: monospace;">
+                        Recall = TP / (TP + FN)
+                    </div>
+                    <p style="margin-top: 20px; text-align: center;">High recall = Catch most positives</p>
+                </div>
+            </div>
+            <div class="alert-box warning" style="margin-top: 30px;">
+                <strong>The Trade-off:</strong> Increasing recall often decreases precision (more false alarms). Increasing precision often decreases recall (miss more positives). Choose based on which error is more costly!
+            </div>
+        </div>
+
+        <!-- Slide 23: Precision vs Recall Examples -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>When to Prioritize Which Metric</h1>
+            <div class="comparison-grid">
+                <div class="concept-card info">
+                    <h3>Prioritize RECALL When...</h3>
+                    <p style="font-weight: bold; margin: 15px 0;">Missing a positive is very costly</p>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Disease detection (missing cancer is fatal)</li>
+                        <li>> Fraud detection (missing fraud = lost money)</li>
+                        <li>> Dropout prediction (missing at-risk student = lost opportunity)</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Accept more false alarms to catch all real cases</p>
+                </div>
+                <div class="concept-card success">
+                    <h3>Prioritize PRECISION When...</h3>
+                    <p style="font-weight: bold; margin: 15px 0;">False alarms are costly or annoying</p>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Spam detection (wrongly marking important email)</li>
+                        <li>> Recommendation systems (bad recs hurt trust)</li>
+                        <li>> Criminal justice (false accusation is serious)</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Accept missing some to avoid false positives</p>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <h3>For Dropout Prediction: Usually Prioritize Recall</h3>
+                <p>Better to intervene with a student who would have stayed (false positive) than miss a student who will drop out (false negative).</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: F1 Score and Classification Report -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>F1 Score and Classification Report</h1>
+            <div class="concept-card info" style="margin-bottom: 20px;">
+                <h3>F1 Score: The Harmonic Mean of Precision and Recall</h3>
+                <p style="font-family: monospace; font-size: 1.2rem; margin: 15px 0; text-align: center;">F1 = 2 * (Precision * Recall) / (Precision + Recall)</p>
+                <p>F1 balances both metrics. Use when you need a single number and both precision and recall matter.</p>
+            </div>
+            <div class="code-example"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report, confusion_matrix
+
+<span class="comment"># After making predictions</span>
+y_pred = model.predict(X_test)
+
+<span class="comment"># Confusion Matrix</span>
+cm = confusion_matrix(y_test, y_pred)
+<span class="function">print</span>(<span class="string">"Confusion Matrix:"</span>)
+<span class="function">print</span>(cm)
+
+<span class="comment"># Classification Report (precision, recall, f1 for each class)</span>
+<span class="function">print</span>(<span class="string">"\nClassification Report:"</span>)
+<span class="function">print</span>(classification_report(y_test, y_pred, target_names=[<span class="string">'Stayed'</span>, <span class="string">'Dropped'</span>]))
+
+<span class="comment"># Output:</span>
+<span class="comment">#               precision    recall  f1-score   support</span>
+<span class="comment">#       Stayed       0.92      0.95      0.93       180</span>
+<span class="comment">#      Dropped       0.67      0.55      0.60        20</span>
+<span class="comment">#     accuracy                           0.91       200</span></div>
+        </div>
+
+        <!-- Slide 25: Regression Metrics -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Regression Metrics: When Predicting Numbers</h1>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>MAE</h4>
+                    <div class="formula">Mean Absolute Error</div>
+                    <p>Average of |actual - predicted|</p>
+                    <p style="margin-top: 10px; color: var(--success);">Easy to interpret</p>
+                </div>
+                <div class="metric-card">
+                    <h4>MSE</h4>
+                    <div class="formula">Mean Squared Error</div>
+                    <p>Average of (actual - predicted)^2</p>
+                    <p style="margin-top: 10px; color: var(--warning);">Punishes big errors more</p>
+                </div>
+                <div class="metric-card">
+                    <h4>RMSE</h4>
+                    <div class="formula">Root Mean Squared Error</div>
+                    <p>Square root of MSE</p>
+                    <p style="margin-top: 10px; color: var(--info);">Same units as target</p>
+                </div>
+                <div class="metric-card">
+                    <h4>R-squared</h4>
+                    <div class="formula">Coefficient of Determination</div>
+                    <p>% of variance explained</p>
+                    <p style="margin-top: 10px; color: var(--primary);">0 to 1 (higher = better)</p>
+                </div>
+            </div>
+            <div class="code-example"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, mean_squared_error, r2_score
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># After regression predictions</span>
+y_pred = model.predict(X_test)
+
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+<span class="function">print</span>(<span class="string">f"MAE:  {mae:.2f} grade points"</span>)   <span class="comment"># On average, off by X points</span>
+<span class="function">print</span>(<span class="string">f"RMSE: {rmse:.2f} grade points"</span>)  <span class="comment"># Typical error magnitude</span>
+<span class="function">print</span>(<span class="string">f"R-squared: {r2:.3f}"</span>)             <span class="comment"># Model explains X% of variance</span></div>
+        </div>
+
+        <!-- Slide 26: Section - Cross-Validation -->
+        <div class="slide section-intro">
+            <h1>Part 6: Cross-Validation</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Getting reliable performance estimates</p>
+        </div>
+
+        <!-- Slide 27: Cross-Validation Concept -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Cross-Validation: More Reliable Than a Single Split</h1>
+            <div class="analogy-box">
+                <h3>The Problem with One Train/Test Split</h3>
+                <p>What if your random split happened to be "lucky" or "unlucky"? A single 80/20 split might not represent the model's true performance.</p>
+            </div>
+            <div class="visual-demo">
+                <h3 style="margin-bottom: 15px;">5-Fold Cross-Validation</h3>
+                <pre style="font-size: 0.9rem;">
+    Data split into 5 equal parts (folds):
+
+    Fold 1: [TEST]  [train] [train] [train] [train]  -> Score: 0.85
+    Fold 2: [train] [TEST]  [train] [train] [train]  -> Score: 0.82
+    Fold 3: [train] [train] [TEST]  [train] [train]  -> Score: 0.88
+    Fold 4: [train] [train] [train] [TEST]  [train]  -> Score: 0.84
+    Fold 5: [train] [train] [train] [train] [TEST]   -> Score: 0.86
+
+    Final Score: 0.85 (+/- 0.02)  <- Average and standard deviation
+
+    Every data point is tested exactly once!
+                </pre>
+            </div>
+            <div class="key-takeaway">
+                <h3>Cross-Validation Gives You Both: Estimate AND Uncertainty</h3>
+                <p>Not just "accuracy is 85%" but "accuracy is 85% +/- 2%"</p>
+            </div>
+        </div>
+
+        <!-- Slide 28: Cross-Validation Code -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Cross-Validation in scikit-learn</h1>
+            <div class="code-example"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Prepare data (no train/test split needed for CV)</span>
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>]]
+y = df[<span class="string">'dropped_out'</span>]
+
+<span class="comment"># Compare models with 5-fold cross-validation</span>
+models = {
+    <span class="string">'Logistic Regression'</span>: LogisticRegression(),
+    <span class="string">'Random Forest'</span>: RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>),
+    <span class="string">'KNN'</span>: KNeighborsClassifier(n_neighbors=<span class="number">5</span>)
+}
+
+<span class="keyword">for</span> name, model <span class="keyword">in</span> models.items():
+    scores = cross_val_score(model, X, y, cv=<span class="number">5</span>, scoring=<span class="string">'f1'</span>)
+    <span class="function">print</span>(<span class="string">f"{name}: F1 = {scores.mean():.3f} (+/- {scores.std():.3f})"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Logistic Regression: F1 = 0.62 (+/- 0.05)</span>
+<span class="comment"># Random Forest:       F1 = 0.71 (+/- 0.03)  <- Winner!</span>
+<span class="comment"># KNN:                 F1 = 0.58 (+/- 0.08)</span></div>
+            <div class="alert-box info">
+                <strong>scoring parameter options:</strong> 'accuracy', 'precision', 'recall', 'f1', 'roc_auc' for classification; 'r2', 'neg_mean_squared_error' for regression.
+            </div>
+        </div>
+
+        <!-- Slide 29: Feature Importance -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Feature Importance: What Drives Predictions?</h1>
+            <div class="concept-grid">
+                <div>
+                    <div class="code-example" style="font-size: 0.85rem;"><span class="comment"># After training Random Forest</span>
+rf_model.fit(X_train, y_train)
+
+<span class="comment"># Get feature importances</span>
+importances = rf_model.feature_importances_
+features = X.columns
+
+<span class="comment"># Sort by importance</span>
+sorted_idx = np.argsort(importances)[::-<span class="number">1</span>]
+
+<span class="function">print</span>(<span class="string">"Feature Importance Ranking:"</span>)
+<span class="keyword">for</span> i <span class="keyword">in</span> sorted_idx:
+    <span class="function">print</span>(<span class="string">f"  {features[i]}: {importances[i]:.3f}"</span>)
+
+<span class="comment"># Visualize</span>
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+plt.barh(features[sorted_idx], importances[sorted_idx])
+plt.xlabel(<span class="string">'Importance'</span>)
+plt.title(<span class="string">'Feature Importance'</span>)
+plt.tight_layout()
+plt.show()</div>
+                </div>
+                <div>
+                    <div class="visual-demo">
+                        <pre style="font-size: 0.9rem;">
+Feature Importance Ranking:
+===========================
+
+attendance          |========== 0.35
+prev_grade          |======== 0.28
+socioeconomic_score |====== 0.22
+study_hours         |==== 0.15
+
+Insight: Attendance is the
+strongest predictor of dropout.
+
+Action: Focus interventions on
+students with declining attendance!
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="alert-box success">
+                <strong>Business Value:</strong> Feature importance helps explain the model to stakeholders and prioritize interventions.
+            </div>
+        </div>
+
+        <!-- Slide 30: Demo -->
+        <div class="slide">
+            <div class="demo-section">
+                <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo: Model Comparison</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Student Dropout Prediction Challenge</div>
+
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">What We Will Build:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">1. Load and prepare student data</li>
+                                <li style="padding: 8px 0;">2. Train 4 different models</li>
+                                <li style="padding: 8px 0;">3. Compare using cross-validation</li>
+                                <li style="padding: 8px 0;">4. Analyze confusion matrices</li>
+                                <li style="padding: 8px 0;">5. Extract feature importance</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Models to Compare:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">- Logistic Regression (baseline)</li>
+                                <li style="padding: 8px 0;">- Decision Tree</li>
+                                <li style="padding: 8px 0;">- K-Nearest Neighbors</li>
+                                <li style="padding: 8px 0;">- Random Forest</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
+                    <strong>Goal:</strong> Find the best model for dropout prediction and explain WHY students are at risk
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 31: Workshop -->
+        <div class="slide">
+            <div class="workshop-section">
+                <div style="font-size: 3rem; margin-bottom: 30px;">Workshop: Kaggle-Style Competition</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Predict Student Performance - May the Best Model Win!</div>
+
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Your Mission:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">1. Load the provided dataset</li>
+                                <li style="padding: 8px 0;">2. Try at least 3 different models</li>
+                                <li style="padding: 8px 0;">3. Use cross-validation to compare</li>
+                                <li style="padding: 8px 0;">4. Generate classification report</li>
+                                <li style="padding: 8px 0;">5. Extract feature importance</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 20px;">Evaluation Criteria:</h3>
+                            <ul style="list-style: none; color: white; font-size: 1rem;">
+                                <li style="padding: 8px 0;">- Primary metric: F1-Score (Recall matters!)</li>
+                                <li style="padding: 8px 0;">- Bonus: Best explanation of feature importance</li>
+                                <li style="padding: 8px 0;">- Bonus: Creative feature engineering</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
+                    <strong>Deliverable:</strong> Jupyter notebook with model comparison, best model selection, and business recommendation
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 32: Summary -->
+        <div class="slide">
+            <span class="section-label summary">SUMMARY</span>
+            <h1>How to Choose the Right Model</h1>
+            <div class="concept-grid">
+                <div>
+                    <h2>Today You Learned:</h2>
+                    <div style="background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>> No single "best" model (No Free Lunch)</li>
+                            <li>> Linear/Logistic Regression: interpretable baseline</li>
+                            <li>> KNN: simple, distance-based (scale features!)</li>
+                            <li>> Random Forest: powerful ensemble</li>
+                            <li>> Confusion Matrix: understand your errors</li>
+                            <li>> Precision vs Recall trade-off</li>
+                            <li>> Cross-validation: reliable comparison</li>
+                            <li>> Feature importance: explain predictions</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Model Selection Checklist:</h2>
+                    <div style="background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>1. Start with a simple baseline (Logistic)</li>
+                            <li>2. Try multiple models</li>
+                            <li>3. Use cross-validation (not single split)</li>
+                            <li>4. Choose metric that matches your goal</li>
+                            <li>5. Check confusion matrix for error types</li>
+                            <li>6. Consider interpretability needs</li>
+                            <li>7. Extract feature importance for insights</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                    <h2 style="color: white; margin-bottom: 15px;">Key Takeaway</h2>
+                    <p style="font-size: 1.3rem;">
+                        The best model is not the most complex one.<br>
+                        It is the one that solves YOUR problem best.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 33: Next Week Preview -->
+        <div class="slide">
+            <h1>Next Week: Model Deployment and Final Project</h1>
+            <div class="concept-grid">
+                <div class="concept-card success">
+                    <h3>Week 15 Preview</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> From notebook to production</li>
+                        <li>> Saving and loading models</li>
+                        <li>> Making predictions on new data</li>
+                        <li>> Final project guidance</li>
+                    </ul>
+                </div>
+                <div class="concept-card info">
+                    <h3>Prepare For Next Week</h3>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>> Review your best model from today</li>
+                        <li>> Think about your final project dataset</li>
+                        <li>> Consider: What problem will you solve?</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, var(--warning), var(--warning-dark)); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                    <h2 style="color: white; margin-bottom: 15px;">Homework</h2>
+                    <p style="font-size: 1.1rem;">
+                        Complete the workshop notebook<br>
+                        Best F1-score wins bragging rights!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
