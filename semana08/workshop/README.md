@@ -1,276 +1,249 @@
-# Week 8 Workshop: Build a Budget Execution Dashboard
+# Week 8 Workshop: Visualization Principles
 
-## Overview
+## Creating Publication-Ready Figures with Budget Execution Data
 
-| Item | Details |
-|------|---------|
-| **Duration** | 90 minutes |
-| **Dataset** | Budget Execution (Ejecucion Presupuestal) |
-| **Deliverable** | Working Streamlit dashboard |
-| **Tools** | Python, Plotly, Streamlit |
+**Duration:** 2 hours (homework or in-class workshop)
+
+**Dataset:** Budget Execution Data (EJECUCION_PRESUPUESTAL) from datos.gov.co
 
 ---
 
-## Learning Objectives
+## Objectives
 
-By completing this workshop, you will be able to:
+By completing this workshop, you will:
 
-1. Build a complete Streamlit web application
-2. Implement filter widgets (selectbox, multiselect, slider)
-3. Display key metrics using `st.metric()`
-4. Create and display 4 interactive Plotly charts
-5. Organize dashboard layout with columns and sidebar
-
----
-
-## Prerequisites
-
-### Install Required Packages
-
-```bash
-pip install streamlit plotly pandas
-```
-
-### Verify Installation
-
-```bash
-streamlit --version
-```
+1. Create 5 different chart types with real budget data
+2. Apply a consistent, professional color palette
+3. Add proper titles, labels, and annotations
+4. Export publication-ready figures in multiple formats
 
 ---
 
-## Dashboard Requirements
+## Workshop Tasks
 
-Your dashboard must include:
+### Part 1: Data Preparation and Color Palette (15 minutes)
 
-### 1. Title and Description
-- Application title
-- Brief description of what the dashboard shows
-- Data source information
+**Task 1.1: Load and Explore the Data**
 
-### 2. Three Filter Widgets (in sidebar)
+1. Load the budget execution dataset
+2. Identify numeric and categorical columns
+3. Create summary statistics
 
-| Widget | Type | Purpose |
-|--------|------|---------|
-| Department | `multiselect` | Filter by one or more departments |
-| Year | `slider` | Filter by year range |
-| Show Raw Data | `checkbox` | Toggle data table visibility |
+**Task 1.2: Define a Professional Color Palette**
 
-### 3. Four Charts
+Create a consistent color palette that you will use throughout:
+- Primary color (main data)
+- Secondary color (comparison/secondary data)
+- Accent color (highlighting important values)
+- Warning color (below-target or negative values)
+- Neutral color (reference lines, background elements)
 
-| Chart # | Type | Purpose |
-|---------|------|---------|
-| 1 | Bar Chart | Budget by department (approved vs executed) |
-| 2 | Line Chart | Budget trend over years |
-| 3 | Pie Chart | Budget distribution by category |
-| 4 | Scatter Plot | Approved vs Executed with size = execution rate |
-
-### 4. Key Metrics Row
-
-Display these 3 metrics at the top:
-
-| Metric | Calculation |
-|--------|-------------|
-| Total Approved Budget | Sum of approved budget |
-| Total Executed Budget | Sum of executed budget |
-| Average Execution Rate | Executed / Approved * 100 |
+Recommended palettes:
+- Corporate blue: `['#2C3E50', '#3498DB', '#1ABC9C', '#E74C3C', '#95A5A6']`
+- Muted earth: `['#5D4E37', '#8B7355', '#CD853F', '#B22222', '#A9A9A9']`
+- Modern minimal: `['#1A1A2E', '#16213E', '#0F3460', '#E94560', '#EAEAEA']`
 
 ---
 
-## Workshop Structure
+### Part 2: Create 5 Chart Types (75 minutes)
 
-### Part 1: Plotly Exercises (30 minutes)
-Complete `workshop_starter.ipynb` to practice Plotly charts.
+**Chart 1: Horizontal Bar Chart - Budget by Category (15 minutes)**
 
-### Part 2: Streamlit Dashboard (60 minutes)
-Build the complete dashboard using `streamlit_app_starter.py`.
+Create a horizontal bar chart showing budget allocation by category:
+- Sort values from largest to smallest
+- Use a single professional color
+- Add value labels at the end of each bar
+- Include a clean title with context
+- Remove unnecessary gridlines and spines
 
----
+**Chart 2: Grouped Bar Chart - Approved vs Executed (15 minutes)**
 
-## Files in This Workshop
+Create a grouped bar chart comparing approved budget vs executed budget:
+- Use two distinct colors (one for approved, one for executed)
+- Add a legend
+- Show the gap between approved and executed
+- Include percentage execution rate in annotations
 
-| File | Purpose |
-|------|---------|
-| `workshop_starter.ipynb` | Plotly practice exercises |
-| `workshop_solution.ipynb` | Plotly solutions |
-| `streamlit_app_starter.py` | Dashboard starter template |
-| `streamlit_app_solution.py` | Complete dashboard solution |
+**Chart 3: Line Chart - Monthly Execution Trend (15 minutes)**
 
----
+Create a line chart showing monthly budget execution rate:
+- Include a target line for reference
+- Use color to differentiate actual vs target
+- Highlight months where execution was below target
+- Add annotations for key data points (start, end, any notable changes)
 
-## Running the Streamlit App
+**Chart 4: Stacked Bar Chart - Budget Composition (15 minutes)**
 
-### Step 1: Navigate to workshop directory
-```bash
-cd /path/to/semana08/workshop
-```
+Create a stacked bar chart showing how the budget is composed:
+- Use a sequential color palette (light to dark)
+- Add percentage labels within each segment
+- Include a legend
+- Consider horizontal orientation for readability
 
-### Step 2: Run the app
-```bash
-streamlit run streamlit_app_starter.py
-```
+**Chart 5: Small Multiples - Department Comparison (15 minutes)**
 
-### Step 3: View in browser
-The app will open automatically at `http://localhost:8501`
-
-### Step 4: Make changes and refresh
-- Edit the Python file
-- Save your changes
-- Click "Rerun" in the browser (or enable "Always rerun")
-
----
-
-## Streamlit Quick Reference
-
-### Text and Titles
-```python
-st.title('Main Title')
-st.header('Section Header')
-st.subheader('Subsection')
-st.write('Regular text')
-st.markdown('**Bold** and *italic*')
-```
-
-### Widgets
-```python
-# Selectbox (single choice)
-selected = st.selectbox('Label', options=['A', 'B', 'C'])
-
-# Multiselect (multiple choices)
-selected_list = st.multiselect('Label', options=['A', 'B', 'C'], default=['A'])
-
-# Slider (numeric range)
-year = st.slider('Year', min_value=2020, max_value=2024, value=(2020, 2024))
-
-# Checkbox (boolean)
-show_data = st.checkbox('Show raw data')
-```
-
-### Layout
-```python
-# Columns
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric('Label', value, delta)
-
-# Sidebar
-with st.sidebar:
-    st.title('Filters')
-    # widgets go here
-
-# Tabs
-tab1, tab2 = st.tabs(['Tab 1', 'Tab 2'])
-with tab1:
-    # content for tab 1
-```
-
-### Display
-```python
-# Metrics
-st.metric(label='Total', value=1000, delta='+10%')
-
-# DataFrames
-st.dataframe(df)  # Interactive
-st.table(df)      # Static
-
-# Plotly charts
-st.plotly_chart(fig, use_container_width=True)
-```
-
-### Control Flow
-```python
-# Stop execution if condition not met
-if len(selected) == 0:
-    st.warning('Please select at least one option')
-    st.stop()
-```
+Create a small multiples visualization comparing execution across departments:
+- Use consistent scales across all subplots
+- Highlight the department with lowest execution
+- Add reference lines at 90% target
+- Use minimal styling for each subplot
 
 ---
 
-## Common Issues and Solutions
+### Part 3: Publication-Ready Formatting (20 minutes)
 
-### Issue: "ModuleNotFoundError: No module named 'streamlit'"
-**Solution:** Install streamlit: `pip install streamlit`
+**Task 3.1: Apply Consistent Styling**
 
-### Issue: "fig.show() opens in browser, not in app"
-**Solution:** Use `st.plotly_chart(fig)` instead of `fig.show()`
+For each of your 5 charts, ensure:
 
-### Issue: "Multiselect returns empty list and breaks filter"
-**Solution:** Check for empty selection before filtering:
-```python
-if len(selected_depts) == 0:
-    st.warning('Please select at least one department')
-    st.stop()
-```
+- [ ] Title is descriptive and left-aligned
+- [ ] Axis labels are clear and have units if applicable
+- [ ] Font sizes are consistent across all charts
+- [ ] Colors follow your defined palette
+- [ ] Legends are positioned appropriately
+- [ ] No unnecessary gridlines or borders
 
-### Issue: "Chart is too narrow"
-**Solution:** Add `use_container_width=True`:
-```python
-st.plotly_chart(fig, use_container_width=True)
-```
+**Task 3.2: Add Source Attribution**
 
-### Issue: "TypeError: cannot use == with list"
-**Solution:** Use `.isin()` for multiselect filtering:
-```python
-# Wrong
-filtered = df[df['dept'] == selected_depts]
+Add a footnote to each chart with:
+- Data source: "Source: datos.gov.co - Budget Execution Data"
+- Date of data (if available)
 
-# Right
-filtered = df[df['dept'].isin(selected_depts)]
-```
+**Task 3.3: Export Figures**
+
+Export each chart in two formats:
+1. PNG at 300 DPI for reports
+2. SVG for presentations (vector format)
+
+Use consistent naming:
+- `chart1_budget_by_category.png`
+- `chart2_approved_vs_executed.png`
+- etc.
 
 ---
 
-## Rubric
+### Part 4: Critical Analysis (10 minutes)
+
+Answer the following questions in your notebook:
+
+1. **Which chart type was most effective** for communicating the budget story? Why?
+
+2. **What insight would be missed** if you only used one chart type?
+
+3. **If you could only show one chart** to a decision-maker, which would you choose and why?
+
+4. **What additional data** would make these visualizations more impactful?
+
+---
+
+## Deliverables
+
+Your completed workshop should include:
+
+1. **Jupyter Notebook** (`workshop_solution.ipynb`) with:
+   - All code cells executed
+   - Clear markdown explanations for each chart
+   - Answers to critical analysis questions
+
+2. **Exported Figures** (10 files total):
+   - 5 PNG files at 300 DPI
+   - 5 SVG files
+
+3. **Color Palette Documentation**:
+   - Hex codes for your chosen palette
+   - Brief rationale for color choices
+
+---
+
+## Grading Criteria
 
 | Criteria | Points | Description |
 |----------|--------|-------------|
-| Title & Description | 10 | App has clear title and description |
-| Filter Widgets | 20 | 3 working filters (multiselect, slider, checkbox) |
-| Key Metrics | 15 | 3 metrics displayed correctly |
-| Bar Chart | 15 | Department comparison chart |
-| Line Chart | 10 | Year trend chart |
-| Pie Chart | 10 | Category distribution chart |
-| Scatter Plot | 10 | Approved vs Executed with size |
-| Layout | 10 | Clean organization with sidebar and columns |
+| Data-Ink Ratio | 20 | Charts are clean, no chartjunk |
+| Chart Type Selection | 20 | Appropriate chart for each data type |
+| Color Usage | 15 | Purposeful, consistent palette |
+| Labels & Titles | 15 | Clear, informative, professional |
+| Export Quality | 15 | High-resolution, properly named files |
+| Critical Analysis | 15 | Thoughtful answers to questions |
 | **Total** | **100** | |
 
 ---
 
-## Bonus Challenges
+## Tips for Success
 
-If you finish early, try these enhancements:
+### Matplotlib Style Tips
 
-1. **Add a download button** for filtered data
-   ```python
-   st.download_button('Download CSV', filtered.to_csv(), 'data.csv')
-   ```
+```python
+# Set a clean style
+plt.style.use('seaborn-v0_8-whitegrid')
 
-2. **Add a category filter** (fourth filter widget)
+# Or create custom style
+plt.rcParams['figure.figsize'] = (10, 6)
+plt.rcParams['figure.dpi'] = 100
+plt.rcParams['font.size'] = 11
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['axes.spines.top'] = False
+plt.rcParams['axes.spines.right'] = False
+```
 
-3. **Add delta values** to metrics showing change from previous year
+### Color Best Practices
 
-4. **Add color to metrics** based on performance (green for good, red for bad)
+| Do | Do Not |
+|-----|---------|
+| Use color to highlight key data | Use rainbow colors |
+| Keep palette to 5-7 colors max | Use different color for each bar |
+| Use sequential colors for ordered data | Use red-green (colorblind issues) |
+| Gray out less important data | Make everything equally prominent |
 
-5. **Create a two-tab layout** separating Overview and Details
+### Exporting Tips
+
+```python
+# High-resolution PNG
+plt.savefig('chart.png', dpi=300, bbox_inches='tight',
+            facecolor='white', edgecolor='none')
+
+# Vector format for editing
+plt.savefig('chart.svg', format='svg', bbox_inches='tight')
+
+# PDF for printing
+plt.savefig('chart.pdf', format='pdf', bbox_inches='tight')
+```
+
+### Annotation Best Practices
+
+- Annotate only the most important values
+- Use consistent formatting for numbers
+- Position annotations to avoid overlap
+- Use subtle colors for annotations (gray or dark version of main color)
+
+---
+
+## Files Provided
+
+- `workshop_starter.ipynb` - Starter notebook with structure and hints
+- `workshop_solution.ipynb` - Complete solution (for reference after completion)
 
 ---
 
 ## Submission
 
-Submit the following:
-1. Your completed `streamlit_app.py` file
-2. A screenshot of your running dashboard
+Submit your completed notebook and exported figures via the course platform by [deadline].
+
+Create a folder named: `Week7_Workshop_[YourName]/`
+
+Include:
+- `workshop_completed.ipynb`
+- `figures/` folder with all exported charts
 
 ---
 
-## Resources
+## Additional Resources
 
-- [Streamlit Documentation](https://docs.streamlit.io/)
-- [Streamlit Cheat Sheet](https://docs.streamlit.io/library/cheatsheet)
-- [Plotly Express Documentation](https://plotly.com/python/plotly-express/)
-- [Streamlit Gallery](https://streamlit.io/gallery)
+- [Edward Tufte - The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
+- [Matplotlib Gallery](https://matplotlib.org/stable/gallery/index.html)
+- [Seaborn Gallery](https://seaborn.pydata.org/examples/index.html)
+- [ColorBrewer - Color Advice for Maps](https://colorbrewer2.org/)
 
 ---
 
-*Last updated: January 2026*
+*Remember: Good visualization is about communication, not decoration. Every element should serve the data.*

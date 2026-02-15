@@ -1,244 +1,487 @@
-# Week 10 Workshop: Inferential Statistics - Confidence Intervals & Hypothesis Testing
+# Week 10 Workshop: Birth Records Dashboard in Power BI
 
-## Overview
+## Power BI Essentials - Complete Dashboard Project
 
-In this workshop, you will apply inferential statistics techniques to draw conclusions about population parameters using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS).
+**Duration:** 2 hours (homework or in-class workshop)
 
-**Duration:** 2-3 hours (independent work)
+**Dataset:** Nacidos Vivos (Birth Records) from datos.gov.co
 
-**Deadline:** Before Week 11 class
-
----
-
-## Learning Objectives
-
-By completing this workshop, you will be able to:
-
-1. Calculate and interpret confidence intervals for different metrics
-2. Formulate and test statistical hypotheses
-3. Perform and interpret t-tests for group comparisons
-4. Translate statistical results into business language
-5. Visualize statistical significance effectively
+**Source:** [https://www.datos.gov.co/en/Salud-y-Protecci-n-Social/nacimientos/26g4-ekt3](https://www.datos.gov.co/en/Salud-y-Protecci-n-Social/nacimientos/26g4-ekt3)
 
 ---
 
-## Dataset
+## Objectives
 
-**Source:** datos.gov.co - MEN_ESTADISTICAS
+By completing this workshop, you will:
 
-**Description:** Education statistics from the Colombian Ministry of Education containing:
-- Enrollment numbers by department, municipality, and education level
-- Dropout and graduation rates
-- Demographic breakdowns (gender, urban/rural, etc.)
-- Historical data across multiple years
-
-This is the same dataset you worked with in Week 3 (Data Cleaning).
+1. Import and clean data using Power Query
+2. Create 5 different visualization types
+3. Write 3 DAX measures for key metrics
+4. Add interactive slicers for filtering
+5. Design a clean, professional dashboard layout
 
 ---
 
-## Workshop Structure
+## Workshop Overview
 
-### Part 1: Confidence Intervals for 3 Metrics
-
-You will calculate 95% confidence intervals for:
-
-| Metric | What it tells us |
-|--------|------------------|
-| 1. Mean enrollment | Average number of students per record |
-| 2. Dropout rate | Average dropout percentage |
-| 3. Approval rate | Average approval/pass rate |
-
-For each, you must:
-- Calculate the CI manually AND using scipy
-- Interpret the CI in plain language
-- Visualize the CI on a distribution plot
-
-### Part 2: Hypothesis Testing (2 Tests)
-
-You will perform two hypothesis tests:
-
-| Test | Comparison |
-|------|------------|
-| 1. Urban vs Rural | Compare dropout rates between urban and rural areas |
-| 2. Time Comparison | Compare enrollment between two different years |
-
-For each test, you must:
-- State the null and alternative hypotheses
-- Perform the appropriate test (t-test)
-- Report the t-statistic and p-value
-- Make a decision at alpha = 0.05
-- Write a conclusion in business language
-
-### Part 3: Business Interpretation
-
-Translate your findings into language that a non-technical stakeholder (e.g., Ministry official, school administrator) would understand.
-
-### Part 4: Visualization of Statistical Significance
-
-Create publication-quality visualizations that:
-- Show the distributions being compared
-- Indicate whether differences are significant
-- Include confidence intervals where appropriate
+```
++----------------------------------------------------------+
+|  BIRTH RECORDS DASHBOARD                                  |
+|  Colombia - Nacidos Vivos Analysis                        |
++----------------------------------------------------------+
+|                                                           |
+|  [Year Slicer]  [Gender Slicer]  [Area Slicer]           |
+|                                                           |
+|  +-------------+  +-------------+  +-------------+        |
+|  | CARD        |  | CARD        |  | CARD        |        |
+|  | Total Births|  | Avg Weight  |  | Low Weight %|        |
+|  +-------------+  +-------------+  +-------------+        |
+|                                                           |
+|  +---------------------------+  +---------------------+   |
+|  | BAR CHART                 |  | LINE CHART          |   |
+|  | Births by Department      |  | Births Over Time    |   |
+|  +---------------------------+  +---------------------+   |
+|                                                           |
+|  +---------------------------+  +---------------------+   |
+|  | MAP                       |  | TABLE               |   |
+|  | Geographic Distribution   |  | Detailed Records    |   |
+|  +---------------------------+  +---------------------+   |
+|                                                           |
++----------------------------------------------------------+
+```
 
 ---
 
-## Files Provided
+## Part 1: Data Import and Cleaning (30 minutes)
 
-| File | Description |
-|------|-------------|
-| `workshop_starter.ipynb` | Starter notebook with empty cells for your work |
-| `workshop_solution.ipynb` | Complete solution (only look after attempting!) |
+### Task 1.1: Download the Dataset
+
+1. Go to [datos.gov.co](https://www.datos.gov.co/)
+2. Search for "nacidos vivos" or "nacimientos"
+3. Download the dataset as CSV
+4. Note the file location
+
+Alternative: Use the direct link provided by your instructor.
 
 ---
 
-## Instructions
+### Task 1.2: Import Data into Power BI
 
-### Step 1: Setup
+1. Open **Power BI Desktop**
+2. Click **Home** > **Get Data** > **Text/CSV**
+3. Select your downloaded file
+4. In the preview window, verify:
+   - Column headers are detected correctly
+   - Data types look reasonable
+5. Click **Transform Data** (not Load) to open Power Query
 
-1. Open `workshop_starter.ipynb` in Jupyter or VS Code
-2. Run the setup cell to load libraries and dataset
-3. Review the dataset structure
+---
 
-### Step 2: Confidence Intervals (Part 1)
+### Task 1.3: Clean Data in Power Query
 
-For each of the 3 metrics:
-1. Extract the relevant column
-2. Calculate sample statistics (mean, std, n)
-3. Compute the confidence interval
-4. Verify using `scipy.stats.t.interval()`
-5. Create a visualization
-6. Write the interpretation
+Perform these cleaning operations:
 
-### Step 3: Hypothesis Tests (Part 2)
+#### 1. Rename Columns for Clarity
 
-For each of the 2 tests:
-1. Define H0 and H1 clearly
-2. Prepare the two groups
-3. Check assumptions (sample size, approximate normality)
-4. Perform the t-test using `scipy.stats.ttest_ind()`
-5. Report results and make a decision
-6. Write the conclusion
+Right-click column headers and rename:
 
-### Step 4: Business Interpretation (Part 3)
+| Original | New Name |
+|----------|----------|
+| PESO | Birth_Weight_Grams |
+| SEXO | Gender |
+| ANO | Year |
+| MES | Month |
+| DEPARTAMENTO | Department |
+| MUNICIPIO | Municipality |
+| AREA | Area_Type |
 
-Write a brief executive summary (5-7 sentences) that:
-- Summarizes key findings
-- Explains what they mean for education policy
-- Avoids statistical jargon
+#### 2. Transform Gender Values
 
-### Step 5: Visualization (Part 4)
+1. Select the Gender column
+2. Go to **Transform** > **Replace Values**
+3. Replace:
+   - `1` with `Male`
+   - `2` with `Female`
 
-Create at least 2 visualizations:
-1. A comparison plot (boxplot or distribution overlay) with significance annotation
-2. A confidence interval plot showing the 3 metrics
+#### 3. Transform Area Values
+
+1. Select the Area_Type column
+2. Replace:
+   - `1` with `Urban`
+   - `2` with `Rural`
+   - `3` with `Unknown`
+
+#### 4. Remove Invalid Records
+
+1. Filter out rows where Birth_Weight_Grams = 0 or is null
+2. Filter out rows where Gender is null
+3. Click on column header > **Remove Empty**
+
+#### 5. Check Data Types
+
+Ensure:
+- Birth_Weight_Grams = Whole Number
+- Year = Whole Number
+- Month = Whole Number
+- Text columns = Text
+
+#### 6. Close and Apply
+
+Click **Home** > **Close & Apply**
+
+---
+
+## Part 2: Create 5 Visualizations (45 minutes)
+
+### Visualization 1: Card - Total Births
+
+1. Click blank area on canvas
+2. Select **Card** from Visualizations pane
+3. Drag `Birth_Weight_Grams` to Values
+4. Change aggregation: Click dropdown > **Count**
+5. Format the card:
+   - Display units: Auto
+   - Add title: "Total Births"
+   - Increase font size
+
+**Expected:** A single number showing total birth count.
+
+---
+
+### Visualization 2: Clustered Bar Chart - Births by Department
+
+1. Click blank area
+2. Select **Clustered Bar Chart**
+3. Configure:
+   - **Y-axis:** Department
+   - **X-axis:** Birth_Weight_Grams (Count)
+4. Sort: Click chart > More options (...) > Sort descending
+5. Show only Top 10:
+   - In Filters pane, add Department
+   - Select "Top N" filter type
+   - Show Top 10 by Count of Birth_Weight_Grams
+
+**Expected:** Horizontal bars showing top 10 departments by birth count.
+
+---
+
+### Visualization 3: Line Chart - Births Over Time
+
+1. Click blank area
+2. Select **Line Chart**
+3. Configure:
+   - **X-axis:** Year
+   - **Y-axis:** Birth_Weight_Grams (Count)
+4. Optional: Add Month for monthly detail
+   - Drill down hierarchy: Year > Month
+
+**Expected:** Line showing trend of births over years.
+
+---
+
+### Visualization 4: Filled Map - Geographic Distribution
+
+1. Click blank area
+2. Select **Filled Map**
+3. Configure:
+   - **Location:** Department
+   - **Legend:** Leave empty
+   - **Tooltips:** Count of Birth_Weight_Grams
+4. In Format pane:
+   - Set map style to Grayscale
+   - Adjust colors for data values
+
+**Note:** If map does not recognize Colombian departments, you may need to:
+- Add "Colombia" to department names
+- Or use a custom TopoJSON file
+
+**Alternative:** Use **Shape Map** if Filled Map does not work.
+
+**Expected:** Map of Colombia colored by birth density.
+
+---
+
+### Visualization 5: Table - Detailed Records
+
+1. Click blank area
+2. Select **Table**
+3. Add columns:
+   - Department
+   - Gender
+   - Area_Type
+   - Count of records
+   - Average Birth_Weight_Grams
+4. Enable totals row:
+   - Format > Totals > On
+
+**Expected:** A sortable table with aggregated data.
+
+---
+
+## Part 3: Create 3 DAX Measures (20 minutes)
+
+### Measure 1: Average Birth Weight
+
+1. Right-click table in Fields pane
+2. Select **New Measure**
+3. Enter:
+
+```dax
+Avg Birth Weight =
+AVERAGE('nacidos_vivos'[Birth_Weight_Grams])
+```
+
+4. Format: Whole Number with "g" suffix
+
+---
+
+### Measure 2: Low Birth Weight Percentage
+
+Low birth weight is defined as less than 2500 grams.
+
+```dax
+Low Weight Percentage =
+VAR TotalBirths = COUNT('nacidos_vivos'[Birth_Weight_Grams])
+VAR LowWeightBirths =
+    CALCULATE(
+        COUNT('nacidos_vivos'[Birth_Weight_Grams]),
+        'nacidos_vivos'[Birth_Weight_Grams] < 2500
+    )
+RETURN
+    DIVIDE(LowWeightBirths, TotalBirths, 0) * 100
+```
+
+Format: Number with 1 decimal, add "%" suffix
+
+---
+
+### Measure 3: Year-over-Year Change
+
+```dax
+YoY Birth Change =
+VAR CurrentYear = SUM('nacidos_vivos'[Year])
+VAR CurrentBirths = COUNT('nacidos_vivos'[Birth_Weight_Grams])
+VAR PreviousYearBirths =
+    CALCULATE(
+        COUNT('nacidos_vivos'[Birth_Weight_Grams]),
+        PREVIOUSYEAR('nacidos_vivos'[Date])
+    )
+RETURN
+    DIVIDE(CurrentBirths - PreviousYearBirths, PreviousYearBirths, 0) * 100
+```
+
+**Note:** This measure requires a Date column. If your data only has Year/Month:
+
+Alternative simpler version:
+```dax
+Births This Year =
+CALCULATE(
+    COUNT('nacidos_vivos'[Birth_Weight_Grams]),
+    'nacidos_vivos'[Year] = MAX('nacidos_vivos'[Year])
+)
+```
+
+---
+
+### Add Measures to Dashboard
+
+1. Create 3 Card visuals
+2. Add one measure to each card
+3. Position them at the top of the dashboard
+
+---
+
+## Part 4: Add Slicers (15 minutes)
+
+### Slicer 1: Year
+
+1. Click blank area
+2. Select **Slicer** visualization
+3. Drag `Year` to the slicer
+4. Format options:
+   - Style: Dropdown or List
+   - Single select or Multi-select
+
+---
+
+### Slicer 2: Gender
+
+1. Add another Slicer
+2. Drag `Gender` to the slicer
+3. Format:
+   - Style: Buttons (horizontal)
+   - Add "All" option
+
+---
+
+### Slicer 3: Area Type
+
+1. Add another Slicer
+2. Drag `Area_Type` to the slicer
+3. Format:
+   - Style: Dropdown
+   - Allow multiple selections
+
+---
+
+### Sync Slicers (Optional but Recommended)
+
+1. Go to **View** > **Sync Slicers**
+2. Ensure all slicers affect all visuals on the page
+
+---
+
+## Part 5: Dashboard Design (10 minutes)
+
+### Layout Guidelines
+
+1. **Align visuals:** Use gridlines (View > Gridlines)
+2. **Consistent sizing:** Group similar visuals together
+3. **Visual hierarchy:**
+   - KPIs (cards) at top
+   - Main charts in middle
+   - Details (table) at bottom
+
+### Color Scheme
+
+Use a consistent color palette:
+
+| Element | Color Suggestion |
+|---------|------------------|
+| Male | Blue (#4A90D9) |
+| Female | Pink (#E84393) |
+| Urban | Gray (#636E72) |
+| Rural | Green (#00B894) |
+| Accent | Purple (#6C5CE7) |
+
+### Add Title
+
+1. Insert > Text Box
+2. Add dashboard title: "Colombia Birth Records Analysis"
+3. Add subtitle with data source and date range
+
+---
+
+## Deliverables
+
+Your completed workshop should include:
+
+### Power BI File (.pbix)
+
+1. **Data Model:**
+   - Cleaned and transformed data
+   - Proper column names and data types
+
+2. **Measures (3 total):**
+   - Avg Birth Weight
+   - Low Weight Percentage
+   - Births count or YoY metric
+
+3. **Visualizations (5 total):**
+   - Card (Total Births)
+   - Clustered Bar Chart (by Department)
+   - Line Chart (over time)
+   - Map (geographic)
+   - Table (detailed)
+
+4. **Slicers (3 total):**
+   - Year
+   - Gender
+   - Area Type
+
+5. **Professional Layout:**
+   - Aligned visuals
+   - Consistent colors
+   - Clear titles
 
 ---
 
 ## Grading Criteria
 
-This workshop is for practice and feedback. Focus on:
-
-| Criterion | What we look for |
-|-----------|------------------|
-| Completeness | All tasks attempted |
-| Correctness | Proper statistical methods used |
-| Interpretation | Results explained correctly, avoiding common p-value mistakes |
-| Visualization | Clear, informative plots with proper labels |
-| Business Language | Technical findings translated for non-technical audience |
+| Criteria | Points | Description |
+|----------|--------|-------------|
+| Data Cleaning | 15 | Proper transformations in Power Query |
+| Visualizations | 30 | All 5 charts created correctly |
+| DAX Measures | 25 | All 3 measures work correctly |
+| Slicers | 15 | Interactive filtering works |
+| Design | 15 | Professional appearance and layout |
+| **Total** | **100** | |
 
 ---
 
 ## Tips for Success
 
-### Before You Start
-- Review the class slides on confidence intervals and hypothesis testing
-- Remember the formula: CI = mean +/- t * (std / sqrt(n))
-- Know the difference between t-test types (independent vs paired)
+### Power Query Tips
 
-### While Working
-- Always check for missing values before calculations
-- Use `dropna()` to clean data before statistical tests
-- Remember: p-value < 0.05 means reject H0 (at alpha = 0.05)
-- Statistical significance != practical significance
+- Use **Applied Steps** to track your transformations
+- You can always go back and modify steps
+- Name your steps descriptively
 
-### Common Mistakes to Avoid
-- Saying "p-value is the probability H0 is true" (WRONG!)
-- Using paired t-test when groups are independent
-- Forgetting to state your hypotheses before testing
-- Ignoring sample size when interpreting results
+### DAX Tips
 
-### If Stuck
-- Re-read the cell instructions carefully
-- Check the scipy.stats documentation
-- Try a simpler version first
-- Only check the solution notebook as a last resort
+- Test measures in a Card visual first
+- Use **DAX Formatter** (daxformatter.com) to format complex formulas
+- Start simple, then add complexity
+
+### Design Tips
+
+- Less is more - do not overcrowd the dashboard
+- Every visual should answer a specific question
+- Test interactivity - click on charts to see cross-filtering
 
 ---
 
-## Key Formulas Reference
+## Common Issues and Solutions
 
-### Confidence Interval for Mean
-```
-CI = x_bar +/- t_critical * (s / sqrt(n))
+### Issue: Map Shows Wrong Location
 
-Where:
-- x_bar = sample mean
-- t_critical = t-value for desired confidence level
-- s = sample standard deviation
-- n = sample size
-```
+**Solution:** Add country context
+- Rename "Bogota" to "Bogota, Colombia"
+- Or use Data Categories: Set column to State/Province
 
-### Standard Error
-```
-SE = s / sqrt(n)
-```
+### Issue: Slicers Do Not Filter Charts
 
-### T-Statistic (two independent samples)
-```
-t = (x1_bar - x2_bar) / sqrt(s1^2/n1 + s2^2/n2)
-```
+**Solution:** Check relationships
+- Go to Model View
+- Ensure tables are related
+- Check if filters are set to "All Pages"
 
-### Decision Rule
-```
-If p-value < alpha: Reject H0
-If p-value >= alpha: Fail to reject H0
-```
+### Issue: DAX Returns Blank
+
+**Solution:** Check for nulls
+- Use `DIVIDE()` instead of `/` to handle division by zero
+- Wrap calculations in `IF(ISBLANK(...), 0, ...)`
+
+---
+
+## Extension Challenges
+
+If you finish early, try these:
+
+1. **Add a Gauge:** Show % of births meeting healthy weight threshold
+2. **Create a Drill-through:** Click on department to see municipality details
+3. **Add Bookmarks:** Create different views (Overview, Regional, Trends)
+4. **Mobile Layout:** Design a phone-friendly version
 
 ---
 
 ## Submission
 
-Submit your completed `workshop_starter.ipynb` via the course LMS before the deadline.
+Submit your completed .pbix file via the course platform.
 
-Ensure that:
-- All cells have been executed (Kernel > Restart & Run All)
-- All confidence intervals are calculated and interpreted
-- Both hypothesis tests are complete with conclusions
-- The business summary is written
-- Visualizations are clear and labeled
+Name your file: `Week9_Workshop_[YourName].pbix`
 
----
-
-## Connection to Project
-
-These techniques will be essential for your final project:
-
-| Workshop Skill | Project Application |
-|----------------|---------------------|
-| Confidence intervals | Estimate population parameters from your sample |
-| Hypothesis testing | Compare groups in your datos.gov.co dataset |
-| Business interpretation | Executive summary section of your report |
-| Statistical visualization | Results section of your presentation |
+Include a screenshot of your final dashboard as backup.
 
 ---
 
 ## Resources
 
-- scipy.stats documentation: https://docs.scipy.org/doc/scipy/reference/stats.html
-- Understanding p-values: https://www.nature.com/articles/nmeth.2698
-- Common statistical mistakes: https://www.nature.com/articles/nmeth.2900
-- Visualizing uncertainty: https://clauswilke.com/dataviz/
+- [Power BI Documentation](https://docs.microsoft.com/en-us/power-bi/)
+- [DAX Guide](https://dax.guide/)
+- [Power Query Documentation](https://docs.microsoft.com/en-us/power-query/)
+- [datos.gov.co](https://www.datos.gov.co/)
 
 ---
 
-*Week 10 - Data Analytics Course - Universidad Cooperativa de Colombia*
+*Power BI transforms data into insights. Your dashboard tells the story of thousands of Colombian births.*

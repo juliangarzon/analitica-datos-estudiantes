@@ -731,4 +731,4 @@ Remove unnecessary elements:
 
 ---
 
-*This guide accompanies Week 9 of the Data Analytics course. For questions, contact your instructor.*
+*This guide accompanies Week 10 of the Data Analytics course. For questions, contact your instructor.*

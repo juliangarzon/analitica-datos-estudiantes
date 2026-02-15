@@ -1,4 +1,4 @@
-# Week 9 In-Class Exercise: DAX Measures for Birth Weight Analysis
+# Week 10 In-Class Exercise: DAX Measures for Birth Weight Analysis
 
 ## Power BI Essentials - Calculated Measures Practice
 

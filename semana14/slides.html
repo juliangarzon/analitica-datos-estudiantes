@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 14 - Machine Learning Models and Evaluation</title>
+    <title>Week 14 - Introduction to Machine Learning</title>
     <style>
         :root {
             --primary: #667eea;
@@ -133,7 +133,6 @@
             margin-bottom: 15px;
         }
 
-        /* Section Labels */
         .section-label {
             display: inline-block;
             padding: 8px 20px;
@@ -338,39 +337,6 @@
             margin-bottom: 10px;
         }
 
-        .stat-box {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 30px 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .stat-item .formula {
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .stat-item p {
-            font-size: 0.9rem;
-            opacity: 0.85;
-        }
-
         .visual-demo {
             background: var(--bg-light);
             padding: 30px;
@@ -486,127 +452,140 @@
             background: var(--bg-light);
         }
 
-        /* Confusion Matrix Visual */
-        .confusion-matrix {
+        .overfit-grid {
             display: grid;
-            grid-template-columns: auto 1fr 1fr;
-            grid-template-rows: auto 1fr 1fr;
-            gap: 5px;
-            max-width: 500px;
-            margin: 20px auto;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .cm-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 8px;
-        }
-
-        .cm-label {
-            background: var(--primary-dark);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 8px;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-        }
-
-        .cm-cell {
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 1.1rem;
-        }
-
-        .cm-cell.tp {
-            background: linear-gradient(135deg, var(--success), var(--success-light));
-            color: white;
-        }
-
-        .cm-cell.tn {
-            background: linear-gradient(135deg, var(--success), var(--success-light));
-            color: white;
-        }
-
-        .cm-cell.fp {
-            background: linear-gradient(135deg, var(--danger), var(--danger-light));
-            color: white;
-        }
-
-        .cm-cell.fn {
-            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
-            color: white;
-        }
-
-        .cm-corner {
-            background: transparent;
-        }
-
-        /* Model Cards */
-        .model-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
             margin: 30px 0;
         }
 
-        .model-card {
-            background: white;
+        .overfit-card {
+            background: var(--bg-light);
+            padding: 25px;
             border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .model-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .model-card-header {
-            padding: 20px;
-            color: white;
             text-align: center;
+            border: 2px solid var(--bg-medium);
         }
 
-        .model-card-header.linear {
+        .overfit-card pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            margin: 15px 0;
+        }
+
+        .ml-types-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .ml-type-card {
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .ml-type-card.supervised {
             background: linear-gradient(135deg, var(--info-light), var(--info));
         }
 
-        .model-card-header.tree {
+        .ml-type-card.unsupervised {
             background: linear-gradient(135deg, var(--success), var(--success-light));
         }
 
-        .model-card-header.knn {
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));
+        .ml-type-card h3 {
+            color: white;
+            margin-bottom: 15px;
         }
 
-        .model-card-header.forest {
-            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+        .workflow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .model-card-body {
-            padding: 20px;
+        .workflow-step {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
         }
 
-        .model-card-body ul {
-            list-style: none;
-            line-height: 2;
-        }
-
-        .model-card-body li::before {
-            content: ">";
-            color: var(--primary);
+        .workflow-step .step-num {
+            font-size: 2rem;
             font-weight: bold;
-            margin-right: 10px;
+            margin-bottom: 8px;
         }
 
-        /* Navigation */
+        .tree-visual {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .tree-visual pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 40px 0;
+        }
+
+        .workshop-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 40px 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .metric-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .metric-card .formula {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .metric-card p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+
         .nav-container {
             position: fixed;
             top: 20px;
@@ -639,57 +618,6 @@
             font-weight: bold;
         }
 
-        .workshop-section {
-            text-align: center;
-            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
-            margin: 40px 0;
-        }
-
-        .demo-section {
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
-            margin: 40px 0;
-        }
-
-        /* Four column grid for metrics */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .metric-card {
-            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border-top: 4px solid var(--primary);
-        }
-
-        .metric-card h4 {
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .metric-card .formula {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 8px;
-        }
-
-        .metric-card p {
-            font-size: 0.9rem;
-            color: var(--text-medium);
-        }
-
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -717,9 +645,14 @@
 
             .concept-grid,
             .comparison-grid,
-            .stat-box,
+            .ml-types-grid,
+            .overfit-grid,
             .metrics-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .workflow-steps {
+                flex-direction: column;
             }
         }
     </style>
@@ -727,43 +660,45 @@
 <body>
     <div class="nav-container">
         <button class="nav-btn" onclick="previousSlide()">Prev</button>
-        <span class="slide-counter" id="slideCounter">1 / 30</span>
+        <span class="slide-counter" id="slideCounter">1 / 20</span>
         <button class="nav-btn" onclick="nextSlide()">Next</button>
     </div>
 
     <div class="presentation-container">
         <!-- Slide 1: Title -->
         <div class="slide title-slide">
-            <h1>Machine Learning Models and Evaluation</h1>
-            <h2>Comparing Models, Metrics, and Making the Right Choice</h2>
+            <h1>Introduction to Machine Learning</h1>
+            <h2>Teaching Computers to Learn from Data</h2>
             <div class="author">Data Analytics Course - Week 14</div>
-            <div style="margin-top: 40px; opacity: 0.8;">Building on Week 13: Decision Trees and ML Fundamentals</div>
+            <div style="margin-top: 40px; opacity: 0.8;">From Data Analysis to Predictive Models</div>
         </div>
 
-        <!-- Slide 2: HOOK - Same Data, Different Models -->
+        <!-- Slide 2: HOOK -->
         <div class="slide">
             <span class="section-label hook">HOOK</span>
-            <h1>Same Data, Three Models, Three Different Answers</h1>
-            <div class="visual-demo">
-                <pre style="font-size: 1rem;">
-    PREDICTING STUDENT DROPOUT
-
-    Dataset: 1,000 students with grades, attendance, socioeconomic data
-
-    Model A (Logistic Regression):  "Student X will NOT drop out" (75% confident)
-    Model B (Decision Tree):        "Student X WILL drop out"     (82% confident)
-    Model C (Random Forest):        "Student X will NOT drop out" (91% confident)
-
-    Who is right? How do we decide?
-                </pre>
-            </div>
+            <h1>Can You Predict House Prices?</h1>
             <div class="hook-card">
-                <h2>The Model You Choose Changes Your Answer</h2>
-                <p>Different algorithms see patterns differently. Choosing the "best" model requires understanding how they work and how to evaluate them.</p>
+                <h2>You have data on 1,000 houses that sold last year</h2>
+                <p>Size, bedrooms, location, age, condition... and the sale price.</p>
+                <p style="margin-top: 20px; font-size: 1.5rem;">A new house comes on the market. What will it sell for?</p>
+            </div>
+            <div class="concept-grid" style="margin-top: 30px;">
+                <div class="concept-card danger">
+                    <h3>Traditional Approach</h3>
+                    <p style="font-size: 1.1rem;">"Well, similar houses sold for around $300K..."</p>
+                    <p style="margin-top: 15px;">Based on intuition and limited comparisons</p>
+                    <p style="color: #666; margin-top: 10px;">Error: +/- $50,000?</p>
+                </div>
+                <div class="concept-card success">
+                    <h3>Machine Learning Approach</h3>
+                    <p style="font-size: 1.1rem;">"Based on ALL 1,000 houses, predicted price is $312,450"</p>
+                    <p style="margin-top: 15px;">Computer learned patterns from data</p>
+                    <p style="color: #666; margin-top: 10px;">Error: +/- $15,000</p>
+                </div>
             </div>
             <div class="key-takeaway">
-                <h3>Today's Question</h3>
-                <p>How do we compare models fairly and choose the right one for our problem?</p>
+                <h3>Machine Learning finds patterns humans cannot see</h3>
+                <p>It learns from thousands of examples to make predictions</p>
             </div>
         </div>
 
@@ -774,925 +709,619 @@
             <div class="objectives-list">
                 <div class="objective-item">
                     <div class="check-icon">1</div>
-                    <div><strong>Model Comparison Philosophy</strong> - Why one model is never enough</div>
+                    <div><strong>What is Machine Learning?</strong> - Computers learning patterns from data</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">2</div>
-                    <div><strong>New Models</strong> - Linear/Logistic Regression, Random Forest, K-Nearest Neighbors</div>
+                    <div><strong>Supervised vs Unsupervised</strong> - Two main approaches</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">3</div>
-                    <div><strong>Classification Metrics</strong> - Accuracy, Precision, Recall, F1, Confusion Matrix</div>
+                    <div><strong>Classification vs Regression</strong> - Categories vs numbers</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">4</div>
-                    <div><strong>Regression Metrics</strong> - MAE, MSE, R-squared</div>
+                    <div><strong>Train/Test Split</strong> - Why we separate data for evaluation</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">5</div>
-                    <div><strong>Cross-Validation</strong> - Getting reliable performance estimates</div>
+                    <div><strong>Overfitting</strong> - When models memorize instead of learn</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">6</div>
-                    <div><strong>Feature Importance</strong> - Understanding what drives predictions</div>
+                    <div><strong>Your First Model</strong> - End-to-end Decision Tree in scikit-learn</div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 4: Week 13 Recap -->
+        <!-- Slide 4: ML in Real Life -->
         <div class="slide">
             <span class="section-label context">CONTEXT</span>
-            <h1>Quick Recap: What We Know from Week 13</h1>
-            <div class="concept-grid">
-                <div class="concept-card success">
-                    <h3>Supervised Learning</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> We have labeled data (X, y)</li>
-                        <li>> Model learns mapping X -> y</li>
-                        <li>> Classification: predict categories</li>
-                        <li>> Regression: predict numbers</li>
-                    </ul>
+            <h1>Machine Learning is Everywhere</h1>
+            <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="feature-card">
+                    <h3>Netflix</h3>
+                    <p>"You might also like..."</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Recommendation systems</p>
                 </div>
-                <div class="concept-card info">
-                    <h3>Train/Test Split</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> Never evaluate on training data</li>
-                        <li>> Split: 80% train, 20% test</li>
-                        <li>> Prevents overfitting</li>
-                        <li>> Gives honest performance estimate</li>
-                    </ul>
+                <div class="feature-card" style="background: linear-gradient(135deg, var(--success), var(--success-light));">
+                    <h3>Banks</h3>
+                    <p>Fraud detection</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Anomaly detection</p>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));">
+                    <h3>Email</h3>
+                    <p>Spam filtering</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Classification</p>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, var(--warning), var(--warning-dark));">
+                    <h3>Healthcare</h3>
+                    <p>Disease diagnosis</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Image recognition</p>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+                    <h3>Retail</h3>
+                    <p>Customer churn</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Prediction</p>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, var(--danger), var(--danger-light));">
+                    <h3>Self-Driving</h3>
+                    <p>Object detection</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Computer vision</p>
                 </div>
             </div>
-            <div class="concept-grid">
-                <div class="concept-card warning">
-                    <h3>Decision Trees</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> Series of if-then rules</li>
-                        <li>> Easy to interpret</li>
-                        <li>> Can overfit if too deep</li>
-                        <li>> Basis for more powerful models</li>
-                    </ul>
-                </div>
-                <div class="concept-card danger">
-                    <h3>The Problem</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> We only know ONE model</li>
-                        <li>> How do we know it is the best?</li>
-                        <li>> What metrics should we use?</li>
-                        <li>> Today: expand our toolkit!</li>
-                    </ul>
-                </div>
+            <div class="alert-box info" style="margin-top: 20px;">
+                <strong>Key Insight:</strong> Every time you see "personalized", "recommended", "predicted", or "automated", there is likely ML behind it.
             </div>
         </div>
 
-        <!-- Slide 5: Section - Model Comparison Philosophy -->
+        <!-- Slide 5: Section - What is ML? -->
         <div class="slide section-intro">
-            <h1>Part 1: Model Comparison Philosophy</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">No model is universally best</p>
+            <h1>Part 1: What is Machine Learning?</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Teaching computers to find patterns</p>
         </div>
 
-        <!-- Slide 6: No Free Lunch -->
+        <!-- Slide 6: What is ML? -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>The "No Free Lunch" Theorem</h1>
+            <h1>What is Machine Learning?</h1>
             <div class="analogy-box">
-                <h3>There Is No Universal Best Model</h3>
-                <p>Every model makes assumptions about the data. A model that works great on one dataset might fail on another. The "best" model depends on YOUR specific data and problem.</p>
+                <h3>The Child Learning Analogy</h3>
+                <p>Think about how a child learns to recognize cats: You do not give them rules ("4 legs + fur + whiskers = cat"). You show them MANY examples, and eventually they recognize new cats they have never seen before.</p>
+                <p style="margin-top: 15px;"><strong>Machine Learning works the same way:</strong> Show the computer many examples, and it learns the patterns.</p>
             </div>
-            <div class="comparison-grid">
-                <div class="visual-demo">
-                    <h3 style="margin-bottom: 15px;">Linear Data</h3>
-                    <pre>
-    y
-    |           *
-    |         *
-    |       *
-    |     *
-    |   *
-    | *
-    +--------------> x
+            <div class="visual-demo" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">Traditional Programming vs Machine Learning</h3>
+                <pre style="font-size: 1rem;">
+Traditional Programming:
+    Data + Rules --> Program --> Output
 
-    Linear Regression wins!
-                    </pre>
-                </div>
-                <div class="visual-demo">
-                    <h3 style="margin-bottom: 15px;">Complex Boundaries</h3>
-                    <pre>
-    y
-    |  * *     o o
-    | * * *   o o o
-    |  * *     o o
-    |     o o o
-    |    o   o
-    +--------------> x
-
-    Decision Tree wins!
-                    </pre>
-                </div>
-            </div>
-            <div class="key-takeaway">
-                <h3>The Solution: Try Multiple Models, Compare Fairly</h3>
-                <p>Always test several algorithms and use proper evaluation metrics to choose.</p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Section - Linear and Logistic Regression -->
-        <div class="slide section-intro">
-            <h1>Part 2: Linear and Logistic Regression</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">The simplest, most interpretable models</p>
-        </div>
-
-        <!-- Slide 8: Linear Regression Concept -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Linear Regression: Drawing the Best Line</h1>
-            <div class="concept-grid">
-                <div>
-                    <div class="visual-demo">
-                        <pre style="font-size: 0.9rem;">
-    Final Grade
-    |
-    |              *    *
-    |           *   *
-    |        *   *
-    |      *  *
-    |    *  *
-    |  * *
-    +-----------------------> Study Hours
-
-    Goal: Find the line that best fits the data
-    Prediction: grade = a + b * study_hours
-                        </pre>
-                    </div>
-                </div>
-                <div>
-                    <div class="concept-card info">
-                        <h3>The Idea</h3>
-                        <p>Find the straight line that minimizes the distance between predictions and actual values.</p>
-                        <p style="margin-top: 15px;"><strong>Output:</strong> A continuous number (price, grade, salary)</p>
-                    </div>
-                    <div class="concept-card success" style="margin-top: 20px;">
-                        <h3>Strengths</h3>
-                        <ul style="list-style: none; line-height: 1.8;">
-                            <li>> Very interpretable (coefficients have meaning)</li>
-                            <li>> Fast to train</li>
-                            <li>> Works well when relationship is linear</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 9: Linear Regression Code -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Linear Regression in scikit-learn</h1>
-            <div class="code-example"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
-<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
-<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-
-<span class="comment"># Load and prepare data</span>
-df = pd.read_csv(<span class="string">'student_data.csv'</span>)
-X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'prev_grade'</span>]]
-y = df[<span class="string">'final_grade'</span>]
-
-<span class="comment"># Split data</span>
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
-
-<span class="comment"># Train model</span>
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-<span class="comment"># Make predictions</span>
-y_pred = model.predict(X_test)
-
-<span class="comment"># Evaluate</span>
-<span class="function">print</span>(<span class="string">f"R-squared: {r2_score(y_test, y_pred):.3f}"</span>)
-<span class="function">print</span>(<span class="string">f"MSE: {mean_squared_error(y_test, y_pred):.3f}"</span>)
-
-<span class="comment"># Interpret coefficients</span>
-<span class="keyword">for</span> feature, coef <span class="keyword">in</span> zip(X.columns, model.coef_):
-    <span class="function">print</span>(<span class="string">f"{feature}: {coef:.3f}"</span>)</div>
-            <div class="alert-box info">
-                <strong>Interpretation:</strong> Each coefficient tells you how much y changes when that feature increases by 1, holding other features constant.
-            </div>
-        </div>
-
-        <!-- Slide 10: Logistic Regression Concept -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Logistic Regression: Classification, Not Regression</h1>
-            <div class="analogy-box">
-                <h3>Despite the Name, It Is for Classification</h3>
-                <p>Logistic regression predicts the PROBABILITY of belonging to a class. Output is between 0 and 1, then converted to a class label.</p>
-            </div>
-            <div class="concept-grid">
-                <div class="visual-demo">
-                    <pre style="font-size: 0.9rem;">
-    P(dropout)
-    1 |                 ------
-      |               /
-    0.5|             /
-      |           /
-    0 | ---------
-      +-----------------------> Risk Score
-
-    The S-curve (sigmoid) maps any input
-    to a probability between 0 and 1
-                    </pre>
-                </div>
-                <div>
-                    <div class="concept-card warning">
-                        <h3>How It Works</h3>
-                        <ul style="list-style: none; line-height: 1.8;">
-                            <li>> Combines features linearly</li>
-                            <li>> Passes through sigmoid function</li>
-                            <li>> Output: probability (0 to 1)</li>
-                            <li>> Threshold (usually 0.5) -> class</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card success" style="margin-top: 20px;">
-                        <h3>Use When</h3>
-                        <ul style="list-style: none; line-height: 1.8;">
-                            <li>> Binary classification (yes/no)</li>
-                            <li>> You need probability estimates</li>
-                            <li>> Interpretability matters</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 11: Logistic Regression Code -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Logistic Regression in scikit-learn</h1>
-            <div class="code-example"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
-<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
-<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, classification_report
-
-<span class="comment"># Prepare data (binary classification)</span>
-X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>]]
-y = df[<span class="string">'dropped_out'</span>]  <span class="comment"># 0 = stayed, 1 = dropped out</span>
-
-<span class="comment"># Split</span>
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
-
-<span class="comment"># Train</span>
-model = LogisticRegression()
-model.fit(X_train, y_train)
-
-<span class="comment"># Predict classes</span>
-y_pred = model.predict(X_test)
-
-<span class="comment"># Predict probabilities</span>
-y_proba = model.predict_proba(X_test)[:, <span class="number">1</span>]  <span class="comment"># P(dropout)</span>
-
-<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
-<span class="function">print</span>(<span class="string">f"\nStudent 1 dropout probability: {y_proba[0]:.1%}"</span>)</div>
-            <div class="alert-box success">
-                <strong>Key Feature:</strong> predict_proba() gives you the actual probability, not just the class. Useful for ranking or setting custom thresholds.
-            </div>
-        </div>
-
-        <!-- Slide 12: Section - K-Nearest Neighbors -->
-        <div class="slide section-intro">
-            <h1>Part 3: K-Nearest Neighbors (KNN)</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">You are the average of your neighbors</p>
-        </div>
-
-        <!-- Slide 13: KNN Concept -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>KNN: The "Neighborhood" Algorithm</h1>
-            <div class="analogy-box">
-                <h3>Tell Me Your Neighbors, I Will Tell You Who You Are</h3>
-                <p>To classify a new point, find the K closest points in the training data. The new point gets the majority class of its neighbors.</p>
-            </div>
-            <div class="concept-grid">
-                <div class="visual-demo">
-                    <pre style="font-size: 0.9rem;">
-         o o
-       o   o      ? = new point
-         o   ?    Find 5 nearest neighbors:
-       *       *    3 circles (o), 2 stars (*)
-         * *
-       *   *      Prediction: circle (o)
-
-    K=5: Look at 5 nearest neighbors
-    Majority vote: 3 circles > 2 stars
-                    </pre>
-                </div>
-                <div>
-                    <div class="concept-card info">
-                        <h3>Key Idea</h3>
-                        <ul style="list-style: none; line-height: 1.8;">
-                            <li>> No training phase (lazy learning)</li>
-                            <li>> Stores all data, compares at prediction time</li>
-                            <li>> K is a hyperparameter you choose</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card warning" style="margin-top: 20px;">
-                        <h3>Choosing K</h3>
-                        <ul style="list-style: none; line-height: 1.8;">
-                            <li>> Small K: flexible, but noisy</li>
-                            <li>> Large K: smooth, but may miss local patterns</li>
-                            <li>> Common choices: 3, 5, 7 (odd to avoid ties)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 14: KNN Code -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>KNN in scikit-learn</h1>
-            <div class="code-example"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier
-<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
-<span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline
-
-<span class="comment"># IMPORTANT: KNN is distance-based, so scale features!</span>
-X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'age'</span>]]
-y = df[<span class="string">'dropped_out'</span>]
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
-
-<span class="comment"># Create pipeline: scale -> KNN</span>
-pipeline = Pipeline([
-    (<span class="string">'scaler'</span>, StandardScaler()),   <span class="comment"># Normalize features</span>
-    (<span class="string">'knn'</span>, KNeighborsClassifier(n_neighbors=<span class="number">5</span>))
-])
-
-<span class="comment"># Train and predict</span>
-pipeline.fit(X_train, y_train)
-y_pred = pipeline.predict(X_test)
-
-<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)</div>
-            <div class="alert-box danger">
-                <strong>Critical:</strong> Always scale features for KNN! Without scaling, features with large values (like age in years) will dominate distance calculations over features with small values (like GPA 0-5).
-            </div>
-        </div>
-
-        <!-- Slide 15: Section - Random Forest -->
-        <div class="slide section-intro">
-            <h1>Part 4: Random Forest</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">The wisdom of many trees</p>
-        </div>
-
-        <!-- Slide 16: Random Forest Concept -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Random Forest: Ensemble of Decision Trees</h1>
-            <div class="analogy-box">
-                <h3>Ask 100 Experts, Trust the Majority</h3>
-                <p>A single decision tree can be wrong. But if you build 100 different trees and let them vote, the collective wisdom is often better than any individual tree.</p>
-            </div>
-            <div class="visual-demo">
-                <pre style="font-size: 0.9rem;">
-                   Random Forest (100 trees)
-                   ========================
-
-    Tree 1:        Tree 2:        Tree 3:       ...    Tree 100:
-      [A]            [B]            [A]                   [A]
-     /   \          /   \          /   \                 /   \
-   [A]   [B]      [A]   [A]      [B]   [A]             [A]   [B]
-
-    Vote: A        Vote: A        Vote: A                Vote: A
-
-    Final Answer: A wins (majority vote)
-
-    Why different trees? Each tree sees:
-    - Random subset of data (bagging)
-    - Random subset of features at each split
+Machine Learning:
+    Data + Output --> Algorithm --> Rules (Model)
                 </pre>
             </div>
-        </div>
-
-        <!-- Slide 17: Random Forest Code -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Random Forest in scikit-learn</h1>
-            <div class="code-example"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
-
-<span class="comment"># Prepare data</span>
-X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>, <span class="string">'prev_grade'</span>]]
-y = df[<span class="string">'dropped_out'</span>]
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
-
-<span class="comment"># Train Random Forest</span>
-rf_model = RandomForestClassifier(
-    n_estimators=<span class="number">100</span>,      <span class="comment"># Number of trees</span>
-    max_depth=<span class="number">10</span>,          <span class="comment"># Limit tree depth (prevent overfitting)</span>
-    random_state=<span class="number">42</span>
-)
-rf_model.fit(X_train, y_train)
-
-<span class="comment"># Predict</span>
-y_pred = rf_model.predict(X_test)
-<span class="function">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
-
-<span class="comment"># Feature importance (bonus!)</span>
-<span class="keyword">for</span> feature, importance <span class="keyword">in</span> zip(X.columns, rf_model.feature_importances_):
-    <span class="function">print</span>(<span class="string">f"{feature}: {importance:.3f}"</span>)</div>
-            <div class="alert-box success">
-                <strong>Bonus:</strong> Random Forest automatically calculates feature importance, telling you which variables matter most for predictions.
-            </div>
-        </div>
-
-        <!-- Slide 18: Model Comparison Summary -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Model Comparison: When to Use What</h1>
-            <div class="model-grid">
-                <div class="model-card">
-                    <div class="model-card-header linear">
-                        <h3>Linear/Logistic Regression</h3>
-                    </div>
-                    <div class="model-card-body">
-                        <ul>
-                            <li>Interpretable coefficients</li>
-                            <li>Fast training</li>
-                            <li>Works when relationship is linear</li>
-                            <li>Good baseline model</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="model-card">
-                    <div class="model-card-header tree">
-                        <h3>Decision Tree</h3>
-                    </div>
-                    <div class="model-card-body">
-                        <ul>
-                            <li>Easy to visualize and explain</li>
-                            <li>Handles non-linear relationships</li>
-                            <li>No feature scaling needed</li>
-                            <li>Can overfit (limit depth)</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="model-card">
-                    <div class="model-card-header knn">
-                        <h3>K-Nearest Neighbors</h3>
-                    </div>
-                    <div class="model-card-body">
-                        <ul>
-                            <li>Simple and intuitive</li>
-                            <li>No training phase</li>
-                            <li>Works well with small datasets</li>
-                            <li>Requires feature scaling</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="model-card">
-                    <div class="model-card-header forest">
-                        <h3>Random Forest</h3>
-                    </div>
-                    <div class="model-card-body">
-                        <ul>
-                            <li>Usually high accuracy</li>
-                            <li>Handles complex patterns</li>
-                            <li>Built-in feature importance</li>
-                            <li>Less interpretable</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 19: Section - Evaluation Metrics -->
-        <div class="slide section-intro">
-            <h1>Part 5: Evaluation Metrics</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Accuracy is not enough</p>
-        </div>
-
-        <!-- Slide 20: The Accuracy Trap -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>The Accuracy Trap: Why 95% Can Be Terrible</h1>
-            <div class="hook-card" style="background: linear-gradient(135deg, var(--danger), var(--danger-light));">
-                <h2>Scenario: Predicting Rare Diseases</h2>
-                <p>Out of 1,000 patients, only 10 have the disease (1%).</p>
-                <p style="margin-top: 15px;">A model that ALWAYS predicts "healthy" gets 99% accuracy!</p>
-            </div>
-            <div class="comparison-grid" style="margin-top: 30px;">
-                <div class="comparison-card bad">
-                    <h3>"Lazy" Model</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0;">Always predicts "No Disease"</p>
-                    <p style="font-size: 2rem; font-weight: bold;">99% Accuracy</p>
-                    <p style="margin-top: 15px;">But misses ALL 10 sick patients!</p>
-                    <p>They do not get treatment.</p>
-                </div>
-                <div class="comparison-card good">
-                    <h3>"Useful" Model</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0;">Catches 8 of 10 sick patients</p>
-                    <p style="font-size: 2rem; font-weight: bold;">92% Accuracy</p>
-                    <p style="margin-top: 15px;">20 false alarms, but 8 lives saved!</p>
-                    <p>Lower accuracy, better outcome.</p>
-                </div>
-            </div>
             <div class="key-takeaway">
-                <h3>Lesson: Accuracy Alone Is Misleading for Imbalanced Data</h3>
-                <p>We need metrics that capture what REALLY matters.</p>
+                <h3>ML = Learning rules from examples, not programming rules manually</h3>
             </div>
         </div>
 
-        <!-- Slide 21: Confusion Matrix -->
+        <!-- Slide 7: Section - Types of ML -->
+        <div class="slide section-intro">
+            <h1>Part 2: Types of Machine Learning</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Supervised vs Unsupervised</p>
+        </div>
+
+        <!-- Slide 8: Supervised vs Unsupervised -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>The Confusion Matrix: Understanding Errors</h1>
-            <p style="text-align: center; color: var(--text-light); margin-bottom: 20px;">A table showing all possible prediction outcomes</p>
-
-            <div class="confusion-matrix">
-                <div class="cm-corner"></div>
-                <div class="cm-header">Predicted: No</div>
-                <div class="cm-header">Predicted: Yes</div>
-
-                <div class="cm-label">Actual: No</div>
-                <div class="cm-cell tn"><strong>TN</strong><br>True Negative<br>(Correct)</div>
-                <div class="cm-cell fp"><strong>FP</strong><br>False Positive<br>(Type I Error)</div>
-
-                <div class="cm-label">Actual: Yes</div>
-                <div class="cm-cell fn"><strong>FN</strong><br>False Negative<br>(Type II Error)</div>
-                <div class="cm-cell tp"><strong>TP</strong><br>True Positive<br>(Correct)</div>
+            <h1>Two Main Types of Machine Learning</h1>
+            <div class="ml-types-grid">
+                <div class="ml-type-card supervised">
+                    <h3>Supervised Learning</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">"Learning with a teacher"</p>
+                    <p><strong>You have:</strong> Input data AND correct answers</p>
+                    <p style="margin-top: 15px;"><strong>Goal:</strong> Learn to predict answers for new data</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <p><strong>Examples:</strong></p>
+                        <ul style="list-style: none; margin-top: 10px;">
+                            <li>- House features --> Price</li>
+                            <li>- Email text --> Spam or Not</li>
+                            <li>- Patient symptoms --> Disease</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ml-type-card unsupervised">
+                    <h3>Unsupervised Learning</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">"Learning without a teacher"</p>
+                    <p><strong>You have:</strong> Input data only (no answers)</p>
+                    <p style="margin-top: 15px;"><strong>Goal:</strong> Find hidden patterns or groups</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <p><strong>Examples:</strong></p>
+                        <ul style="list-style: none; margin-top: 10px;">
+                            <li>- Customer segmentation</li>
+                            <li>- Anomaly detection</li>
+                            <li>- Topic discovery in documents</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <div class="concept-grid" style="margin-top: 30px;">
-                <div class="concept-card danger">
-                    <h3>False Positive (FP)</h3>
-                    <p>Model said YES, reality was NO</p>
-                    <p style="margin-top: 10px; color: var(--text-light);">Example: Flagged as dropout, but student stayed</p>
-                </div>
-                <div class="concept-card warning">
-                    <h3>False Negative (FN)</h3>
-                    <p>Model said NO, reality was YES</p>
-                    <p style="margin-top: 10px; color: var(--text-light);">Example: Predicted to stay, but student dropped out</p>
-                </div>
+            <div class="alert-box info" style="margin-top: 20px;">
+                <strong>This course focuses on Supervised Learning</strong> - It is the most common type and the foundation for understanding ML.
             </div>
         </div>
 
-        <!-- Slide 22: Precision vs Recall -->
+        <!-- Slide 9: Classification vs Regression -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>Precision vs Recall: The Critical Trade-off</h1>
+            <h1>Classification vs Regression</h1>
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-light); margin-bottom: 20px;">Two types of supervised learning problems</p>
             <div class="comparison-grid">
                 <div style="background: linear-gradient(135deg, var(--info-light), var(--info)); padding: 30px; border-radius: 15px; color: white;">
-                    <h3 style="color: white; text-align: center;">Precision</h3>
-                    <p style="text-align: center; font-size: 1.5rem; margin: 20px 0;">"Of all I predicted YES, how many were actually YES?"</p>
-                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center; font-family: monospace;">
-                        Precision = TP / (TP + FP)
+                    <h3 style="color: white; text-align: center;">Classification</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predict a CATEGORY</strong></p>
+                    <p style="text-align: center;">Output is one of several discrete classes</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li>Email: Spam / Not Spam</li>
+                            <li>Tumor: Malignant / Benign</li>
+                            <li>Student: Pass / Fail</li>
+                            <li>Customer: Will churn / Will stay</li>
+                        </ul>
                     </div>
-                    <p style="margin-top: 20px; text-align: center;">High precision = Few false alarms</p>
                 </div>
                 <div style="background: linear-gradient(135deg, var(--success), var(--success-light)); padding: 30px; border-radius: 15px; color: white;">
-                    <h3 style="color: white; text-align: center;">Recall (Sensitivity)</h3>
-                    <p style="text-align: center; font-size: 1.5rem; margin: 20px 0;">"Of all actual YES, how many did I catch?"</p>
-                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center; font-family: monospace;">
-                        Recall = TP / (TP + FN)
+                    <h3 style="color: white; text-align: center;">Regression</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predict a NUMBER</strong></p>
+                    <p style="text-align: center;">Output is a continuous value</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li>House price: $312,450</li>
+                            <li>Temperature tomorrow: 24.5C</li>
+                            <li>Sales next month: $1.2M</li>
+                            <li>Student grade: 4.2</li>
+                        </ul>
                     </div>
-                    <p style="margin-top: 20px; text-align: center;">High recall = Catch most positives</p>
                 </div>
             </div>
-            <div class="alert-box warning" style="margin-top: 30px;">
-                <strong>The Trade-off:</strong> Increasing recall often decreases precision (more false alarms). Increasing precision often decreases recall (miss more positives). Choose based on which error is more costly!
-            </div>
-        </div>
-
-        <!-- Slide 23: Precision vs Recall Examples -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>When to Prioritize Which Metric</h1>
-            <div class="comparison-grid">
-                <div class="concept-card info">
-                    <h3>Prioritize RECALL When...</h3>
-                    <p style="font-weight: bold; margin: 15px 0;">Missing a positive is very costly</p>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> Disease detection (missing cancer is fatal)</li>
-                        <li>> Fraud detection (missing fraud = lost money)</li>
-                        <li>> Dropout prediction (missing at-risk student = lost opportunity)</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: var(--text-light);">Accept more false alarms to catch all real cases</p>
-                </div>
-                <div class="concept-card success">
-                    <h3>Prioritize PRECISION When...</h3>
-                    <p style="font-weight: bold; margin: 15px 0;">False alarms are costly or annoying</p>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li>> Spam detection (wrongly marking important email)</li>
-                        <li>> Recommendation systems (bad recs hurt trust)</li>
-                        <li>> Criminal justice (false accusation is serious)</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: var(--text-light);">Accept missing some to avoid false positives</p>
-                </div>
-            </div>
-            <div class="key-takeaway">
-                <h3>For Dropout Prediction: Usually Prioritize Recall</h3>
-                <p>Better to intervene with a student who would have stayed (false positive) than miss a student who will drop out (false negative).</p>
+            <div class="key-takeaway" style="margin-top: 20px;">
+                <h3>Quick Rule</h3>
+                <p>Classification = "What category?" | Regression = "How much/many?"</p>
             </div>
         </div>
 
-        <!-- Slide 24: F1 Score and Classification Report -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>F1 Score and Classification Report</h1>
-            <div class="concept-card info" style="margin-bottom: 20px;">
-                <h3>F1 Score: The Harmonic Mean of Precision and Recall</h3>
-                <p style="font-family: monospace; font-size: 1.2rem; margin: 15px 0; text-align: center;">F1 = 2 * (Precision * Recall) / (Precision + Recall)</p>
-                <p>F1 balances both metrics. Use when you need a single number and both precision and recall matter.</p>
-            </div>
-            <div class="code-example"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report, confusion_matrix
-
-<span class="comment"># After making predictions</span>
-y_pred = model.predict(X_test)
-
-<span class="comment"># Confusion Matrix</span>
-cm = confusion_matrix(y_test, y_pred)
-<span class="function">print</span>(<span class="string">"Confusion Matrix:"</span>)
-<span class="function">print</span>(cm)
-
-<span class="comment"># Classification Report (precision, recall, f1 for each class)</span>
-<span class="function">print</span>(<span class="string">"\nClassification Report:"</span>)
-<span class="function">print</span>(classification_report(y_test, y_pred, target_names=[<span class="string">'Stayed'</span>, <span class="string">'Dropped'</span>]))
-
-<span class="comment"># Output:</span>
-<span class="comment">#               precision    recall  f1-score   support</span>
-<span class="comment">#       Stayed       0.92      0.95      0.93       180</span>
-<span class="comment">#      Dropped       0.67      0.55      0.60        20</span>
-<span class="comment">#     accuracy                           0.91       200</span></div>
-        </div>
-
-        <!-- Slide 25: Regression Metrics -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Regression Metrics: When Predicting Numbers</h1>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <h4>MAE</h4>
-                    <div class="formula">Mean Absolute Error</div>
-                    <p>Average of |actual - predicted|</p>
-                    <p style="margin-top: 10px; color: var(--success);">Easy to interpret</p>
-                </div>
-                <div class="metric-card">
-                    <h4>MSE</h4>
-                    <div class="formula">Mean Squared Error</div>
-                    <p>Average of (actual - predicted)^2</p>
-                    <p style="margin-top: 10px; color: var(--warning);">Punishes big errors more</p>
-                </div>
-                <div class="metric-card">
-                    <h4>RMSE</h4>
-                    <div class="formula">Root Mean Squared Error</div>
-                    <p>Square root of MSE</p>
-                    <p style="margin-top: 10px; color: var(--info);">Same units as target</p>
-                </div>
-                <div class="metric-card">
-                    <h4>R-squared</h4>
-                    <div class="formula">Coefficient of Determination</div>
-                    <p>% of variance explained</p>
-                    <p style="margin-top: 10px; color: var(--primary);">0 to 1 (higher = better)</p>
-                </div>
-            </div>
-            <div class="code-example"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, mean_squared_error, r2_score
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="comment"># After regression predictions</span>
-y_pred = model.predict(X_test)
-
-mae = mean_absolute_error(y_test, y_pred)
-mse = mean_squared_error(y_test, y_pred)
-rmse = np.sqrt(mse)
-r2 = r2_score(y_test, y_pred)
-
-<span class="function">print</span>(<span class="string">f"MAE:  {mae:.2f} grade points"</span>)   <span class="comment"># On average, off by X points</span>
-<span class="function">print</span>(<span class="string">f"RMSE: {rmse:.2f} grade points"</span>)  <span class="comment"># Typical error magnitude</span>
-<span class="function">print</span>(<span class="string">f"R-squared: {r2:.3f}"</span>)             <span class="comment"># Model explains X% of variance</span></div>
-        </div>
-
-        <!-- Slide 26: Section - Cross-Validation -->
+        <!-- Slide 10: Section - The ML Workflow -->
         <div class="slide section-intro">
-            <h1>Part 6: Cross-Validation</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Getting reliable performance estimates</p>
+            <h1>Part 3: The ML Workflow</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Train, Test, Evaluate</p>
         </div>
 
-        <!-- Slide 27: Cross-Validation Concept -->
+        <!-- Slide 11: ML Workflow -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>Cross-Validation: More Reliable Than a Single Split</h1>
-            <div class="analogy-box">
-                <h3>The Problem with One Train/Test Split</h3>
-                <p>What if your random split happened to be "lucky" or "unlucky"? A single 80/20 split might not represent the model's true performance.</p>
+            <h1>The Machine Learning Workflow</h1>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-num">1</div>
+                    <div>Collect Data</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">2</div>
+                    <div>Prepare Data</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">3</div>
+                    <div>Split Data</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">4</div>
+                    <div>Train Model</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">5</div>
+                    <div>Evaluate</div>
+                </div>
             </div>
-            <div class="visual-demo">
-                <h3 style="margin-bottom: 15px;">5-Fold Cross-Validation</h3>
-                <pre style="font-size: 0.9rem;">
-    Data split into 5 equal parts (folds):
+            <div class="alert-box success" style="margin-top: 30px;">
+                <strong>Good news:</strong> You already know steps 1-2 from previous weeks! Today we focus on steps 3-5: the core ML process.
+            </div>
+        </div>
 
-    Fold 1: [TEST]  [train] [train] [train] [train]  -> Score: 0.85
-    Fold 2: [train] [TEST]  [train] [train] [train]  -> Score: 0.82
-    Fold 3: [train] [train] [TEST]  [train] [train]  -> Score: 0.88
-    Fold 4: [train] [train] [train] [TEST]  [train]  -> Score: 0.84
-    Fold 5: [train] [train] [train] [train] [TEST]   -> Score: 0.86
-
-    Final Score: 0.85 (+/- 0.02)  <- Average and standard deviation
-
-    Every data point is tested exactly once!
+        <!-- Slide 12: Train/Test Split -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Train/Test Split: Why It Matters</h1>
+            <div class="analogy-box">
+                <h3>The Exam Analogy</h3>
+                <p>Imagine a student who memorizes the exact questions from the practice exam. They score 100% on practice, but fail the real exam because the questions are different.</p>
+                <p style="margin-top: 15px;"><strong>We need to test on data the model has NEVER seen before.</strong></p>
+            </div>
+            <div class="visual-demo" style="margin-top: 20px;">
+                <h3 style="margin-bottom: 15px;">Splitting Your Data</h3>
+                <pre>
+Your Dataset (1000 rows)
+|=====================================================|
+|                                                     |
+|   TRAINING SET (80%)          |   TEST SET (20%)   |
+|   800 rows                    |   200 rows         |
+|   Model learns from these     |   Never seen!      |
+|                               |   Used to evaluate |
+|=====================================================|
                 </pre>
             </div>
-            <div class="key-takeaway">
-                <h3>Cross-Validation Gives You Both: Estimate AND Uncertainty</h3>
-                <p>Not just "accuracy is 85%" but "accuracy is 85% +/- 2%"</p>
+            <div class="code-example"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+
+<span class="comment"># Separate features (X) from target (y)</span>
+X = df[[<span class="string">'size'</span>, <span class="string">'bedrooms'</span>, <span class="string">'age'</span>]]  <span class="comment"># Features (inputs)</span>
+y = df[<span class="string">'price'</span>]                         <span class="comment"># Target (what we predict)</span>
+
+<span class="comment"># Split: 80% train, 20% test</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>
+)</div>
+            <div class="alert-box warning" style="margin-top: 15px;">
+                <strong>Golden Rule:</strong> NEVER use test data during training. Keep it completely separate until final evaluation.
             </div>
         </div>
 
-        <!-- Slide 28: Cross-Validation Code -->
+        <!-- Slide 13: Section - Overfitting -->
+        <div class="slide section-intro">
+            <h1>Part 4: Overfitting</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">When models memorize instead of learn</p>
+        </div>
+
+        <!-- Slide 14: Overfitting Explained -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>Cross-Validation in scikit-learn</h1>
-            <div class="code-example"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score
-<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
-<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="comment"># Prepare data (no train/test split needed for CV)</span>
-X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'socioeconomic_score'</span>]]
-y = df[<span class="string">'dropped_out'</span>]
-
-<span class="comment"># Compare models with 5-fold cross-validation</span>
-models = {
-    <span class="string">'Logistic Regression'</span>: LogisticRegression(),
-    <span class="string">'Random Forest'</span>: RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>),
-    <span class="string">'KNN'</span>: KNeighborsClassifier(n_neighbors=<span class="number">5</span>)
-}
-
-<span class="keyword">for</span> name, model <span class="keyword">in</span> models.items():
-    scores = cross_val_score(model, X, y, cv=<span class="number">5</span>, scoring=<span class="string">'f1'</span>)
-    <span class="function">print</span>(<span class="string">f"{name}: F1 = {scores.mean():.3f} (+/- {scores.std():.3f})"</span>)
-
-<span class="comment"># Output:</span>
-<span class="comment"># Logistic Regression: F1 = 0.62 (+/- 0.05)</span>
-<span class="comment"># Random Forest:       F1 = 0.71 (+/- 0.03)  <- Winner!</span>
-<span class="comment"># KNN:                 F1 = 0.58 (+/- 0.08)</span></div>
-            <div class="alert-box info">
-                <strong>scoring parameter options:</strong> 'accuracy', 'precision', 'recall', 'f1', 'roc_auc' for classification; 'r2', 'neg_mean_squared_error' for regression.
+            <h1>Understanding Overfitting</h1>
+            <div class="overfit-grid">
+                <div class="overfit-card">
+                    <h3 style="color: var(--danger);">Underfitting</h3>
+                    <pre>
+    o   o    o
+ o     o  o
+______________ (line)
+  o  o    o
+    o   o
+                    </pre>
+                    <p>Model too simple</p>
+                    <p style="color: #666; font-size: 0.9rem;">"Does not capture patterns"</p>
+                </div>
+                <div class="overfit-card" style="border: 3px solid var(--success);">
+                    <h3 style="color: var(--success);">Good Fit</h3>
+                    <pre>
+    o   o    o
+ o    _/\__o
+___--/  o  \__
+  o  o    o
+    o   o
+                    </pre>
+                    <p>Model captures trend</p>
+                    <p style="color: #666; font-size: 0.9rem;">"Generalizes well"</p>
+                </div>
+                <div class="overfit-card">
+                    <h3 style="color: var(--warning-dark);">Overfitting</h3>
+                    <pre>
+    o   o    o
+ o /\_/|  |/\o
+_|/  |_|__|  \__
+  o  o    o
+    o   o
+                    </pre>
+                    <p>Model too complex</p>
+                    <p style="color: #666; font-size: 0.9rem;">"Memorizes noise"</p>
+                </div>
+            </div>
+            <div class="comparison-grid" style="margin-top: 20px;">
+                <div class="comparison-card bad">
+                    <h3>Overfitting Signs</h3>
+                    <p style="margin-top: 15px;">Training accuracy: 99%</p>
+                    <p>Test accuracy: 65%</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">Huge gap = Problem!</p>
+                </div>
+                <div class="comparison-card good">
+                    <h3>Good Generalization</h3>
+                    <p style="margin-top: 15px;">Training accuracy: 85%</p>
+                    <p>Test accuracy: 82%</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">Similar = Good!</p>
+                </div>
             </div>
         </div>
 
-        <!-- Slide 29: Feature Importance -->
+        <!-- Slide 15: Section - scikit-learn and Decision Trees -->
+        <div class="slide section-intro">
+            <h1>Part 5: Your First Model</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Decision Trees in scikit-learn</p>
+        </div>
+
+        <!-- Slide 16: scikit-learn Pattern -->
         <div class="slide">
             <span class="section-label content">CONTENT</span>
-            <h1>Feature Importance: What Drives Predictions?</h1>
+            <h1>The scikit-learn Pattern</h1>
+            <div class="analogy-box">
+                <h3>sklearn = Machine Learning Made Easy</h3>
+                <p>Just like pandas makes data manipulation easy, scikit-learn makes machine learning easy. The same 5-step pattern works for ALL algorithms!</p>
+            </div>
+            <div class="visual-demo" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">The Universal Pattern</h3>
+                <pre style="font-size: 1.1rem;">
+1. from sklearn import Model          # Import
+2. model = Model()                    # Create
+3. model.fit(X_train, y_train)        # Train
+4. predictions = model.predict(X_test) # Predict
+5. score = model.score(X_test, y_test) # Evaluate
+                </pre>
+            </div>
+            <div class="alert-box success" style="margin-top: 20px;">
+                <strong>Once you learn this pattern, you can use ANY algorithm in scikit-learn.</strong> Decision Trees, Linear Regression, Random Forest, Neural Networks - they all follow the same 5 steps.
+            </div>
+        </div>
+
+        <!-- Slide 17: Decision Trees -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Decision Trees: How They Work</h1>
             <div class="concept-grid">
                 <div>
-                    <div class="code-example" style="font-size: 0.85rem;"><span class="comment"># After training Random Forest</span>
-rf_model.fit(X_train, y_train)
-
-<span class="comment"># Get feature importances</span>
-importances = rf_model.feature_importances_
-features = X.columns
-
-<span class="comment"># Sort by importance</span>
-sorted_idx = np.argsort(importances)[::-<span class="number">1</span>]
-
-<span class="function">print</span>(<span class="string">"Feature Importance Ranking:"</span>)
-<span class="keyword">for</span> i <span class="keyword">in</span> sorted_idx:
-    <span class="function">print</span>(<span class="string">f"  {features[i]}: {importances[i]:.3f}"</span>)
-
-<span class="comment"># Visualize</span>
-<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
-
-plt.barh(features[sorted_idx], importances[sorted_idx])
-plt.xlabel(<span class="string">'Importance'</span>)
-plt.title(<span class="string">'Feature Importance'</span>)
-plt.tight_layout()
-plt.show()</div>
-                </div>
-                <div>
-                    <div class="visual-demo">
-                        <pre style="font-size: 0.9rem;">
-Feature Importance Ranking:
-===========================
-
-attendance          |========== 0.35
-prev_grade          |======== 0.28
-socioeconomic_score |====== 0.22
-study_hours         |==== 0.15
-
-Insight: Attendance is the
-strongest predictor of dropout.
-
-Action: Focus interventions on
-students with declining attendance!
-                        </pre>
+                    <h3>The "20 Questions" Algorithm</h3>
+                    <p style="margin: 15px 0;">A decision tree asks yes/no questions about your data, splitting it until it can make a prediction.</p>
+                    <div class="alert-box info" style="margin-top: 20px;">
+                        <strong>Why start here?</strong>
+                        <ul style="margin-top: 10px; list-style: none;">
+                            <li>- Easy to understand and visualize</li>
+                            <li>- Works for classification AND regression</li>
+                            <li>- No complex math required</li>
+                            <li>- Shows which features matter most</li>
+                        </ul>
                     </div>
                 </div>
+                <div class="tree-visual">
+                    <h3 style="margin-bottom: 10px;">Predict: Will customer buy?</h3>
+                    <pre>
+        [Age > 30?]
+        /         \
+     Yes           No
+      |             |
+[Income>50K?]   [Student?]
+  /      \       /     \
+Yes       No    Yes     No
+ |         |     |       |
+[BUY]    [NO]  [BUY]   [NO]
+                    </pre>
+                </div>
             </div>
-            <div class="alert-box success">
-                <strong>Business Value:</strong> Feature importance helps explain the model to stakeholders and prioritize interventions.
+            <div class="key-takeaway">
+                <h3>Decision Trees are interpretable</h3>
+                <p>You can explain exactly WHY the model made each prediction by following the decision path</p>
             </div>
         </div>
 
-        <!-- Slide 30: Demo -->
+        <!-- Slide 18: Complete Classification Example -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Complete Example: Classification</h1>
+            <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 1. Load data</span>
+df = pd.read_csv(<span class="string">'student_data.csv'</span>)
+
+<span class="comment"># 2. Prepare features (X) and target (y)</span>
+X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'previous_grade'</span>]]
+y = df[<span class="string">'passed'</span>]  <span class="comment"># 1 = passed, 0 = failed</span>
+
+<span class="comment"># 3. Split data</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># 4. Create and train model</span>
+model = DecisionTreeClassifier(max_depth=<span class="number">3</span>)  <span class="comment"># Limit depth to avoid overfitting</span>
+model.fit(X_train, y_train)
+
+<span class="comment"># 5. Make predictions and evaluate</span>
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+<span class="function">print</span>(<span class="string">f"Model Accuracy: {accuracy:.2%}"</span>)  <span class="comment"># e.g., "Model Accuracy: 85.00%"</span></div>
+            <div class="alert-box warning" style="margin-top: 15px;">
+                <strong>max_depth=3</strong> limits the tree to 3 levels of questions. This prevents overfitting by keeping the model simple.
+            </div>
+        </div>
+
+        <!-- Slide 19: Complete Regression Example -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>Complete Example: Regression</h1>
+            <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, r2_score
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># 1. Load data</span>
+df = pd.read_csv(<span class="string">'housing_data.csv'</span>)
+
+<span class="comment"># 2. Prepare features (X) and target (y)</span>
+X = df[[<span class="string">'size_sqft'</span>, <span class="string">'bedrooms'</span>, <span class="string">'bathrooms'</span>, <span class="string">'age'</span>]]
+y = df[<span class="string">'price'</span>]  <span class="comment"># Continuous value</span>
+
+<span class="comment"># 3. Split data</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+
+<span class="comment"># 4. Create and train model (note: Regressor, not Classifier)</span>
+model = DecisionTreeRegressor(max_depth=<span class="number">5</span>)
+model.fit(X_train, y_train)
+
+<span class="comment"># 5. Make predictions and evaluate</span>
+y_pred = model.predict(X_test)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+<span class="function">print</span>(<span class="string">f"Average Error: ${mae:,.0f}"</span>)    <span class="comment"># e.g., "$15,234"</span>
+<span class="function">print</span>(<span class="string">f"R-squared: {r2:.3f}"</span>)            <span class="comment"># e.g., "0.82" (explains 82% of variance)</span></div>
+        </div>
+
+        <!-- Slide 20: Key Metrics -->
+        <div class="slide">
+            <span class="section-label content">CONTENT</span>
+            <h1>How Do We Know If Our Model Is Good?</h1>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problem Type</th>
+                            <th>Metric</th>
+                            <th>What It Measures</th>
+                            <th>Good Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2"><strong>Classification</strong></td>
+                            <td>Accuracy</td>
+                            <td>% of correct predictions</td>
+                            <td>> 80% (depends on task)</td>
+                        </tr>
+                        <tr>
+                            <td>Confusion Matrix</td>
+                            <td>Types of errors made</td>
+                            <td>Few false positives/negatives</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Regression</strong></td>
+                            <td>MAE</td>
+                            <td>Average prediction error</td>
+                            <td>Small relative to target range</td>
+                        </tr>
+                        <tr>
+                            <td>R-squared</td>
+                            <td>% variance explained</td>
+                            <td>Close to 1.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="concept-grid" style="margin-top: 30px;">
+                <div class="concept-card info">
+                    <h3>Check for Overfitting</h3>
+                    <p>Always compare train vs test metrics. A big gap means your model memorized instead of learned.</p>
+                    <div class="code-example" style="font-size: 0.8rem; margin-top: 15px;"><span class="comment"># Check for overfitting</span>
+train_score = model.score(X_train, y_train)
+test_score = model.score(X_test, y_test)
+<span class="function">print</span>(<span class="string">f"Train: {train_score:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Test:  {test_score:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Gap:   {train_score - test_score:.3f}"</span>)</div>
+                </div>
+                <div class="concept-card warning">
+                    <h3>Interpreting the Gap</h3>
+                    <ul style="list-style: none; line-height: 2; margin-top: 10px;">
+                        <li>> Gap &lt; 0.05: Great, no overfitting</li>
+                        <li>> Gap 0.05-0.10: Acceptable</li>
+                        <li>> Gap 0.10-0.20: Concerning</li>
+                        <li>> Gap > 0.20: Overfitting! Simplify the model</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Fix: reduce max_depth or increase min_samples_split</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Demo -->
         <div class="slide">
             <div class="demo-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo: Model Comparison</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Student Dropout Prediction Challenge</div>
+                <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Building Your First ML Model End-to-End</div>
 
                 <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
                         <div>
                             <h3 style="color: white; margin-bottom: 20px;">What We Will Build:</h3>
                             <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Load and prepare student data</li>
-                                <li style="padding: 8px 0;">2. Train 4 different models</li>
-                                <li style="padding: 8px 0;">3. Compare using cross-validation</li>
-                                <li style="padding: 8px 0;">4. Analyze confusion matrices</li>
-                                <li style="padding: 8px 0;">5. Extract feature importance</li>
+                                <li style="padding: 8px 0;">1. Load a datos.gov.co dataset</li>
+                                <li style="padding: 8px 0;">2. Select features and target</li>
+                                <li style="padding: 8px 0;">3. Split into train/test</li>
+                                <li style="padding: 8px 0;">4. Train a Decision Tree</li>
+                                <li style="padding: 8px 0;">5. Evaluate and check for overfitting</li>
                             </ul>
                         </div>
                         <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Models to Compare:</h3>
+                            <h3 style="color: white; margin-bottom: 20px;">The 5-Step Pattern:</h3>
                             <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Logistic Regression (baseline)</li>
-                                <li style="padding: 8px 0;">- Decision Tree</li>
-                                <li style="padding: 8px 0;">- K-Nearest Neighbors</li>
-                                <li style="padding: 8px 0;">- Random Forest</li>
+                                <li style="padding: 8px 0;">Import -> Create -> Fit -> Predict -> Evaluate</li>
                             </ul>
+                            <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                                <p style="font-size: 0.95rem;">We will try both:</p>
+                                <p style="margin-top: 10px;">- <strong>Classification:</strong> Will student pass?</p>
+                                <p>- <strong>Regression:</strong> Predict consumption amount</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
-                    <strong>Goal:</strong> Find the best model for dropout prediction and explain WHY students are at risk
                 </div>
             </div>
         </div>
 
-        <!-- Slide 31: Workshop -->
+        <!-- Slide 22: Workshop -->
         <div class="slide">
             <div class="workshop-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Workshop: Kaggle-Style Competition</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Predict Student Performance - May the Best Model Win!</div>
+                <div style="font-size: 3rem; margin-bottom: 30px;">Workshop: Build Your Own ML Model</div>
+                <div style="font-size: 1.5rem; margin-bottom: 40px;">Apply the 5-Step Pattern to Your Project Data</div>
 
                 <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
                         <div>
                             <h3 style="color: white; margin-bottom: 20px;">Your Mission:</h3>
                             <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Load the provided dataset</li>
-                                <li style="padding: 8px 0;">2. Try at least 3 different models</li>
-                                <li style="padding: 8px 0;">3. Use cross-validation to compare</li>
-                                <li style="padding: 8px 0;">4. Generate classification report</li>
-                                <li style="padding: 8px 0;">5. Extract feature importance</li>
+                                <li style="padding: 8px 0;">1. Load the Water Consumption dataset</li>
+                                <li style="padding: 8px 0;">2. Select features and target variable</li>
+                                <li style="padding: 8px 0;">3. Split into train/test (80/20)</li>
+                                <li style="padding: 8px 0;">4. Train a Decision Tree model</li>
+                                <li style="padding: 8px 0;">5. Evaluate and check for overfitting</li>
                             </ul>
                         </div>
                         <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Evaluation Criteria:</h3>
+                            <h3 style="color: white; margin-bottom: 20px;">Bonus Challenges:</h3>
                             <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Primary metric: F1-Score (Recall matters!)</li>
-                                <li style="padding: 8px 0;">- Bonus: Best explanation of feature importance</li>
-                                <li style="padding: 8px 0;">- Bonus: Creative feature engineering</li>
+                                <li style="padding: 8px 0;">- Try different max_depth values (3, 5, 10, None)</li>
+                                <li style="padding: 8px 0;">- Plot actual vs predicted values</li>
+                                <li style="padding: 8px 0;">- Try both classification and regression</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
-                    <strong>Deliverable:</strong> Jupyter notebook with model comparison, best model selection, and business recommendation
+                    <strong>Deliverable:</strong> Jupyter notebook with a working ML model trained on your datos.gov.co dataset
                 </div>
             </div>
         </div>
 
-        <!-- Slide 32: Summary -->
+        <!-- Slide 23: Summary -->
         <div class="slide">
             <span class="section-label summary">SUMMARY</span>
-            <h1>How to Choose the Right Model</h1>
+            <h1>What You Learned Today</h1>
             <div class="concept-grid">
                 <div>
-                    <h2>Today You Learned:</h2>
+                    <h2>Key Concepts</h2>
                     <div style="background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
                         <ul style="list-style: none; line-height: 2;">
-                            <li>> No single "best" model (No Free Lunch)</li>
-                            <li>> Linear/Logistic Regression: interpretable baseline</li>
-                            <li>> KNN: simple, distance-based (scale features!)</li>
-                            <li>> Random Forest: powerful ensemble</li>
-                            <li>> Confusion Matrix: understand your errors</li>
-                            <li>> Precision vs Recall trade-off</li>
-                            <li>> Cross-validation: reliable comparison</li>
-                            <li>> Feature importance: explain predictions</li>
+                            <li>> ML = learning rules from examples</li>
+                            <li>> Supervised: labeled data (inputs + answers)</li>
+                            <li>> Classification: predict categories</li>
+                            <li>> Regression: predict numbers</li>
+                            <li>> Train/test split: never test on training data</li>
+                            <li>> Overfitting: memorizing vs learning</li>
                         </ul>
                     </div>
                 </div>
                 <div>
-                    <h2>Model Selection Checklist:</h2>
+                    <h2>Practical Skills</h2>
                     <div style="background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
                         <ul style="list-style: none; line-height: 2;">
-                            <li>1. Start with a simple baseline (Logistic)</li>
-                            <li>2. Try multiple models</li>
-                            <li>3. Use cross-validation (not single split)</li>
-                            <li>4. Choose metric that matches your goal</li>
-                            <li>5. Check confusion matrix for error types</li>
-                            <li>6. Consider interpretability needs</li>
-                            <li>7. Extract feature importance for insights</li>
+                            <li>> The sklearn 5-step pattern</li>
+                            <li>> train_test_split()</li>
+                            <li>> DecisionTreeClassifier</li>
+                            <li>> DecisionTreeRegressor</li>
+                            <li>> accuracy_score, MAE, R-squared</li>
+                            <li>> Detecting overfitting (train vs test gap)</li>
                         </ul>
                     </div>
                 </div>
@@ -1702,32 +1331,33 @@ students with declining attendance!
                 <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
                     <h2 style="color: white; margin-bottom: 15px;">Key Takeaway</h2>
                     <p style="font-size: 1.3rem;">
-                        The best model is not the most complex one.<br>
-                        It is the one that solves YOUR problem best.
+                        ML is not magic. It is pattern recognition at scale.<br>
+                        You now have the tools to go from data to prediction.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 33: Next Week Preview -->
+        <!-- Slide 24: Next Steps -->
         <div class="slide">
-            <h1>Next Week: Model Deployment and Final Project</h1>
+            <h1>What Comes Next</h1>
             <div class="concept-grid">
                 <div class="concept-card success">
-                    <h3>Week 15 Preview</h3>
+                    <h3>Week 15: Milestone 3</h3>
                     <ul style="list-style: none; line-height: 2;">
-                        <li>> From notebook to production</li>
-                        <li>> Saving and loading models</li>
-                        <li>> Making predictions on new data</li>
-                        <li>> Final project guidance</li>
+                        <li>> Final project presentation</li>
+                        <li>> Apply ML to your datos.gov.co dataset</li>
+                        <li>> Full analysis: EDA + Dashboard + ML</li>
+                        <li>> Tell the complete data story</li>
                     </ul>
                 </div>
                 <div class="concept-card info">
-                    <h3>Prepare For Next Week</h3>
+                    <h3>Prepare for Milestone 3</h3>
                     <ul style="list-style: none; line-height: 2;">
-                        <li>> Review your best model from today</li>
-                        <li>> Think about your final project dataset</li>
-                        <li>> Consider: What problem will you solve?</li>
+                        <li>> Complete the workshop notebook</li>
+                        <li>> Add an ML model to your project</li>
+                        <li>> Even a simple model adds value</li>
+                        <li>> Focus on interpretation, not complexity</li>
                     </ul>
                 </div>
             </div>
@@ -1735,8 +1365,9 @@ students with declining attendance!
                 <div style="background: linear-gradient(135deg, var(--warning), var(--warning-dark)); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
                     <h2 style="color: white; margin-bottom: 15px;">Homework</h2>
                     <p style="font-size: 1.1rem;">
-                        Complete the workshop notebook<br>
-                        Best F1-score wins bragging rights!
+                        Complete the workshop notebook.<br>
+                        Train a Decision Tree on the Water Consumption dataset.<br>
+                        Report your accuracy/R-squared and whether you see overfitting.
                     </p>
                 </div>
             </div>

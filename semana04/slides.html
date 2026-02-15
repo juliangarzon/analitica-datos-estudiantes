@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 4 - EDA Part 1: Univariate Analysis + Statistics Refresher</title>
+    <title>Week 04 - Data Filtering & Selection</title>
     <style>
+        /* ===========================================
+           DATA ANALYTICS COURSE - WEEK 4
+           Data Filtering & Selection
+           Universidad Cooperativa de Colombia
+           Instructor: Julian Eduardo Garzon Giraldo, MsC
+           =========================================== */
+
         * {
             margin: 0;
             padding: 0;
@@ -24,6 +31,9 @@
             padding: 20px;
         }
 
+        /* ===========================================
+           SLIDE BASE STYLES
+           =========================================== */
         .slide {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -33,11 +43,15 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             min-height: 80vh;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: center;
             position: relative;
             overflow: hidden;
+        }
+
+        .slide:first-of-type {
+            display: flex;
         }
 
         .slide::before {
@@ -51,32 +65,45 @@
             border-radius: 20px 20px 0 0;
         }
 
+        /* ===========================================
+           TITLE SLIDE
+           =========================================== */
         .title-slide {
             text-align: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
+        .title-slide::before {
+            display: none;
+        }
+
         .title-slide h1 {
             font-size: 3.5rem;
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+            color: white;
+        }
+
+        .title-slide h1::after {
+            display: none;
         }
 
         .title-slide h2 {
             font-size: 1.8rem;
             margin-bottom: 40px;
             opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
+            color: white;
         }
 
-        .title-slide .author {
+        .title-slide .info {
             font-size: 1.3rem;
             opacity: 0.8;
-            animation: fadeInUp 1s ease-out 0.6s both;
         }
 
+        /* ===========================================
+           HEADINGS
+           =========================================== */
         h1 {
             font-size: 2.5rem;
             color: #2c3e50;
@@ -106,355 +133,12 @@
         h3 {
             font-size: 1.4rem;
             color: #2c3e50;
-            margin-bottom: 15px;
+            margin: 20px 0 15px 0;
         }
 
-        .section-intro {
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .section-intro h1 {
-            color: white;
-            font-size: 3rem;
-        }
-
-        .section-intro h1::after {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .hook-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .hook-card h2 {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .hook-card p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-        }
-
-        .concept-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .concept-card {
-            background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid #667eea;
-        }
-
-        .concept-card.info {
-            border-left-color: #0984e3;
-        }
-
-        .concept-card.success {
-            border-left-color: #00b894;
-        }
-
-        .concept-card.warning {
-            border-left-color: #fdcb6e;
-        }
-
-        .concept-card.danger {
-            border-left-color: #ff7675;
-        }
-
-        .analogy-box {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
-
-        .analogy-box h3 {
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .analogy-box p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .comparison-card {
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .comparison-card.good {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-        }
-
-        .comparison-card.bad {
-            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
-            color: white;
-        }
-
-        .comparison-card h3 {
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .code-example {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 25px;
-            border-radius: 12px;
-            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-            margin: 20px 0;
-            overflow-x: auto;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            border: 1px solid #4a5568;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            white-space: pre;
-        }
-
-        .code-example .comment {
-            color: #68d391;
-            font-style: italic;
-        }
-
-        .code-example .keyword {
-            color: #f093fb;
-            font-weight: bold;
-        }
-
-        .code-example .string {
-            color: #ffd93d;
-        }
-
-        .code-example .function {
-            color: #4fd1c7;
-        }
-
-        .code-example .number {
-            color: #fc8181;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: scale(1.03);
-        }
-
-        .feature-card h3 {
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .stat-box {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .stat-item .formula {
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .stat-item p {
-            font-size: 0.9rem;
-            opacity: 0.85;
-        }
-
-        .visual-demo {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .visual-demo pre {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            text-align: left;
-            display: inline-block;
-        }
-
-        .distribution-visual {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .distribution-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .distribution-card h3 {
-            margin-bottom: 15px;
-        }
-
-        .distribution-card pre {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            line-height: 1.2;
-            margin: 15px 0;
-        }
-
-        .alert-box {
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-        }
-
-        .alert-box.info {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-        }
-
-        .alert-box.warning {
-            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
-            color: white;
-        }
-
-        .alert-box.success {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-        }
-
-        .alert-box.danger {
-            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
-            color: white;
-        }
-
-        .key-takeaway {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .key-takeaway h3 {
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .objectives-list {
-            display: grid;
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .objective-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            border-left: 4px solid #28a745;
-        }
-
-        .check-icon {
-            width: 24px;
-            height: 24px;
-            background: #28a745;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 15px 20px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
         .nav-container {
             position: fixed;
             top: 20px;
@@ -472,6 +156,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
+            font-size: 14px;
         }
 
         .nav-btn:hover {
@@ -485,26 +170,414 @@
             padding: 10px 15px;
             border-radius: 25px;
             font-weight: bold;
+            font-size: 14px;
         }
 
-        .workshop-section {
-            text-align: center;
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
+        /* ===========================================
+           GRID LAYOUTS
+           =========================================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             margin: 40px 0;
         }
 
-        .demo-section {
-            text-align: center;
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        /* ===========================================
+           CARDS
+           =========================================== */
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
-            margin: 40px 0;
         }
 
+        .card-success {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .card-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .card-danger {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+        }
+
+        .card-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .card-light {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            border-left: 5px solid #667eea;
+        }
+
+        .card h3 {
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .card-white h3,
+        .card-light h3 {
+            color: #667eea;
+        }
+
+        /* ===========================================
+           CODE BLOCKS
+           =========================================== */
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            white-space: pre;
+        }
+
+        .code-inline {
+            background: #e2e8f0;
+            color: #1a202c;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        /* Syntax highlighting colors */
+        .code-block .keyword { color: #f687b3; }
+        .code-block .string { color: #68d391; }
+        .code-block .comment { color: #718096; font-style: italic; }
+        .code-block .function { color: #63b3ed; }
+        .code-block .number { color: #f6ad55; }
+
+        /* ===========================================
+           LISTS
+           =========================================== */
+        .list-styled {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .list-styled li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .list-styled li:last-child {
+            border-bottom: none;
+        }
+
+        .list-check li::before {
+            content: '';
+            background: #00b894;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ===========================================
+           CONCEPT BOX (Explanations like for 10-year-olds)
+           =========================================== */
+        .concept-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .concept-box p {
+            margin: 10px 0;
+        }
+
+        .concept-box strong {
+            color: #667eea;
+        }
+
+        .concept-box .analogy {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        /* ===========================================
+           COMPARISON BOXES
+           =========================================== */
+        .comparison-good {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .comparison-bad {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        /* ===========================================
+           ALERT BOXES
+           =========================================== */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* ===========================================
+           TABLES
+           =========================================== */
+        .table-styled {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-styled thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table-styled th,
+        .table-styled td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table-styled tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .table-styled tbody tr:hover {
+            background: #e9ecef;
+        }
+
+        /* ===========================================
+           PROCESS FLOW
+           =========================================== */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 150px;
+            position: relative;
+        }
+
+        .process-arrow {
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* ===========================================
+           VISUAL DATAFRAME
+           =========================================== */
+        .dataframe-visual {
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .dataframe-visual .header-row {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: grid;
+            color: white;
+            font-weight: 600;
+        }
+
+        .dataframe-visual .data-row {
+            display: grid;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dataframe-visual .data-row:nth-child(even) {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .dataframe-visual .cell {
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .dataframe-visual .index-cell {
+            background: rgba(102, 126, 234, 0.1);
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .cell-true {
+            background: rgba(0, 184, 148, 0.2) !important;
+            color: #00b894;
+            font-weight: bold;
+        }
+
+        .cell-false {
+            background: rgba(255, 118, 117, 0.15) !important;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        .cell-highlight {
+            background: rgba(0, 184, 148, 0.15) !important;
+            font-weight: bold;
+        }
+
+        .cell-dim {
+            color: #adb5bd;
+        }
+
+        /* ===========================================
+           VENN DIAGRAM (CSS-only)
+           =========================================== */
+        .venn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            height: 220px;
+        }
+
+        .venn-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .venn-circle-left {
+            left: calc(50% - 160px);
+            opacity: 0.7;
+        }
+
+        .venn-circle-right {
+            left: calc(50% - 40px);
+            opacity: 0.7;
+        }
+
+        .venn-label {
+            position: absolute;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* ===========================================
+           BEFORE/AFTER VISUAL
+           =========================================== */
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .before-after .arrow {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -517,9 +590,12 @@
         }
 
         .fade-in {
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeInUp 0.6s ease-out;
         }
 
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
         @media (max-width: 768px) {
             .slide {
                 padding: 30px;
@@ -530,826 +606,953 @@
                 font-size: 2.5rem;
             }
 
-            .concept-grid,
-            .comparison-grid,
-            .stat-box,
-            .distribution-visual {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
                 grid-template-columns: 1fr;
             }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .before-after {
+                grid-template-columns: 1fr;
+            }
+
+            .venn-container {
+                transform: scale(0.7);
+            }
+        }
+
+        /* ===========================================
+           PRINT STYLES
+           =========================================== */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .slide {
+                display: flex !important;
+                page-break-after: always;
+                min-height: auto;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .nav-container {
+                display: none;
+            }
+        }
+
+        /* ===========================================
+           CUSTOM STYLES FOR THIS PRESENTATION
+           =========================================== */
+        .hook-question {
+            font-size: 2rem;
+            text-align: center;
+            color: #667eea;
+            margin: 40px 0;
+            font-weight: 600;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-top: 10px;
+        }
+
+        .mask-overlay {
+            display: grid;
+            gap: 0;
+            margin: 20px 0;
+        }
+
+        .mask-row {
+            display: grid;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mask-row .cell {
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .operator-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .operator-card:hover {
+            transform: translateY(-3px);
+            border-color: #667eea;
+        }
+
+        .operator-symbol {
+            font-size: 2rem;
+            font-family: 'Fira Code', monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .operator-name {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
+    <!-- NAVIGATION -->
     <div class="nav-container">
         <button class="nav-btn" onclick="previousSlide()">Prev</button>
-        <span class="slide-counter" id="slideCounter">1 / 24</span>
+        <span class="slide-counter" id="slideCounter">1 / 18</span>
         <button class="nav-btn" onclick="nextSlide()">Next</button>
     </div>
 
     <div class="presentation-container">
-        <!-- Slide 1: Title -->
+
+        <!-- =========================================
+             SLIDE 1: TITLE (HOOK)
+             ========================================= -->
         <div class="slide title-slide">
-            <h1>EDA Part 1: Univariate Analysis</h1>
-            <h2>Statistics Refresher + Distribution Analysis</h2>
-            <div class="author">Data Analytics Course - Week 4</div>
-            <div style="margin-top: 40px; opacity: 0.8;">Dataset: Water Consumption (HISTORICO_CONSUMO)</div>
+            <h1>Data Filtering & Selection</h1>
+            <h2>Week 4 - Finding the Needle in the Haystack</h2>
+            <div class="info">
+                <div>Julian Eduardo Garzon Giraldo, MsC</div>
+                <div style="margin-top: 10px; opacity: 0.8;">Data Analytics Course - UCC</div>
+            </div>
         </div>
 
-        <!-- Slide 2: HOOK - Why Statistics Matters -->
+        <!-- =========================================
+             SLIDE 2: HOOK - Why Filter?
+             ========================================= -->
         <div class="slide">
-            <h1>Why Should You Care About Statistics?</h1>
-            <div class="hook-card">
-                <h2>Without statistics, you are just guessing</h2>
-                <p>"The average Colombian household consumes 15 cubic meters of water per month"</p>
-            </div>
-            <div class="concept-grid" style="margin-top: 30px;">
-                <div class="concept-card danger">
-                    <h3>Without Statistics</h3>
-                    <p>"I think water consumption is high"</p>
-                    <p>"Some municipalities use more water"</p>
-                    <p>"Prices seem to vary a lot"</p>
-                    <p style="margin-top: 15px; font-weight: bold;">= Opinions, not insights</p>
-                </div>
-                <div class="concept-card success">
-                    <h3>With Statistics</h3>
-                    <p>"Mean consumption is 12.4 m3, median is 10.2 m3"</p>
-                    <p>"Top 5 municipalities account for 40% of consumption"</p>
-                    <p>"Prices range from $800 to $3,200 per m3"</p>
-                    <p style="margin-top: 15px; font-weight: bold;">= Data-driven decisions</p>
+            <h1>Why Do We Need Filtering?</h1>
+
+            <p class="hook-question">Your dataset has 14,000+ rows. How do you find the ones that matter?</p>
+
+            <div class="concept-box">
+                <div style="font-size: 3rem; text-align: center; margin-bottom: 15px;">&#128218;</div>
+                <p><strong>Filtering is like searching in a library.</strong></p>
+                <p>You don't read every book in the library. You go to a section, look for a topic, maybe filter by author or year. You ask specific questions to narrow down what you need.</p>
+                <div class="analogy">
+                    Data filtering is the same: you ask pandas a question like "show me only schools in Antioquia with dropout rates above 5%" and it returns just those rows.
                 </div>
             </div>
-            <div class="key-takeaway">
-                <h3>Statistics is the language of data</h3>
-                <p>Master the vocabulary, master the conversation</p>
+
+            <div class="grid-3">
+                <div class="card card-primary" style="text-align: center;">
+                    <h3>Focus</h3>
+                    <p style="margin-top: 10px;">Analyze a specific region, year, or category</p>
+                </div>
+                <div class="card card-success" style="text-align: center;">
+                    <h3>Compare</h3>
+                    <p style="margin-top: 10px;">Compare high-performers vs. low-performers</p>
+                </div>
+                <div class="card card-info" style="text-align: center;">
+                    <h3>Clean</h3>
+                    <p style="margin-top: 10px;">Remove outliers or invalid data</p>
+                </div>
             </div>
         </div>
 
-        <!-- Slide 3: Learning Objectives -->
+        <!-- =========================================
+             SLIDE 3: LEARNING OBJECTIVES
+             ========================================= -->
         <div class="slide">
-            <h1>What You Will Learn Today</h1>
-            <div class="objectives-list">
-                <div class="objective-item">
-                    <div class="check-icon">1</div>
-                    <div><strong>Statistics Refresher (45 min)</strong> - Population vs Sample, Mean/Median/Mode, Variance, Percentiles</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">2</div>
-                    <div><strong>Understanding Distributions</strong> - Normal, Skewed, Bimodal shapes</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">3</div>
-                    <div><strong>Measuring Center</strong> - When to use mean vs median</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">4</div>
-                    <div><strong>Measuring Spread</strong> - Standard deviation, IQR, range</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">5</div>
-                    <div><strong>Detecting Outliers</strong> - IQR method and visualization</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">6</div>
-                    <div><strong>Creating Visualizations</strong> - Histograms and boxplots in Python</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 4: SECTION - Statistics Refresher -->
-        <div class="slide section-intro">
-            <h1>Part 1: Statistics Refresher</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">The fundamental concepts you need to analyze data</p>
-            <div style="margin-top: 50px; font-size: 1.2rem; opacity: 0.8;">Duration: 45 minutes</div>
-        </div>
-
-        <!-- Slide 5: Population vs Sample -->
-        <div class="slide">
-            <h1>Population vs Sample</h1>
-            <div class="analogy-box">
-                <h3>The Soup Tasting Analogy</h3>
-                <p>You want to know if your soup is salty enough. Do you drink the entire pot? No! You taste one spoonful.</p>
-                <p style="margin-top: 15px;"><strong>Population</strong> = The entire pot of soup (all the data that exists)</p>
-                <p><strong>Sample</strong> = One spoonful (the data you actually measure)</p>
-            </div>
-            <div class="concept-grid">
-                <div class="concept-card info">
-                    <h3>Population</h3>
-                    <ul style="list-style: none; line-height: 1.8;">
-                        <li>All water consumers in Colombia</li>
-                        <li>Every transaction ever made</li>
-                        <li>All students in all universities</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: #666;">Usually impossible or impractical to measure</p>
-                </div>
-                <div class="concept-card success">
-                    <h3>Sample</h3>
-                    <ul style="list-style: none; line-height: 1.8;">
-                        <li>1,000 surveyed consumers</li>
-                        <li>Transactions from last year</li>
-                        <li>Students in this classroom</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: #666;">What we use to ESTIMATE the population</p>
-                </div>
-            </div>
-            <div class="alert-box warning">
-                <strong>Key insight:</strong> Your sample must be REPRESENTATIVE. A spoonful from the top of the pot may not represent the whole soup!
-            </div>
-        </div>
-
-        <!-- Slide 6: Mean, Median, Mode -->
-        <div class="slide">
-            <h1>Measures of Central Tendency</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">Three ways to answer: "What's a typical value?"</p>
-            <div class="stat-box">
-                <div class="stat-item">
-                    <h3>Mean (Average)</h3>
-                    <div class="formula">sum(values) / count</div>
-                    <p>Add all values, divide by count</p>
-                </div>
-                <div class="stat-item">
-                    <h3>Median (Middle)</h3>
-                    <div class="formula">middle value when sorted</div>
-                    <p>The center value in order</p>
-                </div>
-                <div class="stat-item">
-                    <h3>Mode (Most Common)</h3>
-                    <div class="formula">most frequent value</div>
-                    <p>The value that appears most</p>
-                </div>
-            </div>
-            <div class="visual-demo">
-                <h3 style="margin-bottom: 15px;">Example: Water consumption (m3) for 7 households</h3>
-                <pre style="font-size: 1.1rem;">
-Values:   8,  10,  11,  12,  12,  14,  45
-
-Mean:    (8+10+11+12+12+14+45) / 7 = 16.0 m3
-Median:  8, 10, 11, [12], 12, 14, 45 = 12.0 m3
-Mode:    12 (appears twice)
-                </pre>
-                <p style="margin-top: 15px; color: #666;">Notice: Mean (16.0) is pulled up by the outlier (45). Median (12.0) is more representative!</p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Salary Example - When to Use Which -->
-        <div class="slide">
-            <h1>Mean vs Median: The Salary Example</h1>
-            <div class="analogy-box">
-                <h3>Imagine a Company with 10 Employees</h3>
-                <p>9 employees earn $50,000 per year. The CEO earns $5,000,000.</p>
-            </div>
-            <div class="comparison-grid">
-                <div class="comparison-card bad">
-                    <h3>Mean Salary</h3>
-                    <p style="font-size: 2rem; font-weight: bold; margin: 20px 0;">$545,000</p>
-                    <p>($50K x 9 + $5M) / 10</p>
-                    <p style="margin-top: 15px;">"Our average salary is $545K!"</p>
-                    <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 10px;">Misleading and unrepresentative</p>
-                </div>
-                <div class="comparison-card good">
-                    <h3>Median Salary</h3>
-                    <p style="font-size: 2rem; font-weight: bold; margin: 20px 0;">$50,000</p>
-                    <p>Middle value of sorted salaries</p>
-                    <p style="margin-top: 15px;">"A typical salary is $50K"</p>
-                    <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 10px;">Representative of most employees</p>
-                </div>
-            </div>
-            <div class="key-takeaway">
-                <h3>Rule of Thumb</h3>
-                <p>If mean != median, your data is skewed. Use median for better representation.</p>
-            </div>
-        </div>
-
-        <!-- Slide 8: Variance and Standard Deviation -->
-        <div class="slide">
-            <h1>Variance and Standard Deviation</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">Measuring how spread out your data is</p>
-            <div class="analogy-box">
-                <h3>The Archery Analogy</h3>
-                <p>Two archers shoot 10 arrows each at a target.</p>
-                <p style="margin-top: 10px;"><strong>Archer A:</strong> All arrows land close together (low standard deviation = consistent)</p>
-                <p><strong>Archer B:</strong> Arrows all over the place (high standard deviation = inconsistent)</p>
-            </div>
-            <div class="concept-grid">
-                <div class="concept-card info">
-                    <h3>Variance (squared units)</h3>
-                    <p style="font-family: monospace; margin: 15px 0;">variance = avg(distance from mean)^2</p>
-                    <p>How far each value is from the mean, squared</p>
-                    <p style="color: #666; margin-top: 10px;">Units: m3^2 (hard to interpret)</p>
-                </div>
-                <div class="concept-card success">
-                    <h3>Standard Deviation (original units)</h3>
-                    <p style="font-family: monospace; margin: 15px 0;">std = sqrt(variance)</p>
-                    <p>Same as variance, but in original units</p>
-                    <p style="color: #666; margin-top: 10px;">Units: m3 (easy to interpret!)</p>
-                </div>
-            </div>
-            <div class="visual-demo">
-                <h3 style="margin-bottom: 15px;">Visual: Low vs High Standard Deviation</h3>
-                <pre>
-Low std (consistent):          High std (spread out):
-        *****                          *
-       *******                        * *
-      *********                      *   *
-     ***********                    *     *
-    *************                  *       *
-   _______________                ___________
-       mean                          mean
-                </pre>
-            </div>
-        </div>
-
-        <!-- Slide 9: The 68-95-99.7 Rule -->
-        <div class="slide">
-            <h1>The 68-95-99.7 Rule</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">For normally distributed data</p>
-            <div class="visual-demo">
-                <pre style="font-size: 1rem;">
-                         99.7% (within 3 std)
-                   |_______________________________|
-                         95% (within 2 std)
-                     |_______________________|
-                         68% (within 1 std)
-                       |_______________|
-
-                              *****
-                            *********
-                          *************
-                        *****************
-                      *********************
-                    *************************
-                  |_____|_____|_____|_____|_____|
-                 -3std -2std -1std mean +1std +2std +3std
-                </pre>
-            </div>
-            <div class="stat-box">
-                <div class="stat-item" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
-                    <h3>68%</h3>
-                    <p>Within 1 std of mean</p>
-                </div>
-                <div class="stat-item" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
-                    <h3>95%</h3>
-                    <p>Within 2 std of mean</p>
-                </div>
-                <div class="stat-item" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <h3>99.7%</h3>
-                    <p>Within 3 std of mean</p>
-                </div>
-            </div>
-            <div class="alert-box info">
-                <strong>Example:</strong> If mean water consumption = 12 m3 and std = 3 m3, then 95% of households consume between 6 m3 and 18 m3.
-            </div>
-        </div>
-
-        <!-- Slide 10: Percentiles and Quartiles -->
-        <div class="slide">
-            <h1>Percentiles and Quartiles</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">Dividing your data into meaningful segments</p>
-            <div class="analogy-box">
-                <h3>The Test Score Analogy</h3>
-                <p>"You scored in the 90th percentile" means you performed better than 90% of test-takers.</p>
-                <p style="margin-top: 10px;">It does NOT mean you got 90% of questions correct!</p>
-            </div>
-            <div class="visual-demo">
-                <h3 style="margin-bottom: 15px;">Quartiles: Dividing Data into 4 Parts</h3>
-                <pre>
-Sorted data: [2, 4, 5, 7, 8, 10, 12, 15, 18, 20, 25, 30]
-
-    |------ 25% ------|------ 25% ------|------ 25% ------|------ 25% ------|
-    2  4  5  |  7  8  10  |  12  15  18  |  20  25  30
-             Q1=6         Q2=11           Q3=19
-           (25th %)     (50th %/median)  (75th %)
-
-IQR (Interquartile Range) = Q3 - Q1 = 19 - 6 = 13
-                </pre>
-            </div>
-            <div class="feature-grid" style="grid-template-columns: repeat(4, 1fr);">
-                <div class="feature-card" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
-                    <h3>Q1</h3>
-                    <p>25th percentile</p>
-                    <p style="font-size: 0.9rem; opacity: 0.9;">25% below</p>
-                </div>
-                <div class="feature-card" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
-                    <h3>Q2</h3>
-                    <p>50th percentile</p>
-                    <p style="font-size: 0.9rem; opacity: 0.9;">= Median</p>
-                </div>
-                <div class="feature-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <h3>Q3</h3>
-                    <p>75th percentile</p>
-                    <p style="font-size: 0.9rem; opacity: 0.9;">75% below</p>
-                </div>
-                <div class="feature-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <h3>IQR</h3>
-                    <p>Q3 - Q1</p>
-                    <p style="font-size: 0.9rem; opacity: 0.9;">Middle 50%</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 11: Statistics Code -->
-        <div class="slide">
-            <h1>Statistics in Python</h1>
-            <div class="code-example"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="comment"># Load water consumption data</span>
-df = pd.read_csv(<span class="string">'water_consumption.csv'</span>)
-
-<span class="comment"># Central tendency</span>
-mean = df[<span class="string">'consumption'</span>].mean()      <span class="comment"># Average</span>
-median = df[<span class="string">'consumption'</span>].median()  <span class="comment"># Middle value</span>
-mode = df[<span class="string">'consumption'</span>].mode()      <span class="comment"># Most frequent</span>
-
-<span class="comment"># Spread</span>
-std = df[<span class="string">'consumption'</span>].std()        <span class="comment"># Standard deviation</span>
-var = df[<span class="string">'consumption'</span>].var()        <span class="comment"># Variance</span>
-
-<span class="comment"># Percentiles and quartiles</span>
-q1 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.25</span>)
-q2 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.50</span>)  <span class="comment"># = median</span>
-q3 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.75</span>)
-iqr = q3 - q1
-
-<span class="comment"># All at once with describe()</span>
-df[<span class="string">'consumption'</span>].describe()</div>
-        </div>
-
-        <!-- Slide 12: SECTION - EDA Univariate -->
-        <div class="slide section-intro">
-            <h1>Part 2: Univariate Analysis</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Understanding ONE variable at a time</p>
-            <div style="margin-top: 50px; font-size: 1.2rem; opacity: 0.8;">Distributions, Outliers, Visualizations</div>
-        </div>
-
-        <!-- Slide 13: What is Univariate Analysis? -->
-        <div class="slide">
-            <h1>What is Univariate Analysis?</h1>
-            <div class="hook-card" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
-                <h2>Univariate = ONE Variable at a Time</h2>
-                <p>Like checking your height without comparing to anyone else</p>
-            </div>
-            <div style="margin: 30px 0;">
-                <h2>The 5-Step Univariate Framework</h2>
-                <div class="feature-grid" style="grid-template-columns: repeat(5, 1fr); margin-top: 20px;">
-                    <div class="feature-card">
-                        <h3>1</h3>
-                        <p>What type?</p>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Numeric or Categorical</p>
-                    </div>
-                    <div class="feature-card" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
-                        <h3>2</h3>
-                        <p>Distribution?</p>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Shape of the data</p>
-                    </div>
-                    <div class="feature-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        <h3>3</h3>
-                        <p>Center?</p>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Mean or Median</p>
-                    </div>
-                    <div class="feature-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <h3>4</h3>
-                        <p>Spread?</p>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Std, IQR, Range</p>
-                    </div>
-                    <div class="feature-card" style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);">
-                        <h3>5</h3>
-                        <p>Outliers?</p>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Unusual values</p>
-                    </div>
-                </div>
-            </div>
-            <div class="alert-box success">
-                <strong>Remember:</strong> Understand each variable individually BEFORE looking at relationships between variables (bivariate analysis).
-            </div>
-        </div>
-
-        <!-- Slide 14: Types of Distributions -->
-        <div class="slide">
-            <h1>Understanding Distributions</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">A distribution shows how values are spread across a range</p>
-            <div class="distribution-visual">
-                <div class="distribution-card">
-                    <h3 style="color: #0984e3;">Normal (Bell Curve)</h3>
-                    <pre>
-        *
-       ***
-      *****
-     *******
-    *********
-   ***********
-  *************
- ***************
-    </pre>
-                    <p>Most values near center</p>
-                    <p style="color: #666; font-size: 0.9rem;">Example: Heights, test scores</p>
-                </div>
-                <div class="distribution-card">
-                    <h3 style="color: #f093fb;">Right Skewed</h3>
-                    <pre>
-   *
-   **
-   ***
-   ****
-   *****
-   ******
-   *******
-   ********___
-    </pre>
-                    <p>Long tail to the right</p>
-                    <p style="color: #666; font-size: 0.9rem;">Example: Income, house prices</p>
-                </div>
-                <div class="distribution-card">
-                    <h3 style="color: #00b894;">Bimodal</h3>
-                    <pre>
-    *         *
-   ***       ***
-  *****     *****
- *******   *******
-********* *********
-    </pre>
-                    <p>Two peaks</p>
-                    <p style="color: #666; font-size: 0.9rem;">Example: Mixed populations</p>
-                </div>
-            </div>
-            <div class="key-takeaway">
-                <h3>Why Distribution Shape Matters</h3>
-                <p>It determines which statistics to use (mean vs median) and what patterns to expect</p>
-            </div>
-        </div>
-
-        <!-- Slide 15: Skewness Explained -->
-        <div class="slide">
-            <h1>Skewness: Which Way Does the Tail Point?</h1>
-            <div class="comparison-grid">
-                <div class="comparison-card good">
-                    <h3>Right (Positive) Skew</h3>
-                    <p style="font-size: 2rem; margin: 15px 0;">Mean > Median</p>
-                    <pre style="font-size: 0.8rem; margin: 15px 0; color: white;">
-   *
-   **
-   ***
-   ****___tail-->
-                    </pre>
-                    <p>Tail points RIGHT</p>
-                    <p style="margin-top: 10px; font-size: 0.9rem;">Income, water consumption, prices</p>
-                </div>
-                <div class="comparison-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                    <h3>Left (Negative) Skew</h3>
-                    <p style="font-size: 2rem; margin: 15px 0;">Mean < Median</p>
-                    <pre style="font-size: 0.8rem; margin: 15px 0; color: white;">
-             *
-            **
-           ***
-<--tail___****
-                    </pre>
-                    <p>Tail points LEFT</p>
-                    <p style="margin-top: 10px; font-size: 0.9rem;">Age at death, exam scores (ceiling)</p>
-                </div>
-            </div>
-            <div class="alert-box info" style="margin-top: 30px;">
-                <strong>Remember:</strong> The mean gets "pulled" toward the tail. So:
-                <br>- Right skew: mean > median (mean pulled right)
-                <br>- Left skew: mean < median (mean pulled left)
-            </div>
-        </div>
-
-        <!-- Slide 16: Outliers -->
-        <div class="slide">
-            <h1>Outliers: The Giraffes in the Dog Park</h1>
-            <div class="analogy-box">
-                <h3>The Outlier Analogy</h3>
-                <p>Imagine a dog park with Chihuahuas, Beagles, Labradors, and one Giraffe.</p>
-                <p style="margin-top: 10px;">The giraffe is an <strong>outlier</strong>. It stands out because it doesn't belong to the normal group.</p>
-            </div>
-            <div class="concept-grid">
-                <div class="concept-card warning">
-                    <h3>What Causes Outliers?</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li><strong>Data entry errors</strong> - Typo: 150 instead of 15</li>
-                        <li><strong>Measurement errors</strong> - Broken sensor</li>
-                        <li><strong>True anomalies</strong> - A water leak causing high consumption</li>
-                        <li><strong>Different population</strong> - Industrial vs residential</li>
-                    </ul>
-                </div>
-                <div class="concept-card danger">
-                    <h3>Why They Matter</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li><strong>Distort statistics</strong> - Pull mean away from center</li>
-                        <li><strong>Break models</strong> - ML models can be sensitive</li>
-                        <li><strong>Hide patterns</strong> - Compress visualization scales</li>
-                        <li><strong>OR reveal insights!</strong> - Fraud detection</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 17: IQR Method for Outliers -->
-        <div class="slide">
-            <h1>Detecting Outliers: The IQR Method</h1>
-            <div class="visual-demo">
-                <h3 style="margin-bottom: 15px;">The 1.5 x IQR Rule</h3>
-                <pre style="font-size: 1rem;">
-        Lower Fence                              Upper Fence
-             |                                        |
-             v                                        v
-    [outlier]  |----[  Q1  |  Q2  |  Q3  ]---|  [outlier]
-               |         Box Plot            |
-               |<------- 1.5 x IQR --------->|
-
-    Lower Fence = Q1 - 1.5 x IQR
-    Upper Fence = Q3 + 1.5 x IQR
-
-    Anything outside the fences = OUTLIER
-                </pre>
-            </div>
-            <div class="code-example"><span class="comment"># Outlier detection with IQR method</span>
-q1 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.25</span>)
-q3 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.75</span>)
-iqr = q3 - q1
-
-lower_bound = q1 - <span class="number">1.5</span> * iqr
-upper_bound = q3 + <span class="number">1.5</span> * iqr
-
-<span class="comment"># Find outliers</span>
-outliers = df[(df[<span class="string">'consumption'</span>] < lower_bound) |
-              (df[<span class="string">'consumption'</span>] > upper_bound)]
-
-<span class="function">print</span>(<span class="string">f"Found {len(outliers)} outliers out of {len(df)} records"</span>)</div>
-        </div>
-
-        <!-- Slide 18: Histograms -->
-        <div class="slide">
-            <h1>Visualization: Histograms</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 20px;">The go-to chart for understanding distributions</p>
-            <div class="concept-grid">
-                <div class="concept-card info">
-                    <h3>What is a Histogram?</h3>
-                    <p>A histogram divides values into "bins" and counts how many fall in each bin.</p>
-                    <div class="visual-demo" style="margin-top: 15px; padding: 15px;">
-                        <pre style="font-size: 0.85rem;">
-Consumption (m3):  0-5  5-10 10-15 15-20 20-25 25+
-                   ===  ==== ===== ===== ===== ===
-Frequency:         ||   |||| ||||| |||   ||    |
-Count:             2    4    5     3     2     1
-                        </pre>
-                    </div>
-                </div>
-                <div class="concept-card success">
-                    <h3>What to Look For</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li><strong>Shape:</strong> Normal? Skewed? Bimodal?</li>
-                        <li><strong>Center:</strong> Where is the peak?</li>
-                        <li><strong>Spread:</strong> How wide is the distribution?</li>
-                        <li><strong>Outliers:</strong> Bars far from the rest?</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="code-example"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
-
-<span class="comment"># Basic histogram</span>
-df[<span class="string">'consumption'</span>].hist(bins=<span class="number">30</span>, edgecolor=<span class="string">'black'</span>)
-plt.xlabel(<span class="string">'Water Consumption (m3)'</span>)
-plt.ylabel(<span class="string">'Frequency'</span>)
-plt.title(<span class="string">'Distribution of Water Consumption'</span>)
-plt.show()
-
-<span class="comment"># With seaborn (nicer)</span>
-<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
-sns.histplot(df[<span class="string">'consumption'</span>], bins=<span class="number">30</span>, kde=<span class="keyword">True</span>)</div>
-        </div>
-
-        <!-- Slide 19: Box Plots -->
-        <div class="slide">
-            <h1>Visualization: Box Plots</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 20px;">The 5-number summary in one picture</p>
-            <div class="visual-demo">
-                <pre style="font-size: 1.1rem;">
-                     outliers
-                        o
-                        o
-                        |
-         |--------------|--------------|  <-- maximum (or upper fence)
-         |              |              |
-         |    Upper     |              |
-         |   Quartile   |              |  <-- Q3 (75th percentile)
-         |              |              |
-    |----|==============|==============|----| <-- median (Q2)
-         |              |              |
-         |    Lower     |              |  <-- Q1 (25th percentile)
-         |   Quartile   |              |
-         |              |              |
-         |--------------|--------------|  <-- minimum (or lower fence)
-                        |
-                        o
-                     outliers
-                </pre>
-            </div>
-            <div class="code-example"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
-<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
-
-<span class="comment"># Basic box plot</span>
-df[<span class="string">'consumption'</span>].plot(kind=<span class="string">'box'</span>)
-plt.title(<span class="string">'Water Consumption Distribution'</span>)
-plt.show()
-
-<span class="comment"># Horizontal box plot with seaborn</span>
-sns.boxplot(x=df[<span class="string">'consumption'</span>])
-plt.xlabel(<span class="string">'Water Consumption (m3)'</span>)
-plt.show()</div>
-        </div>
-
-        <!-- Slide 20: Choosing Mean vs Median -->
-        <div class="slide">
-            <h1>Decision Guide: Mean vs Median</h1>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Situation</th>
-                            <th>Use Mean</th>
-                            <th>Use Median</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Distribution is symmetric</td>
-                            <td style="color: #00b894; font-weight: bold;">Yes</td>
-                            <td style="color: #666;">Also fine</td>
-                        </tr>
-                        <tr>
-                            <td>Distribution is skewed</td>
-                            <td style="color: #ff7675;">No</td>
-                            <td style="color: #00b894; font-weight: bold;">Yes</td>
-                        </tr>
-                        <tr>
-                            <td>Data has outliers</td>
-                            <td style="color: #ff7675;">No</td>
-                            <td style="color: #00b894; font-weight: bold;">Yes</td>
-                        </tr>
-                        <tr>
-                            <td>Need mathematical properties</td>
-                            <td style="color: #00b894; font-weight: bold;">Yes</td>
-                            <td style="color: #666;">Limited</td>
-                        </tr>
-                        <tr>
-                            <td>Income/price data</td>
-                            <td style="color: #ff7675;">Rarely</td>
-                            <td style="color: #00b894; font-weight: bold;">Usually</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="key-takeaway" style="margin-top: 30px;">
-                <h3>Quick Check</h3>
-                <p>Compare mean and median. If they are very different, your data is probably skewed and you should use the median!</p>
-            </div>
-        </div>
-
-        <!-- Slide 21: Complete Analysis Example -->
-        <div class="slide">
-            <h1>Putting It All Together: Complete Univariate Analysis</h1>
-            <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
-
-<span class="comment"># Step 1: Load and understand the variable</span>
-df = pd.read_csv(<span class="string">'water_consumption.csv'</span>)
-<span class="function">print</span>(<span class="string">"Data type:"</span>, df[<span class="string">'consumption'</span>].dtype)
-<span class="function">print</span>(<span class="string">"Non-null count:"</span>, df[<span class="string">'consumption'</span>].count())
-
-<span class="comment"># Step 2: Summary statistics</span>
-<span class="function">print</span>(df[<span class="string">'consumption'</span>].describe())
-
-<span class="comment"># Step 3: Check for skewness</span>
-mean = df[<span class="string">'consumption'</span>].mean()
-median = df[<span class="string">'consumption'</span>].median()
-<span class="function">print</span>(<span class="string">f"Mean: {mean:.2f}, Median: {median:.2f}"</span>)
-<span class="function">print</span>(<span class="string">f"Skewness: {'Right skewed' if mean > median else 'Left skewed or symmetric'}"</span>)
-
-<span class="comment"># Step 4: Visualize</span>
-fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">12</span>, <span class="number">4</span>))
-df[<span class="string">'consumption'</span>].hist(bins=<span class="number">30</span>, ax=axes[<span class="number">0</span>])
-df[<span class="string">'consumption'</span>].plot(kind=<span class="string">'box'</span>, ax=axes[<span class="number">1</span>])
-plt.tight_layout()
-plt.show()
-
-<span class="comment"># Step 5: Detect outliers</span>
-q1, q3 = df[<span class="string">'consumption'</span>].quantile([<span class="number">0.25</span>, <span class="number">0.75</span>])
-iqr = q3 - q1
-outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class="number">1.5</span>*iqr) |
-              (df[<span class="string">'consumption'</span>] > q3 + <span class="number">1.5</span>*iqr)]
-<span class="function">print</span>(<span class="string">f"Outliers: {len(outliers)} ({len(outliers)/len(df)*100:.1f}%)"</span>)</div>
-        </div>
-
-        <!-- Slide 22: Demo -->
-        <div class="slide">
-            <div class="demo-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Water Consumption Dataset - HISTORICO_CONSUMO</div>
-
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">What we will analyze:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Water consumption distribution</li>
-                                <li style="padding: 8px 0;">- Price per cubic meter</li>
-                                <li style="padding: 8px 0;">- Number of subscribers</li>
-                                <li style="padding: 8px 0;">- Identifying outlier municipalities</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Questions to answer:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Is consumption normally distributed?</li>
-                                <li style="padding: 8px 0;">- Mean vs median - which to report?</li>
-                                <li style="padding: 8px 0;">- How many outliers exist?</li>
-                                <li style="padding: 8px 0;">- What explains the outliers?</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 23: Workshop -->
-        <div class="slide">
-            <div class="workshop-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Workshop</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Apply the 5-Step Univariate Framework</div>
-
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Your Tasks:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Analyze 3 numeric variables</li>
-                                <li style="padding: 8px 0;">2. Document distribution type for each</li>
-                                <li style="padding: 8px 0;">3. Calculate mean AND median (compare!)</li>
-                                <li style="padding: 8px 0;">4. Detect outliers with IQR method</li>
-                                <li style="padding: 8px 0;">5. Create histogram + boxplot for each</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Variables to Analyze:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- CONSUMO_FACTURADO (billed consumption)</li>
-                                <li style="padding: 8px 0;">- VALOR_FACTURADO (billed amount)</li>
-                                <li style="padding: 8px 0;">- NUMERO_SUSCRIPTORES (subscribers)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
-                    <strong>Deliverable:</strong> Notebook with complete univariate analysis and at least 3 insights about the data
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 24: Summary and Next Steps -->
-        <div class="slide">
-            <h1>Summary and Next Steps</h1>
-            <div class="concept-grid">
+            <h1>What You'll Learn Today</h1>
+            <div class="grid-2">
                 <div>
-                    <h2>Today You Learned:</h2>
-                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                        <ul style="list-style: none; line-height: 2;">
-                            <li>Population vs Sample (soup tasting)</li>
-                            <li>Mean, Median, Mode (salary example)</li>
-                            <li>Variance and Standard Deviation (archery)</li>
-                            <li>Percentiles and IQR</li>
-                            <li>Distribution shapes (normal, skewed, bimodal)</li>
-                            <li>Outlier detection with IQR method</li>
-                            <li>Histograms and box plots in Python</li>
-                        </ul>
+                    <h2>Objectives</h2>
+                    <ul class="list-styled list-check">
+                        <li>Select rows with boolean indexing</li>
+                        <li>Use comparison operators to build conditions</li>
+                        <li>Combine multiple conditions (AND, OR, NOT)</li>
+                        <li>Filter with .isin(), .between(), .str.contains()</li>
+                        <li>Use .query() as a clean alternative syntax</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>By the end you'll be able to:</h2>
+                    <div class="card card-primary">
+                        <p style="font-size: 1.2rem;">
+                            Extract exactly the rows you need from any dataset using single or combined filter conditions.
+                        </p>
+                    </div>
+                    <div class="alert alert-info" style="margin-top: 20px;">
+                        <strong>Dataset:</strong> Same Education Statistics (MEN) you cleaned last week. Now we query it.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 4: REVIEW - Basic Selection (bridge)
+             ========================================= -->
+        <div class="slide">
+            <h1>Quick Review: Selecting Data</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p>In Week 2, you learned how to select <strong>columns</strong> and <strong>rows by position</strong>. Today we add a new power: selecting rows <strong>by condition</strong>.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card card-light">
+                    <h3>Select columns</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># One column (Series)</span>
+df[<span class="string">'departamento'</span>]
+
+<span class="comment"># Multiple columns (DataFrame)</span>
+df[[<span class="string">'departamento'</span>, <span class="string">'ano'</span>]]</div>
+                </div>
+                <div class="card card-light">
+                    <h3>Select by position</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># First 5 rows</span>
+df.<span class="function">iloc</span>[:<span class="number">5</span>]
+
+<span class="comment"># Row 10, columns 0-2</span>
+df.<span class="function">iloc</span>[<span class="number">10</span>, :<span class="number">3</span>]</div>
+                </div>
+                <div class="card card-primary">
+                    <h3>Select by condition</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Rows where year is 2023</span>
+df[df[<span class="string">'ano'</span>] == <span class="number">2023</span>]
+
+<span class="comment"># THIS IS TODAY'S TOPIC</span></div>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="text-align: center;">
+                <strong>Key shift:</strong> Instead of "give me row 5", you say "give me every row where the year is 2023." This is called <strong>boolean indexing</strong>.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 5: What Is Boolean Indexing?
+             ========================================= -->
+        <div class="slide">
+            <h1>What Is Boolean Indexing?</h1>
+
+            <div class="concept-box">
+                <p><strong>Boolean indexing means using True/False values to select rows.</strong></p>
+                <div class="analogy">
+                    Imagine you have a class roster with a column "passed_exam". Every student has True or False. If you select only the True rows, you get the students who passed. That's boolean indexing: a True/False mask that picks which rows to keep.
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin-top: 20px;">How It Works (Step by Step)</h2>
+
+            <div class="before-after">
+                <div>
+                    <h3 style="text-align: center; color: #667eea;">Step 1: Create a mask</h3>
+                    <div class="code-block" style="font-size: 0.85rem;">df[<span class="string">'ano'</span>] == <span class="number">2023</span>
+
+<span class="comment"># Returns a Series of True/False:</span>
+<span class="comment"># 0     False</span>
+<span class="comment"># 1     False</span>
+<span class="comment"># 2     True</span>
+<span class="comment"># 3     True</span>
+<span class="comment"># ...</span></div>
+                </div>
+                <div class="arrow" style="text-align: center; font-size: 3rem;">&#8594;</div>
+                <div>
+                    <h3 style="text-align: center; color: #00b894;">Step 2: Apply the mask</h3>
+                    <div class="code-block" style="font-size: 0.85rem;">df[df[<span class="string">'ano'</span>] == <span class="number">2023</span>]
+
+<span class="comment"># pandas keeps only True rows</span>
+<span class="comment"># Result: only rows from 2023</span></div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Two steps, one line:</strong> <code class="code-inline">df[df['ano'] == 2023]</code> creates the True/False mask AND applies it in a single expression.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 6: Visual - Boolean Mask on DataFrame
+             ========================================= -->
+        <div class="slide">
+            <h1>Visualizing the Boolean Mask</h1>
+
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 20px;">
+                <code class="code-inline">df['ano'] == 2023</code> creates a True/False value for every row
+            </p>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="text-align: center;">Original DataFrame</h3>
+                    <div class="dataframe-visual">
+                        <div class="header-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell"></div>
+                            <div class="cell">departamento</div>
+                            <div class="cell">ano</div>
+                            <div class="cell">desercion</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell">ANTIOQUIA</div>
+                            <div class="cell">2022</div>
+                            <div class="cell">3.1</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell">ANTIOQUIA</div>
+                            <div class="cell" style="font-weight: bold; color: #00b894;">2023</div>
+                            <div class="cell">2.9</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell">BOGOTA</div>
+                            <div class="cell">2022</div>
+                            <div class="cell">1.8</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell index-cell">3</div>
+                            <div class="cell">BOGOTA</div>
+                            <div class="cell" style="font-weight: bold; color: #00b894;">2023</div>
+                            <div class="cell">1.5</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr 80px 100px;">
+                            <div class="cell index-cell">4</div>
+                            <div class="cell">VALLE</div>
+                            <div class="cell">2022</div>
+                            <div class="cell">4.2</div>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <h2>Next Week - EDA Part 2:</h2>
-                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                        <h3 style="color: white; margin-bottom: 15px;">Bivariate & Multivariate Analysis</h3>
-                        <ul style="list-style: none; line-height: 2;">
-                            <li>Correlation analysis</li>
-                            <li>Scatter plots and heatmaps</li>
-                            <li>Comparing groups</li>
-                            <li>Finding relationships</li>
-                        </ul>
+                    <h3 style="text-align: center;">Boolean Mask</h3>
+                    <div class="dataframe-visual">
+                        <div class="header-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell"></div>
+                            <div class="cell">ano == 2023</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell cell-false">False</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell cell-true">True</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell cell-false">False</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell index-cell">3</div>
+                            <div class="cell cell-true">True</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 50px 1fr;">
+                            <div class="cell index-cell">4</div>
+                            <div class="cell cell-false">False</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
-                    <h2 style="color: white; margin-bottom: 15px;">Key Takeaway</h2>
-                    <p style="font-size: 1.3rem;">
-                        Always check Mean vs Median.<br>
-                        If they differ, your data is skewed. Use median!
+                    <p style="text-align: center; margin-top: 10px; color: #00b894; font-weight: bold;">
+                        Result: rows 1 and 3 (where True)
                     </p>
                 </div>
             </div>
+
+            <div class="alert alert-warning">
+                <strong>Mental model:</strong> The mask is like a bouncer at a club. It checks every row against your condition. True = let it in. False = keep it out.
+            </div>
         </div>
+
+        <!-- =========================================
+             SLIDE 7: Single Condition + Comparison Operators
+             ========================================= -->
+        <div class="slide">
+            <h1>Comparison Operators</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p><strong>Comparison operators are the building blocks of every filter.</strong> They compare a column's values against a target and produce True or False for each row.</p>
+            </div>
+
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <div class="operator-symbol">==</div>
+                    <div class="operator-name">Equal to</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['ano'] == 2023</code></div>
+                </div>
+                <div class="operator-card">
+                    <div class="operator-symbol">!=</div>
+                    <div class="operator-name">Not equal to</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['ano'] != 2023</code></div>
+                </div>
+                <div class="operator-card">
+                    <div class="operator-symbol">></div>
+                    <div class="operator-name">Greater than</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['desercion'] > 5</code></div>
+                </div>
+                <div class="operator-card">
+                    <div class="operator-symbol"><</div>
+                    <div class="operator-name">Less than</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['desercion'] < 2</code></div>
+                </div>
+                <div class="operator-card">
+                    <div class="operator-symbol">>=</div>
+                    <div class="operator-name">Greater or equal</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['cobertura_neta'] >= 90</code></div>
+                </div>
+                <div class="operator-card">
+                    <div class="operator-symbol"><=</div>
+                    <div class="operator-name">Less or equal</div>
+                    <div style="margin-top: 5px; font-size: 0.85rem;"><code class="code-inline">df['reprobacion'] <= 3</code></div>
+                </div>
+            </div>
+
+            <div class="code-block"><span class="comment"># Example: departments with dropout rate above 5%</span>
+high_dropout = df[df[<span class="string">'desercion'</span>] > <span class="number">5</span>]
+<span class="function">print</span>(f<span class="string">"Found {len(high_dropout)} rows with dropout > 5%"</span>)</div>
+
+            <div class="alert alert-danger">
+                <strong>Common mistake:</strong> Using <code class="code-inline">=</code> instead of <code class="code-inline">==</code>. A single <code class="code-inline">=</code> is assignment (storing a value). Double <code class="code-inline">==</code> is comparison (asking a question).
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 8: Combining Conditions - AND (&)
+             ========================================= -->
+        <div class="slide">
+            <h1>Combining Conditions: AND (&amp;)</h1>
+
+            <div class="concept-box">
+                <p><strong>AND means BOTH conditions must be True.</strong> The result is a smaller, more specific set of rows.</p>
+                <div class="analogy">
+                    "Show me books that are about Python AND were published after 2020." Both conditions must be met. A Python book from 2019 would NOT be included.
+                </div>
+            </div>
+
+            <div class="venn-container">
+                <div class="venn-circle venn-circle-left" style="background: rgba(102, 126, 234, 0.4); border: 3px solid #667eea;">
+                    <span style="margin-right: 40px;">ano == 2023</span>
+                </div>
+                <div class="venn-circle venn-circle-right" style="background: rgba(0, 184, 148, 0.4); border: 3px solid #00b894;">
+                    <span style="margin-left: 40px;">desercion > 5</span>
+                </div>
+                <div class="venn-label" style="top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 8px; color: #764ba2; font-size: 1rem;">AND: only the overlap</div>
+            </div>
+
+            <div class="code-block"><span class="comment"># AND: both conditions must be True</span>
+result = df[(df[<span class="string">'ano'</span>] == <span class="number">2023</span>) &amp; (df[<span class="string">'desercion'</span>] > <span class="number">5</span>)]
+
+<span class="comment"># "Departments in 2023 with dropout above 5%"</span>
+<span class="function">print</span>(f<span class="string">"Found {len(result)} rows"</span>)</div>
+
+            <div class="alert alert-danger" style="margin-top: 15px;">
+                <strong>CRITICAL:</strong> Each condition MUST be in parentheses: <code class="code-inline">(condition1) &amp; (condition2)</code>. Without parentheses, Python gets confused about operator priority and throws an error.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 9: Combining Conditions - OR (|)
+             ========================================= -->
+        <div class="slide">
+            <h1>Combining Conditions: OR (|)</h1>
+
+            <div class="concept-box">
+                <p><strong>OR means EITHER condition can be True.</strong> The result is a larger, broader set of rows.</p>
+                <div class="analogy">
+                    "Show me books about Python OR about Data Science." A book about either topic gets included. A book about both also gets included. Only books about neither are excluded.
+                </div>
+            </div>
+
+            <div class="venn-container">
+                <div class="venn-circle venn-circle-left" style="background: rgba(102, 126, 234, 0.4); border: 3px solid #667eea;">
+                    <span style="margin-right: 40px;">Antioquia</span>
+                </div>
+                <div class="venn-circle venn-circle-right" style="background: rgba(0, 184, 148, 0.4); border: 3px solid #00b894;">
+                    <span style="margin-left: 40px;">Bogota</span>
+                </div>
+                <div class="venn-label" style="top: 5px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 8px; color: #764ba2; font-size: 1rem;">OR: everything colored</div>
+            </div>
+
+            <div class="code-block"><span class="comment"># OR: at least one condition must be True</span>
+result = df[(df[<span class="string">'departamento'</span>] == <span class="string">'ANTIOQUIA'</span>) | (df[<span class="string">'departamento'</span>] == <span class="string">'BOGOTA D.C.'</span>)]
+
+<span class="comment"># "All rows from Antioquia OR Bogota"</span>
+<span class="function">print</span>(f<span class="string">"Found {len(result)} rows"</span>)</div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="comparison-good">
+                    <h3>AND (&amp;) = Narrower</h3>
+                    <p style="margin-top: 10px;">Both must be True.</p>
+                    <p>Fewer rows in the result.</p>
+                    <p>"More restrictive"</p>
+                </div>
+                <div class="card card-info">
+                    <h3>OR (|) = Broader</h3>
+                    <p style="margin-top: 10px;">Either can be True.</p>
+                    <p>More rows in the result.</p>
+                    <p>"More inclusive"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 10: CRITICAL - and/or vs &/| and parentheses
+             ========================================= -->
+        <div class="slide">
+            <h1>The #1 Filtering Mistake</h1>
+
+            <div class="alert alert-danger" style="font-size: 1.1rem; margin-bottom: 30px;">
+                <strong>This will cause errors EVERY TIME until you learn it.</strong> Using Python's <code class="code-inline">and</code>/<code class="code-inline">or</code> instead of pandas' <code class="code-inline">&amp;</code>/<code class="code-inline">|</code>, or forgetting parentheses.
+            </div>
+
+            <div class="grid-2">
+                <div class="comparison-bad">
+                    <h3>WRONG (will crash)</h3>
+                    <div class="code-block" style="font-size: 0.85rem; border-color: #ff7675;"><span class="comment"># Python's 'and' - DOES NOT WORK</span>
+df[df[<span class="string">'ano'</span>] == <span class="number">2023</span> <span class="keyword">and</span> df[<span class="string">'desercion'</span>] > <span class="number">5</span>]
+<span class="comment"># ValueError: The truth value of a</span>
+<span class="comment"># Series is ambiguous</span>
+
+<span class="comment"># Missing parentheses - DOES NOT WORK</span>
+df[df[<span class="string">'ano'</span>] == <span class="number">2023</span> &amp; df[<span class="string">'desercion'</span>] > <span class="number">5</span>]
+<span class="comment"># Operator precedence error!</span></div>
+                </div>
+                <div class="comparison-good">
+                    <h3>CORRECT</h3>
+                    <div class="code-block" style="font-size: 0.85rem; border-color: #00b894;"><span class="comment"># Use & with parentheses</span>
+df[(df[<span class="string">'ano'</span>] == <span class="number">2023</span>) &amp; (df[<span class="string">'desercion'</span>] > <span class="number">5</span>)]
+<span class="comment"># Works perfectly!</span>
+
+<span class="comment"># Use | with parentheses</span>
+df[(df[<span class="string">'ano'</span>] == <span class="number">2023</span>) | (df[<span class="string">'ano'</span>] == <span class="number">2022</span>)]
+<span class="comment"># Works perfectly!</span></div>
+                </div>
+            </div>
+
+            <table class="table-styled" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Python keyword</th>
+                        <th>pandas operator</th>
+                        <th>Use when</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="code-inline">and</code> / <code class="code-inline">or</code></td>
+                        <td style="color: #d63031; font-weight: bold;">Never for DataFrames</td>
+                        <td>Only for single True/False values (like <code class="code-inline">if x > 5 and y < 10:</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">&amp;</code> / <code class="code-inline">|</code></td>
+                        <td style="color: #00b894; font-weight: bold;">Always for DataFrames</td>
+                        <td>When comparing entire columns (Series of True/False)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning" style="margin-top: 15px;">
+                <strong>Memory trick:</strong> When filtering DataFrames, always use the <strong>symbols</strong> (<code class="code-inline">&amp;</code> <code class="code-inline">|</code> <code class="code-inline">~</code>) and always wrap each condition in <strong>parentheses</strong>.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 11: Negation with ~ (NOT)
+             ========================================= -->
+        <div class="slide">
+            <h1>Negation: The NOT Operator (~)</h1>
+
+            <div class="concept-box">
+                <p><strong>The tilde <code class="code-inline">~</code> flips every True to False and every False to True.</strong> It means "give me everything EXCEPT this."</p>
+                <div class="analogy">
+                    Like an invitation list: "Invite everyone who is NOT from the marketing department." The ~ takes your condition and reverses it.
+                </div>
+            </div>
+
+            <div class="code-block"><span class="comment"># Without negation: rows where department IS Bogota</span>
+bogota = df[df[<span class="string">'departamento'</span>] == <span class="string">'BOGOTA D.C.'</span>]
+
+<span class="comment"># With negation: rows where department is NOT Bogota</span>
+not_bogota = df[~(df[<span class="string">'departamento'</span>] == <span class="string">'BOGOTA D.C.'</span>)]
+
+<span class="comment"># Same as using !=</span>
+not_bogota = df[df[<span class="string">'departamento'</span>] != <span class="string">'BOGOTA D.C.'</span>]</div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="card card-light">
+                    <h3>When to use <code class="code-inline">!=</code></h3>
+                    <p style="margin-top: 10px;">Simple "not equal to one value" comparisons.</p>
+                    <div class="code-block" style="font-size: 0.85rem;">df[df[<span class="string">'ano'</span>] != <span class="number">2020</span>]</div>
+                </div>
+                <div class="card card-light">
+                    <h3>When to use <code class="code-inline">~</code></h3>
+                    <p style="margin-top: 10px;">Negating complex conditions or method results.</p>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Negate .isin() or .str.contains()</span>
+df[~df[<span class="string">'departamento'</span>].<span class="function">isin</span>([<span class="string">'BOGOTA D.C.'</span>, <span class="string">'NACIONAL'</span>])]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 12: .isin() - Matching a List
+             ========================================= -->
+        <div class="slide">
+            <h1>Filtering with .isin()</h1>
+
+            <div class="concept-box">
+                <p><strong><code class="code-inline">.isin()</code> checks if each value is in a list of allowed values.</strong></p>
+                <div class="analogy">
+                    Think of a guest list at a party. The bouncer has a list of names. For each person who arrives, they check: "Is this name on my list?" If yes, they get in. If no, they don't.
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Without .isin() (long and ugly)</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Multiple OR conditions</span>
+result = df[
+    (df[<span class="string">'departamento'</span>] == <span class="string">'ANTIOQUIA'</span>) |
+    (df[<span class="string">'departamento'</span>] == <span class="string">'BOGOTA D.C.'</span>) |
+    (df[<span class="string">'departamento'</span>] == <span class="string">'VALLE DEL CAUCA'</span>) |
+    (df[<span class="string">'departamento'</span>] == <span class="string">'CUNDINAMARCA'</span>)
+]</div>
+                </div>
+                <div>
+                    <h3>With .isin() (clean and readable)</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Same result, one line</span>
+departments = [<span class="string">'ANTIOQUIA'</span>, <span class="string">'BOGOTA D.C.'</span>,
+               <span class="string">'VALLE DEL CAUCA'</span>, <span class="string">'CUNDINAMARCA'</span>]
+
+result = df[df[<span class="string">'departamento'</span>].<span class="function">isin</span>(departments)]</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;"><span class="comment"># .isin() works with numbers too</span>
+recent_years = df[df[<span class="string">'ano'</span>].<span class="function">isin</span>([<span class="number">2022</span>, <span class="number">2023</span>, <span class="number">2024</span>])]
+
+<span class="comment"># Negate with ~: "everyone NOT on the list"</span>
+excluded = df[~df[<span class="string">'departamento'</span>].<span class="function">isin</span>([<span class="string">'NACIONAL'</span>, <span class="string">'BOGOTA D.C.'</span>])]</div>
+
+            <div class="alert alert-success">
+                <strong>Rule of thumb:</strong> When you have 3+ OR conditions on the same column, use <code class="code-inline">.isin()</code> instead. It's shorter, cleaner, and less error-prone.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 13: .between() - Range Filtering
+             ========================================= -->
+        <div class="slide">
+            <h1>Filtering Ranges with .between()</h1>
+
+            <div class="concept-box">
+                <p><strong><code class="code-inline">.between(low, high)</code> checks if a value falls within a range, inclusive on both ends.</strong></p>
+                <div class="analogy">
+                    Like a thermostat that triggers an alarm if the temperature is between 30 and 40 degrees. Everything inside the range is True, everything outside is False.
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Without .between()</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Two conditions + AND</span>
+result = df[
+    (df[<span class="string">'desercion'</span>] >= <span class="number">2</span>) &amp;
+    (df[<span class="string">'desercion'</span>] <= <span class="number">5</span>)
+]</div>
+                </div>
+                <div>
+                    <h3>With .between()</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># One clean expression</span>
+result = df[
+    df[<span class="string">'desercion'</span>].<span class="function">between</span>(<span class="number">2</span>, <span class="number">5</span>)
+]</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;"><span class="comment"># Departments with net coverage between 80% and 100%</span>
+good_coverage = df[df[<span class="string">'cobertura_neta'</span>].<span class="function">between</span>(<span class="number">80</span>, <span class="number">100</span>)]
+<span class="function">print</span>(f<span class="string">"Departments with 80-100% coverage: {len(good_coverage)}"</span>)
+
+<span class="comment"># Years between 2018 and 2023</span>
+recent = df[df[<span class="string">'ano'</span>].<span class="function">between</span>(<span class="number">2018</span>, <span class="number">2023</span>)]</div>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> <code class="code-inline">.between()</code> is <strong>inclusive</strong> on both ends by default. <code class="code-inline">.between(2, 5)</code> includes 2 and 5 themselves.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 14: String Filtering
+             ========================================= -->
+        <div class="slide">
+            <h1>Filtering Text: String Methods</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p><strong>When a column contains text, you can filter based on patterns</strong> using <code class="code-inline">.str</code> methods. This is like using a search bar: "find departments that contain 'NORTE' in their name."</p>
+            </div>
+
+            <div class="code-block"><span class="comment"># .str.contains() - does the text include this substring?</span>
+norte = df[df[<span class="string">'departamento'</span>].str.<span class="function">contains</span>(<span class="string">'NORTE'</span>, na=<span class="keyword">False</span>)]
+<span class="comment"># Matches: "NORTE DE SANTANDER", "NORTE" in any position</span>
+
+<span class="comment"># .str.startswith() - does the text begin with this?</span>
+starts_c = df[df[<span class="string">'departamento'</span>].str.<span class="function">startswith</span>(<span class="string">'C'</span>, na=<span class="keyword">False</span>)]
+<span class="comment"># Matches: "CALDAS", "CAQUETA", "CAUCA", "CESAR", etc.</span>
+
+<span class="comment"># .str.endswith() - does the text end with this?</span>
+ends_a = df[df[<span class="string">'departamento'</span>].str.<span class="function">endswith</span>(<span class="string">'A'</span>, na=<span class="keyword">False</span>)]
+<span class="comment"># Matches: "ANTIOQUIA", "CUNDINAMARCA", etc.</span></div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="card card-light">
+                    <h3>Case sensitivity</h3>
+                    <p style="margin-top: 10px;"><code class="code-inline">.str.contains('norte')</code> will NOT match "NORTE". Either standardize your text first (Week 3!) or use <code class="code-inline">case=False</code>:</p>
+                    <div class="code-block" style="font-size: 0.85rem;">df[df[<span class="string">'departamento'</span>].str.<span class="function">contains</span>(
+    <span class="string">'norte'</span>, case=<span class="keyword">False</span>, na=<span class="keyword">False</span>
+)]</div>
+                </div>
+                <div class="card card-light">
+                    <h3>Why <code class="code-inline">na=False</code>?</h3>
+                    <p style="margin-top: 10px;">If the column has NaN values, <code class="code-inline">.str.contains()</code> returns NaN for those rows (not True or False). Adding <code class="code-inline">na=False</code> treats NaN as "does not contain."</p>
+                    <div class="alert alert-warning" style="margin-top: 10px; font-size: 0.9rem;">
+                        <strong>Always add <code class="code-inline">na=False</code></strong> to avoid cryptic errors with missing values.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 15: .query() - Clean Alternative
+             ========================================= -->
+        <div class="slide">
+            <h1>The .query() Method</h1>
+
+            <div class="concept-box">
+                <p><strong><code class="code-inline">.query()</code> lets you write filter conditions as a string</strong>, which is often more readable, especially for complex conditions.</p>
+                <div class="analogy">
+                    If boolean indexing is like writing SQL with Python syntax, <code class="code-inline">.query()</code> is like writing actual SQL. Same result, different way to express it.
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Boolean indexing</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Lots of brackets and df references</span>
+result = df[
+    (df[<span class="string">'ano'</span>] == <span class="number">2023</span>) &amp;
+    (df[<span class="string">'desercion'</span>] > <span class="number">3</span>) &amp;
+    (df[<span class="string">'cobertura_neta'</span>] < <span class="number">90</span>)
+]</div>
+                </div>
+                <div>
+                    <h3>.query() version</h3>
+                    <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Clean, readable, no brackets</span>
+result = df.<span class="function">query</span>(
+    <span class="string">'ano == 2023 and desercion > 3 and cobertura_neta < 90'</span>
+)</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;"><span class="comment"># More .query() examples</span>
+
+<span class="comment"># Using 'or' and 'not' (plain English in query strings)</span>
+df.<span class="function">query</span>(<span class="string">'departamento == "ANTIOQUIA" or departamento == "BOGOTA D.C."'</span>)
+
+<span class="comment"># Using variables with @</span>
+year = <span class="number">2023</span>
+df.<span class="function">query</span>(<span class="string">'ano == @year'</span>)
+
+<span class="comment"># Combining with between-style</span>
+df.<span class="function">query</span>(<span class="string">'2020 <= ano <= 2023'</span>)</div>
+
+            <div class="alert alert-info" style="margin-top: 15px;">
+                <strong>When to use .query():</strong> When your filter has 3+ conditions and the bracket soup becomes hard to read. Both approaches give the same result.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 16: Complete Example - Chaining Filters
+             ========================================= -->
+        <div class="slide">
+            <h1>Putting It All Together</h1>
+
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 20px;">
+                <strong>Question:</strong> "Which departments in 2023 had high dropout rates (above 5%) but also high enrollment coverage (above 80%)?"
+            </p>
+
+            <div class="code-block"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 1. Load and quick-clean (Week 3 skills)</span>
+df = pd.<span class="function">read_csv</span>(<span class="string">'../../semana03/data/educacion_estadisticas.csv'</span>)
+df[<span class="string">'departamento'</span>] = df[<span class="string">'departamento'</span>].str.<span class="function">upper</span>().str.<span class="function">strip</span>()
+df[<span class="string">'ano'</span>] = df[<span class="string">'ano'</span>].<span class="function">fillna</span>(<span class="number">0</span>).<span class="function">astype</span>(<span class="function">int</span>)
+
+<span class="comment"># 2. Build the filter step by step</span>
+is_2023     = df[<span class="string">'ano'</span>] == <span class="number">2023</span>
+high_dropout = df[<span class="string">'desercion'</span>] > <span class="number">5</span>
+good_coverage = df[<span class="string">'cobertura_neta'</span>] > <span class="number">80</span>
+
+<span class="comment"># 3. Combine and apply</span>
+result = df[is_2023 &amp; high_dropout &amp; good_coverage]
+
+<span class="comment"># 4. Show relevant columns</span>
+<span class="function">print</span>(result[[<span class="string">'departamento'</span>, <span class="string">'ano'</span>, <span class="string">'desercion'</span>, <span class="string">'cobertura_neta'</span>]])</div>
+
+            <div class="alert alert-success" style="margin-top: 15px;">
+                <strong>Pro tip:</strong> Store each condition in a variable with a descriptive name. This makes complex filters readable and easy to debug. If something looks wrong, you can check each mask individually.
+            </div>
+
+            <div class="card card-light" style="margin-top: 15px;">
+                <h3>Same thing with .query()</h3>
+                <div class="code-block" style="font-size: 0.85rem;">result = df.<span class="function">query</span>(<span class="string">'ano == 2023 and desercion > 5 and cobertura_neta > 80'</span>)</div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 17: Summary - When to Use Which
+             ========================================= -->
+        <div class="slide">
+            <h1>Your Filtering Toolkit</h1>
+
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Need</th>
+                        <th>Method</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Single condition</strong></td>
+                        <td><code class="code-inline">df[df['col'] > value]</code></td>
+                        <td>Dropout above 5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multiple AND</strong></td>
+                        <td><code class="code-inline">(cond1) &amp; (cond2)</code></td>
+                        <td>Year 2023 AND dropout above 5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multiple OR</strong></td>
+                        <td><code class="code-inline">(cond1) | (cond2)</code></td>
+                        <td>Antioquia OR Bogota</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Match a list</strong></td>
+                        <td><code class="code-inline">.isin(list)</code></td>
+                        <td>Years 2022, 2023, 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Numeric range</strong></td>
+                        <td><code class="code-inline">.between(low, high)</code></td>
+                        <td>Coverage between 80% and 100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Text pattern</strong></td>
+                        <td><code class="code-inline">.str.contains()</code></td>
+                        <td>Department name contains "NORTE"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exclude rows</strong></td>
+                        <td><code class="code-inline">~condition</code></td>
+                        <td>All departments EXCEPT Bogota</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clean syntax</strong></td>
+                        <td><code class="code-inline">.query('expression')</code></td>
+                        <td>Complex multi-condition filters</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-danger" style="margin-top: 20px;">
+                <strong>Three rules to remember:</strong>
+                <ol style="margin-top: 10px; margin-left: 20px;">
+                    <li>Use <code class="code-inline">&amp;</code> <code class="code-inline">|</code> <code class="code-inline">~</code> (not <code class="code-inline">and</code> <code class="code-inline">or</code> <code class="code-inline">not</code>) for DataFrames</li>
+                    <li>Wrap every condition in <strong>parentheses</strong></li>
+                    <li>Add <code class="code-inline">na=False</code> to string methods when the column may have NaN</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 18: What's Next + Tasks
+             ========================================= -->
+        <div class="slide">
+            <h1>Summary and Next Steps</h1>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div>
+                    <h2>What We Learned</h2>
+                    <div class="card card-info">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">Filtering = asking a question, getting matching rows</li>
+                            <li style="padding: 8px 0;">Boolean masks: True keeps the row, False drops it</li>
+                            <li style="padding: 8px 0;">6 comparison operators: ==, !=, >, <, >=, <=</li>
+                            <li style="padding: 8px 0;">Combine with &amp; (AND), | (OR), ~ (NOT)</li>
+                            <li style="padding: 8px 0;">.isin() for lists, .between() for ranges</li>
+                            <li style="padding: 8px 0;">.str.contains() for text patterns</li>
+                            <li style="padding: 8px 0;">.query() for clean, readable syntax</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Your Tasks</h2>
+                    <div class="card card-primary">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">1. Complete the in-class exercise</li>
+                            <li style="padding: 8px 0;">2. Finish the workshop notebook</li>
+                            <li style="padding: 8px 0;">3. Apply filtering to YOUR project dataset</li>
+                            <li style="padding: 8px 0;">4. Prepare questions you want to answer about your data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 20px; text-align: center;">
+                <strong>Next week:</strong> Exploratory Data Analysis (EDA) - using statistics and GroupBy to discover patterns in your data.
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <div class="card card-success" style="display: inline-block;">
+                    <h3 style="margin: 0;">Questions?</h3>
+                    <p style="margin: 10px 0 0 0;">Let's discuss before the exercise!</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- NAVIGATION SCRIPT -->
     <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
@@ -1361,9 +1564,9 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
 
         function showSlide(n) {
             slides.forEach(slide => slide.style.display = 'none');
-            currentSlide = (n + slides.length) % slides.length;
+            currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].style.display = 'flex';
-            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            slides[currentSlide].style.animation = 'fadeInUp 0.4s ease-out';
             updateCounter();
         }
 
@@ -1377,10 +1580,18 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
 
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
                 previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
             }
         });
 

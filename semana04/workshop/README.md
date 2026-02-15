@@ -1,141 +1,156 @@
-# Week 4 Workshop: Univariate Analysis
+# Week 4 Workshop: Data Filtering & Selection
 
 ## Overview
 
-| Field | Value |
-|-------|-------|
-| **Topic** | EDA Part 1 - Univariate Analysis |
-| **Dataset** | Water Consumption (HISTORICO_CONSUMO) |
-| **Duration** | 60-90 minutes |
-| **Deliverable** | Completed notebook with analysis of 3 variables |
+In this workshop, you will practice advanced data filtering techniques using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS). You will answer real analytical questions by building single and combined filters.
+
+**Duration:** 2 hours (independent work)
+
+**Deadline:** Before Week 5 class
 
 ---
 
-## Objective
+## Learning Objectives
 
-Apply the **5-step univariate analysis framework** to three different variables from the water consumption dataset. Document your findings and determine the appropriate statistics for each variable based on its distribution.
+By completing this workshop, you will be able to:
 
----
-
-## The 5-Step Univariate Framework
-
-For each variable, you must complete:
-
-| Step | What to Do | Key Questions |
-|------|------------|---------------|
-| 1. **Identify** | Check data type, count non-nulls | Is it numeric or categorical? Any missing values? |
-| 2. **Summarize** | Calculate mean, median, mode | Which measure is most appropriate? Why? |
-| 3. **Spread** | Calculate std, variance, IQR | How much variability exists? |
-| 4. **Visualize** | Create histogram and boxplot | What shape is the distribution? |
-| 5. **Detect** | Find outliers using IQR method | How many outliers? What might cause them? |
+1. Select rows using boolean indexing with comparison operators
+2. Combine multiple filter conditions with & (AND), | (OR), ~ (NOT)
+3. Use convenience methods: .isin(), .between(), .str.contains()
+4. Use .query() for clean filter syntax
+5. Answer analytical questions by translating them into filter code
 
 ---
 
-## Variables to Analyze
+## Dataset
 
-You must analyze the following **3 variables**:
+**Source:** Ministerio de Educacion Nacional (MEN) via datos.gov.co
 
-### Variable 1: CONSUMO_FACTURADO
-- **Description:** Billed water consumption in cubic meters (m3)
-- **Expected finding:** Right-skewed distribution with upper outliers
-- **Story to investigate:** Who are the heavy users?
+**Description:** Same Education Statistics dataset from Week 3, containing:
+- Coverage rates (net and gross) by education level
+- Dropout, approval, failure, and repetition rates
+- Population data (ages 5-16) by department
+- Historical data across multiple years (2011-2024)
 
-### Variable 2: VALOR_FACTURADO
-- **Description:** Billed amount in Colombian Pesos (COP)
-- **Expected finding:** Similar pattern to consumption (they are correlated)
-- **Story to investigate:** Does the billing match consumption patterns?
-
-### Variable 3: NUMERO_SUSCRIPTORES
-- **Description:** Number of subscribers/users in each municipality
-- **Expected finding:** Right-skewed (few large municipalities, many small ones)
-- **Story to investigate:** Urban vs rural distribution
+**Loading:** Data is loaded from `../../semana03/data/educacion_estadisticas.csv`. A quick-clean setup cell applies the Week 3 cleaning steps before you start filtering.
 
 ---
 
-## Deliverables Checklist
+## Workshop Structure
 
-For **each of the 3 variables**, your notebook must include:
+### Part 1: Single Condition Filters
+Practice individual filters with each comparison operator. Build confidence with the basic pattern before combining.
 
-- [ ] Data type and non-null count
-- [ ] Mean, median, and mode values
-- [ ] Mean/median ratio with interpretation
-- [ ] Standard deviation and IQR
-- [ ] Distribution type classification (choose one):
-  - Normal (symmetric)
-  - Right-skewed
-  - Left-skewed
-  - Bimodal
-- [ ] Histogram with mean and median lines
-- [ ] Box plot
-- [ ] Outlier bounds (lower and upper)
-- [ ] Number and percentage of outliers
-- [ ] One-sentence interpretation
+### Part 2: Combining Conditions
+Use AND, OR, and NOT to answer questions that require multiple criteria. Practice with both boolean indexing and .query().
+
+### Part 3: Convenience Methods
+Use .isin(), .between(), and .str.contains() for common filtering patterns.
+
+### Part 4: Analytical Questions
+Translate real questions into filter code and interpret the results. This is the core skill for EDA.
+
+### Part 5: Reflection
+Document your approach and connect filtering skills to your project.
 
 ---
 
-## Summary Table
+## Files Provided
 
-At the end of your notebook, create a summary table like this:
+| File | Description |
+|------|-------------|
+| `workshop_starter.ipynb` | Starter notebook with empty cells for your work |
+| `workshop_solution.ipynb` | Complete solution (only look after attempting!) |
 
-| Variable | Mean | Median | Distribution | Outliers (%) | Best Measure |
-|----------|------|--------|--------------|--------------|--------------|
-| CONSUMO_FACTURADO | ? | ? | ? | ? | ? |
-| VALOR_FACTURADO | ? | ? | ? | ? | ? |
-| NUMERO_SUSCRIPTORES | ? | ? | ? | ? | ? |
+---
+
+## Instructions
+
+### Step 1: Setup
+
+1. Open `workshop_starter.ipynb` in Jupyter or VS Code
+2. Run the setup cell to load and quick-clean the dataset
+3. Review the dataset structure
+
+### Step 2: Work Through Parts 1-4
+
+For each task:
+1. Read the question carefully
+2. Translate the question into a filter condition
+3. Write and run the code
+4. Interpret the result (how many rows? which departments?)
+
+### Step 3: Reflection
+
+Answer the reflection questions at the end about your filtering approach and project application.
 
 ---
 
 ## Grading Criteria
 
-| Criterion | Points | Description |
-|-----------|--------|-------------|
-| **Completeness** | 30 | All 3 variables analyzed with all 5 steps |
-| **Correctness** | 25 | Calculations are correct and verified |
-| **Visualization** | 20 | Histograms and boxplots are properly labeled |
-| **Interpretation** | 15 | Each variable has a meaningful interpretation |
-| **Summary table** | 10 | Final summary table is complete and accurate |
-| **Total** | 100 | |
+This workshop is for practice and feedback. Focus on:
+
+| Criterion | What we look for |
+|-----------|------------------|
+| Completeness | All tasks attempted |
+| Correctness | Filters produce expected results |
+| Interpretation | Results are explained, not just printed |
+| Code Quality | Clean, readable code with comments |
 
 ---
 
 ## Tips for Success
 
-1. **Handle missing values first**
-   - Use `df[var].dropna()` when calculating statistics
-   - Document how many values are missing
+### Before You Start
+- Review the slides on boolean indexing, AND/OR/NOT, and convenience methods
+- Familiarize yourself with the column names (run `df.columns.tolist()`)
 
-2. **Label your plots**
-   - Include axis labels and titles
-   - Add legend for mean/median lines
+### While Working
+- Always wrap conditions in parentheses when combining with & or |
+- Use `na=False` with `.str.contains()` to avoid NaN errors
+- Print `len(result)` after each filter to verify the result size makes sense
+- Store conditions in named variables for readability
 
-3. **Interpret, don't just calculate**
-   - Numbers alone are not enough
-   - What does each finding mean in context?
-
-4. **Compare variables**
-   - Are there similarities in their distributions?
-   - What might explain the patterns you see?
-
-5. **Document your decisions**
-   - Explain why you chose median over mean (if applicable)
-   - Justify your outlier conclusions
+### If Stuck
+- Re-read the task instructions and check the pattern examples
+- Try building the filter one condition at a time
+- Check your class notes or slides
+- Only check the solution notebook as a last resort
 
 ---
 
 ## Submission
 
-- **File name:** `workshop_completed.ipynb`
-- **Location:** Submit through the LMS
-- **Deadline:** Before Week 5 class
+Submit your completed `workshop_starter.ipynb` via the course LMS before the deadline.
+
+Ensure that:
+- All cells have been executed (run all)
+- Your code produces the expected outputs
+- Your interpretation cells are filled in
+
+---
+
+## Connection to Project
+
+These filtering skills are essential for Milestone 1:
+
+| Workshop Skill | Project Application |
+|----------------|---------------------|
+| Single conditions | Focus on a specific year, region, or category |
+| Combined conditions | Answer complex questions about your data |
+| .isin() | Select specific categories for comparison |
+| .between() | Define ranges for numeric analysis |
+| .str.contains() | Search within text columns |
+| .query() | Write clean, readable filters |
 
 ---
 
 ## Resources
 
-- **Dataset source:** [datos.gov.co - HISTORICO_CONSUMO](https://www.datos.gov.co/dataset/HISTORICO-CONSUMO/wcpc-hgdr)
-- **pandas documentation:** https://pandas.pydata.org/docs/
-- **matplotlib documentation:** https://matplotlib.org/stable/contents.html
+- Pandas Boolean Indexing: https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing
+- Pandas .query() Method: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html
+- Real Python - Filtering DataFrames: https://realpython.com/python-data-cleaning-numpy-pandas/
 
 ---
 
-*Week 4 - Data Analytics Course*
+*Week 4 - Data Analytics Course - Universidad Cooperativa de Colombia*

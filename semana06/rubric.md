@@ -1,4 +1,4 @@
-# Milestone 1: Project Proposal Evaluation Rubric
+# Milestone 1: Exploratory Data Analysis Evaluation Rubric
 
 **Course**: Data Analytics
 **Universidad Cooperativa de Colombia**
@@ -8,130 +8,129 @@
 
 ## Overview
 
+Milestone 1 evaluates your ability to clean a dataset and perform univariate exploratory analysis. Bivariate and multivariate analysis are covered in Milestone 2.
+
 | Criterion | Weight | Max Points |
 |-----------|--------|------------|
-| Dataset Selection | 20% | 5 |
-| Problem Statement | 20% | 5 |
-| Research Questions | 25% | 5 |
-| Methodology Plan | 20% | 5 |
-| Presentation Quality | 15% | 5 |
+| Data Cleaning | 25% | 5 |
+| Univariate Analysis | 30% | 5 |
+| Statistics Application | 20% | 5 |
+| Insights & Interpretation | 15% | 5 |
+| Code Quality | 10% | 5 |
 | **Total** | **100%** | **25** |
 
 ---
 
-## Criterion 1: Dataset Selection (20%)
+## Criterion 1: Data Cleaning (25%)
 
-Evaluates the appropriateness, quality, and feasibility of the chosen dataset.
+Evaluates the thoroughness and correctness of data preparation steps.
 
 | Score | Description |
 |-------|-------------|
-| **5 - Excellent** | Dataset is from datos.gov.co, highly relevant to Colombian public policy or social issues. Contains 1000+ rows and 10+ diverse columns (mix of numeric and categorical). Data is recent (within 3 years) and well-documented. Clear rationale for selection provided. |
-| **4 - Good** | Dataset meets minimum requirements (datos.gov.co, 1000+ rows, 8+ columns). Relevance is clear. Some documentation available. Minor limitations acknowledged. |
-| **3 - Acceptable** | Dataset is from datos.gov.co but may be smaller than ideal or have limited variable diversity. Relevance is present but not strongly argued. Documentation is sparse. |
-| **2 - Below Expectations** | Dataset is borderline acceptable (fewer than 1000 rows or limited columns). Relevance to analytics project is questionable. No acknowledgment of limitations. |
-| **1 - Not Acceptable** | Dataset is not from datos.gov.co (without prior approval), too small for meaningful analysis, or inappropriate for the course objectives. |
+| **5 - Excellent** | All data quality issues identified and handled appropriately. Missing values addressed with justified strategy (drop, fill, impute). Data types corrected. Duplicates detected and removed with explanation. String inconsistencies cleaned. Before/after comparison provided. |
+| **4 - Good** | Most data quality issues addressed. Missing value strategy is reasonable. Data types mostly correct. Duplicates handled. Minor issues may remain but do not affect analysis. |
+| **3 - Acceptable** | Basic cleaning performed (missing values dropped or filled). Some data type issues remain. Duplicates checked but handling may be incomplete. Limited documentation of cleaning decisions. |
+| **2 - Below Expectations** | Minimal cleaning. Missing values handled without justification. Data type problems not addressed. No duplicate check. Cleaning steps not documented. |
+| **1 - Not Acceptable** | No meaningful data cleaning performed, or cleaning introduces errors (e.g., dropping too many rows without explanation, filling missing values with inappropriate values). |
 
 ### Key Questions to Ask
-- Is the dataset from datos.gov.co?
-- Are there enough observations for statistical validity?
-- Is there a good mix of variable types for different analyses?
-- Is the data recent and relevant?
+- Were all missing values identified and handled with a justified strategy?
+- Are data types appropriate for each column?
+- Were duplicates checked and handled?
+- Is there a before/after summary showing the impact of cleaning?
 
 ---
 
-## Criterion 2: Problem Statement (20%)
+## Criterion 2: Univariate Analysis (30%)
 
-Evaluates the clarity, specificity, and real-world relevance of the problem being addressed.
+Evaluates the depth and correctness of single-variable exploration.
 
 | Score | Description |
 |-------|-------------|
-| **5 - Excellent** | Problem statement is crystal clear, specific, and compelling. Clearly identifies who cares about this problem and why. Directly tied to the dataset. Could realistically inform a decision or policy. |
-| **4 - Good** | Problem statement is clear and specific. Stakeholders are identified. Connection to dataset is evident. Real-world application is plausible. |
-| **3 - Acceptable** | Problem statement is understandable but could be more specific. Stakeholders mentioned but not well-defined. Connection to dataset requires some inference. |
-| **2 - Below Expectations** | Problem statement is vague or overly broad. Uses generic language like "explore" or "study" without specifics. Unclear who would benefit from the analysis. |
-| **1 - Not Acceptable** | No clear problem statement provided, or the stated problem cannot be addressed with the chosen dataset. |
+| **5 - Excellent** | All key variables analyzed individually. Numeric variables explored with histograms, boxplots, and summary statistics (mean, median, std, quartiles). Categorical variables explored with value counts and bar charts. Distributions described and interpreted. Outliers identified and discussed. |
+| **4 - Good** | Most key variables analyzed. Appropriate chart types used for numeric and categorical variables. Summary statistics calculated. Some interpretation provided. Minor variables may be skipped. |
+| **3 - Acceptable** | Several variables analyzed but not comprehensively. Charts created but may not always be the best type. Summary statistics present but interpretation is shallow. Some variables ignored without justification. |
+| **2 - Below Expectations** | Few variables analyzed. Charts are basic or inappropriate for the data type. Limited summary statistics. No meaningful interpretation of distributions. |
+| **1 - Not Acceptable** | Minimal or no univariate analysis. Charts are missing or incorrect. No summary statistics. No evidence of exploring individual variables. |
 
-### Key Questions to Ask
-- Can I explain this problem in one sentence?
-- Who specifically would use this analysis?
-- What decision or action could this analysis inform?
+### What Makes Strong Univariate Analysis
+
+**Strong Example:**
+> "The distribution of water consumption is right-skewed (mean=145, median=98), indicating most consumers use moderate amounts while a few heavy users pull the average up. The IQR is 52-178, and we identified 23 outliers above 450 units."
+
+**Weak Example:**
+> "Here is a histogram of water consumption."
+
+### Checklist
+- [ ] Numeric variables: histogram + boxplot + descriptive statistics
+- [ ] Categorical variables: value counts + bar chart
+- [ ] Distribution shape described (normal, skewed, bimodal)
+- [ ] Outliers identified and discussed
+- [ ] All key variables covered (not just one or two)
 
 ---
 
-## Criterion 3: Research Questions (25%)
+## Criterion 3: Statistics Application (20%)
 
-Evaluates the quality, specificity, and answerability of the three required research questions.
+Evaluates correct use and interpretation of descriptive statistics.
 
 | Score | Description |
 |-------|-------------|
-| **5 - Excellent** | All three questions are specific, measurable, and clearly answerable with EDA techniques. Questions show progressive complexity (descriptive to relational). Each question directly supports the problem statement. Questions avoid causation claims. |
-| **4 - Good** | Three questions provided, all are specific and answerable. At least two questions show clear connection to the problem statement. Questions are appropriately scoped for EDA. |
-| **3 - Acceptable** | Three questions provided but some lack specificity. Questions are generally answerable but may need refinement. Connection to problem statement is present but could be stronger. |
-| **2 - Below Expectations** | Fewer than three questions, or questions are too vague to answer. Some questions may imply causation or require methods beyond EDA. Weak connection to problem statement. |
-| **1 - Not Acceptable** | Questions are missing, unanswerable with the given data, or fundamentally misunderstand the scope of EDA. |
+| **5 - Excellent** | Correct calculation and interpretation of central tendency (mean, median, mode), dispersion (std, IQR, range), and shape (skewness). Statistics chosen appropriately for data type. Comparisons between groups using groupby where relevant. Clear connection between statistics and research questions. |
+| **4 - Good** | Most statistics correctly calculated and interpreted. Appropriate measures chosen for data type. Some group comparisons present. Connection to research questions is evident. |
+| **3 - Acceptable** | Basic statistics calculated (mean, std) but interpretation may be incomplete. May use inappropriate measures for data type (e.g., mean for highly skewed data). Limited group comparisons. |
+| **2 - Below Expectations** | Statistics calculated but not interpreted. May confuse measures or apply them incorrectly. No group comparisons. No connection to research questions. |
+| **1 - Not Acceptable** | Statistics missing, incorrect, or misinterpreted. Demonstrates fundamental misunderstanding of descriptive statistics. |
 
-### What Makes a Strong Research Question
-
-**Strong Example**:
-> "Which Colombian departments have the highest rates of school dropout among students aged 15-18, and how has this changed from 2018 to 2022?"
-
-**Weak Example**:
-> "Why do students drop out of school?"
-
-### Checklist for Each Question
-- [ ] Specific (mentions variables, timeframes, populations)
-- [ ] Measurable (can be answered with numbers or clear categories)
-- [ ] Answerable with EDA (does not require experiments or surveys)
-- [ ] Connected to the problem statement
-- [ ] Avoids causation language (why, because, causes)
+### Key Concepts to Demonstrate
+- When to use mean vs median (skewed distributions)
+- Standard deviation vs IQR for measuring spread
+- How outliers affect different statistics
+- Groupby aggregations to compare subgroups
 
 ---
 
-## Criterion 4: Methodology Plan (20%)
+## Criterion 4: Insights & Interpretation (15%)
 
-Evaluates alignment with CRISP-DM framework and appropriateness of planned analytical techniques.
+Evaluates the ability to extract meaningful findings from the analysis.
 
 | Score | Description |
 |-------|-------------|
-| **5 - Excellent** | Clear articulation of all CRISP-DM phases with specific activities planned for each. Appropriate EDA techniques identified for each research question. Timeline is realistic. Potential challenges acknowledged with mitigation strategies. |
-| **4 - Good** | CRISP-DM phases are referenced with reasonable activities planned. EDA techniques are appropriate. Timeline is provided. Some awareness of potential challenges. |
-| **3 - Acceptable** | CRISP-DM mentioned but not fully integrated into the plan. Some appropriate techniques identified. Timeline may be vague or overly optimistic. Limited discussion of challenges. |
-| **2 - Below Expectations** | Methodology description is generic or missing CRISP-DM alignment. Techniques mentioned do not match the research questions. No timeline provided. |
-| **1 - Not Acceptable** | No methodology plan provided, or the plan demonstrates fundamental misunderstanding of the analytical process. |
+| **5 - Excellent** | Clear, specific insights derived from the data. Findings directly address research questions. Unexpected patterns noted and discussed. Limitations acknowledged. Insights are actionable and relevant to stakeholders. |
+| **4 - Good** | Solid insights that connect to research questions. Most findings are well-supported by the data. Some awareness of limitations. |
+| **3 - Acceptable** | Insights present but may be obvious or surface-level. Connection to research questions exists but could be stronger. Limited discussion of what the findings mean. |
+| **2 - Below Expectations** | Insights are vague, generic, or unsupported by the analysis. Research questions not addressed. No discussion of limitations. |
+| **1 - Not Acceptable** | No insights provided, or stated conclusions contradict the data shown. |
 
-### CRISP-DM Phases to Address
+### What Makes a Strong Insight
 
-| Phase | Expected Activities |
-|-------|-------------------|
-| Business Understanding | Problem definition, stakeholder identification |
-| Data Understanding | Dataset exploration, data dictionary review |
-| Data Preparation | Cleaning, handling missing values, transformations |
-| Modeling | (For this course: EDA and visualization) |
-| Evaluation | Validating insights, checking assumptions |
-| Deployment | Presenting findings, recommendations |
+**Strong:**
+> "Municipalities in the Andean region consume 35% less water per capita than coastal municipalities (median 87 vs 134 units), suggesting climate and water availability drive consumption patterns. This could inform differentiated conservation policies."
+
+**Weak:**
+> "Some places use more water than others."
 
 ---
 
-## Criterion 5: Presentation Quality (15%)
+## Criterion 5: Code Quality (10%)
 
-Evaluates the clarity, organization, and professionalism of the oral presentation.
+Evaluates the technical quality and reproducibility of the notebook.
 
 | Score | Description |
 |-------|-------------|
-| **5 - Excellent** | Presentation is well-organized, visually appealing, and stays within time limit. All required elements covered. Speakers are confident and engage the audience. Q&A responses are thoughtful. Team coordination is smooth. |
-| **4 - Good** | Presentation covers all required elements within time limit. Slides are clear and readable. Speakers are prepared. Q&A responses are adequate. Minor coordination issues. |
-| **3 - Acceptable** | Presentation covers most required elements. May slightly exceed time limit. Some slides are cluttered or hard to read. Speakers show adequate preparation. Q&A responses are brief or uncertain. |
-| **2 - Below Expectations** | Presentation missing key elements or significantly over/under time. Slides are poorly designed. Speakers appear unprepared. Difficulty answering questions. |
-| **1 - Not Acceptable** | Presentation not delivered, grossly incomplete, or demonstrates lack of preparation. Unable to answer basic questions about the project. |
+| **5 - Excellent** | Code is clean, well-organized, and well-commented. Notebook runs top-to-bottom without errors. Markdown cells explain each section. Variable names are descriptive. No unnecessary code or output. |
+| **4 - Good** | Code is organized and mostly commented. Notebook runs with minimal issues. Some markdown explanations present. |
+| **3 - Acceptable** | Code works but may be disorganized. Limited comments. Some cells may need manual intervention to run. |
+| **2 - Below Expectations** | Code has errors or requires significant manual fixes. No comments or markdown. Poor organization. |
+| **1 - Not Acceptable** | Code does not run. Major errors throughout. No organization. |
 
-### Presentation Checklist
-- [ ] Title slide with team members
-- [ ] Dataset overview (source, size, key variables)
-- [ ] Problem statement and motivation
-- [ ] Three research questions (clearly stated)
-- [ ] Methodology plan (CRISP-DM reference)
-- [ ] Within 8-minute time limit
-- [ ] Professional visual design (readable fonts, consistent formatting)
+### Code Quality Checklist
+- [ ] Notebook runs top-to-bottom (Kernel > Restart & Run All)
+- [ ] Markdown cells introduce each section
+- [ ] Code cells have comments explaining non-obvious logic
+- [ ] Variable names are descriptive (not x, y, df2, temp)
+- [ ] No unnecessary print statements or debug output
+- [ ] Imports at the top of the notebook
 
 ---
 
@@ -143,11 +142,11 @@ Evaluates the clarity, organization, and professionalism of the oral presentatio
 
 | Criterion | Score (1-5) | Weight | Weighted Score | Comments |
 |-----------|-------------|--------|----------------|----------|
-| Dataset Selection | | 20% | | |
-| Problem Statement | | 20% | | |
-| Research Questions | | 25% | | |
-| Methodology Plan | | 20% | | |
-| Presentation Quality | | 15% | | |
+| Data Cleaning | | 25% | | |
+| Univariate Analysis | | 30% | | |
+| Statistics Application | | 20% | | |
+| Insights & Interpretation | | 15% | | |
+| Code Quality | | 10% | | |
 | **Total** | | **100%** | | |
 
 ### Calculation
@@ -191,12 +190,25 @@ ________________________
 
 | Issue | Typical Impact |
 |-------|---------------|
-| Dataset not from datos.gov.co (unapproved) | -1 to -2 points on Dataset Selection |
-| Fewer than 3 research questions | -1 point per missing question |
-| No CRISP-DM reference | -1 to -2 points on Methodology |
-| Presentation over 10 minutes | -1 point on Presentation Quality |
-| Team member absent (unexcused) | -0.5 points on Presentation Quality |
-| Plagiarism or copied content | Automatic 0 + academic integrity review |
+| Dataset not from datos.gov.co (unapproved) | -1 to -2 points on Data Cleaning |
+| No missing value strategy documented | -1 point on Data Cleaning |
+| Only histograms, no boxplots or stats | -1 point on Univariate Analysis |
+| Statistics calculated but not interpreted | -1 point on Statistics Application |
+| Notebook does not run top-to-bottom | -1 to -2 points on Code Quality |
+| No markdown explanations in notebook | -1 point on Code Quality |
+| Plagiarism or copied code without attribution | Automatic 0 + academic integrity review |
+
+---
+
+## Deliverables Checklist
+
+Students must submit:
+- [ ] Jupyter notebook (.ipynb) with complete EDA
+- [ ] Dataset file or clear instructions to download it
+- [ ] Notebook runs without errors (Kernel > Restart & Run All)
+- [ ] All research questions addressed through univariate analysis
+
+**Note:** Bivariate analysis (correlations, scatter plots, cross-tabulations) is NOT required for Milestone 1. It will be evaluated in Milestone 2 after Week 7 (EDA Part 2).
 
 ---
 
@@ -205,6 +217,6 @@ ________________________
 Students may request a re-evaluation within 5 business days of receiving their score. Appeals must include:
 1. Specific criterion being contested
 2. Justification for why the score should be higher
-3. Any supporting evidence not included in the original presentation
+3. Any supporting evidence not included in the original submission
 
 Re-evaluations will be conducted by the instructor and, if necessary, a second faculty member.

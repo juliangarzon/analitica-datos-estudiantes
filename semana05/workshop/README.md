@@ -1,222 +1,155 @@
-# Week 5 Workshop: Bivariate & Multivariate Analysis
+# Week 5 Workshop: Univariate Analysis
 
-## Water Consumption Dataset - Deep Dive into Relationships
+## Overview
 
-**Duration:** 2 hours (homework or in-class workshop)
-
-**Dataset:** HISTORICO_CONSUMO (Water Consumption Data)
-
----
-
-## Objectives
-
-By completing this workshop, you will:
-
-1. Build a complete correlation matrix analysis
-2. Test if relationships change by municipality
-3. Generate 5 actionable insights from bivariate analysis
-4. Practice the critical thinking skill of distinguishing correlation from causation
+| Field | Value |
+|-------|-------|
+| **Topic** | EDA Part 1 - Univariate Analysis |
+| **Dataset** | Water Consumption (HISTORICO_CONSUMO) |
+| **Duration** | 60-90 minutes |
+| **Deliverable** | Completed notebook with analysis of 3 variables |
 
 ---
 
-## Workshop Tasks
+## Objective
 
-### Part 1: Complete Correlation Matrix Analysis (45 minutes)
-
-**Task 1.1: Calculate and Visualize Correlations**
-
-1. Load the water consumption dataset
-2. Calculate the correlation matrix for all numeric variables
-3. Create a professional heatmap visualization with:
-   - Clear color scheme (RdYlGn or coolwarm)
-   - Annotation showing correlation values
-   - Appropriate title and labels
-
-**Task 1.2: Identify Key Correlations**
-
-1. Extract all unique correlations (not duplicates, not diagonal)
-2. Rank them by absolute value
-3. Document the top 5 correlations with their:
-   - Variable pair
-   - Correlation coefficient (r)
-   - Interpretation (positive/negative, strong/moderate/weak)
-
-**Task 1.3: Scatter Plot Analysis**
-
-For each of the top 3 correlations:
-1. Create a scatter plot with regression line
-2. Check for non-linear patterns
-3. Identify any outliers that might affect the correlation
-4. Document your observations
+Apply the **5-step univariate analysis framework** to three different variables from the water consumption dataset. Document your findings and determine the appropriate statistics for each variable based on its distribution.
 
 ---
 
-### Part 2: Test Relationships by Municipality (45 minutes)
+## The 5-Step Univariate Framework
 
-**Task 2.1: Select Key Variables**
+For each variable, you must complete:
 
-Choose two numeric variables that showed interesting correlation in Part 1.
-For example:
-- CONSUMO_FACTURADO vs NUMERO_SUSCRIPTORES
-- CONSUMO_FACTURADO vs VALOR_FACTURADO
-
-**Task 2.2: Calculate Correlations by Group**
-
-1. Group the data by MUNICIPIO (or DEPARTAMENTO if too many municipalities)
-2. Calculate the correlation for each group
-3. Create a summary table showing:
-   - Municipality name
-   - Sample size (n)
-   - Correlation coefficient (r)
-
-**Task 2.3: Visualize Differences**
-
-1. Create a scatter plot colored by municipality (use top 5-10 municipalities)
-2. Compare the slopes visually
-3. Answer: Does the relationship change significantly by municipality?
-
-**Task 2.4: Simpson's Paradox Check**
-
-1. Calculate the overall correlation (all data combined)
-2. Calculate correlations for each subgroup
-3. Document any cases where subgroup patterns differ from overall pattern
+| Step | What to Do | Key Questions |
+|------|------------|---------------|
+| 1. **Identify** | Check data type, count non-nulls | Is it numeric or categorical? Any missing values? |
+| 2. **Summarize** | Calculate mean, median, mode | Which measure is most appropriate? Why? |
+| 3. **Spread** | Calculate std, variance, IQR | How much variability exists? |
+| 4. **Visualize** | Create histogram and boxplot | What shape is the distribution? |
+| 5. **Detect** | Find outliers using IQR method | How many outliers? What might cause them? |
 
 ---
 
-### Part 3: Generate 5 Actionable Insights (30 minutes)
+## Variables to Analyze
 
-Based on your bivariate and multivariate analysis, generate 5 insights that could inform decision-making.
+You must analyze the following **3 variables**:
 
-**For each insight, document:**
+### Variable 1: CONSUMO_FACTURADO
+- **Description:** Billed water consumption in cubic meters (m3)
+- **Expected finding:** Right-skewed distribution with upper outliers
+- **Story to investigate:** Who are the heavy users?
 
-1. **Finding:** What did you discover? (Be specific with numbers)
-2. **So What?:** Why does this matter for the water utility company?
-3. **Now What?:** What action could be taken based on this finding?
-4. **Caution:** Is this correlation or causation? What confounding variables might exist?
+### Variable 2: VALOR_FACTURADO
+- **Description:** Billed amount in Colombian Pesos (COP)
+- **Expected finding:** Similar pattern to consumption (they are correlated)
+- **Story to investigate:** Does the billing match consumption patterns?
 
-**Example Insight Template:**
-
-```
-Insight #1: [Title]
----------------------------------------------------------
-Finding: There is a strong positive correlation (r = 0.XX)
-         between [Variable A] and [Variable B].
-
-So What?: This suggests that [interpretation of business impact]
-
-Now What?: The utility company could [specific action]
-
-Caution: This is correlation, not causation. Possible
-         confounding variable: [variable that might explain both]
-```
+### Variable 3: NUMERO_SUSCRIPTORES
+- **Description:** Number of subscribers/users in each municipality
+- **Expected finding:** Right-skewed (few large municipalities, many small ones)
+- **Story to investigate:** Urban vs rural distribution
 
 ---
 
-## Deliverables
+## Deliverables Checklist
 
-Your completed workshop should include:
+For **each of the 3 variables**, your notebook must include:
 
-1. **Jupyter Notebook** with:
-   - All code cells executed
-   - Clear markdown explanations
-   - Professional visualizations
-   - Answers to all questions
+- [ ] Data type and non-null count
+- [ ] Mean, median, and mode values
+- [ ] Mean/median ratio with interpretation
+- [ ] Standard deviation and IQR
+- [ ] Distribution type classification (choose one):
+  - Normal (symmetric)
+  - Right-skewed
+  - Left-skewed
+  - Bimodal
+- [ ] Histogram with mean and median lines
+- [ ] Box plot
+- [ ] Outlier bounds (lower and upper)
+- [ ] Number and percentage of outliers
+- [ ] One-sentence interpretation
 
-2. **Correlation Summary Table**
-   | Variable 1 | Variable 2 | r | Interpretation |
-   |------------|------------|---|----------------|
-   | ... | ... | ... | ... |
+---
 
-3. **Municipality Comparison Table**
-   | Municipality | n | r | Notes |
-   |--------------|---|---|-------|
-   | ... | ... | ... | ... |
+## GroupBy Section
 
-4. **5 Actionable Insights** (documented as shown above)
+After analyzing each variable individually, use **GroupBy** to compare statistics across groups:
+
+| Task | GroupBy Column | Value Column | Operation |
+|------|---------------|-------------|-----------|
+| 1 | USO (use type) | CONSUMO_FACTURADO | .mean() |
+| 2 | ESTRATO (stratum) | CONSUMO_FACTURADO | .median() |
+| 3 | DEPARTAMENTO | CONSUMO_FACTURADO | .count() and .sum() |
+
+**Pattern:** `df.groupby('GROUP')['VALUE'].operation()`
+
+---
+
+## Summary Table
+
+At the end of your notebook, create a summary table like this:
+
+| Variable | Mean | Median | Distribution | Outliers (%) | Best Measure |
+|----------|------|--------|--------------|--------------|--------------|
+| CONSUMO_FACTURADO | ? | ? | ? | ? | ? |
+| VALOR_FACTURADO | ? | ? | ? | ? | ? |
+| NUMERO_SUSCRIPTORES | ? | ? | ? | ? | ? |
 
 ---
 
 ## Grading Criteria
 
-| Criteria | Points | Description |
-|----------|--------|-------------|
-| Correlation Analysis | 25 | Correct calculations, complete matrix |
-| Visualizations | 25 | Clear, labeled, professional charts |
-| Municipality Comparison | 20 | Correct grouping and comparison |
-| Insights Quality | 20 | Specific, actionable, well-reasoned |
-| Code Quality | 10 | Clean, commented, reproducible |
-| **Total** | **100** | |
+| Criterion | Points | Description |
+|-----------|--------|-------------|
+| **Completeness** | 30 | All 3 variables analyzed with all 5 steps |
+| **Correctness** | 25 | Calculations are correct and verified |
+| **Visualization** | 20 | Histograms and boxplots are properly labeled |
+| **Interpretation** | 15 | Each variable has a meaningful interpretation |
+| **Summary table** | 10 | Final summary table is complete and accurate |
+| **Total** | 100 | |
 
 ---
 
 ## Tips for Success
 
-### Correlation Interpretation Guide
+1. **Handle missing values first**
+   - Use `df[var].dropna()` when calculating statistics
+   - Document how many values are missing
 
-| r Value | Interpretation |
-|---------|---------------|
-| 0.7 to 1.0 | Strong positive |
-| 0.3 to 0.7 | Moderate positive |
-| 0.0 to 0.3 | Weak positive |
-| -0.3 to 0.0 | Weak negative |
-| -0.7 to -0.3 | Moderate negative |
-| -1.0 to -0.7 | Strong negative |
+2. **Label your plots**
+   - Include axis labels and titles
+   - Add legend for mean/median lines
 
-### Common Pitfalls to Avoid
+3. **Interpret, don't just calculate**
+   - Numbers alone are not enough
+   - What does each finding mean in context?
 
-1. **Assuming causation from correlation**
-   - Always ask: "Could there be a third variable?"
-   - Use phrases like "is associated with" not "causes"
+4. **Compare variables**
+   - Are there similarities in their distributions?
+   - What might explain the patterns you see?
 
-2. **Ignoring sample size**
-   - Small groups can show spurious correlations
-   - Report n alongside r
-
-3. **Missing non-linear relationships**
-   - Always create scatter plots, not just numbers
-   - Correlation only measures LINEAR relationships
-
-4. **Forgetting about outliers**
-   - Outliers can artificially inflate or deflate correlation
-   - Consider robust alternatives if outliers are present
-
-### Key Python Functions
-
-```python
-# Correlation matrix
-df.corr()
-
-# Single correlation
-df['var1'].corr(df['var2'])
-
-# Correlation by group
-df.groupby('category').apply(lambda x: x['var1'].corr(x['var2']))
-
-# Heatmap
-sns.heatmap(corr_matrix, annot=True, cmap='RdYlGn', center=0)
-
-# Scatter with regression
-sns.regplot(x='var1', y='var2', data=df)
-
-# Scatter with color by category
-sns.scatterplot(x='var1', y='var2', hue='category', data=df)
-```
-
----
-
-## Files Provided
-
-- `workshop_starter.ipynb` - Starter notebook with structure
-- `workshop_solution.ipynb` - Complete solution (for reference after completion)
+5. **Document your decisions**
+   - Explain why you chose median over mean (if applicable)
+   - Justify your outlier conclusions
 
 ---
 
 ## Submission
 
-Submit your completed notebook via the course platform by [deadline].
-
-Name your file: `Week5_Workshop_[YourName].ipynb`
+- **File name:** `workshop_completed.ipynb`
+- **Location:** Submit through the LMS
+- **Deadline:** Before Week 6 class
 
 ---
 
-*Good luck! Remember: Correlation does NOT equal causation!*
+## Resources
+
+- **Dataset source:** [datos.gov.co - HISTORICO_CONSUMO](https://www.datos.gov.co/dataset/HISTORICO-CONSUMO/wcpc-hgdr)
+- **pandas documentation:** https://pandas.pydata.org/docs/
+- **matplotlib documentation:** https://matplotlib.org/stable/contents.html
+
+---
+
+*Week 5 - Data Analytics Course*

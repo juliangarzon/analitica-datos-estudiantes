@@ -1,10 +1,10 @@
-# Week 3 Workshop: Data Manipulation & Cleaning
+# Week 3 Workshop: Data Cleaning
 
 ## Overview
 
-In this workshop, you will practice data cleaning and manipulation techniques using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS).
+In this workshop, you will practice data cleaning techniques using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS).
 
-**Duration:** 2-3 hours (independent work)
+**Duration:** 2 hours (independent work)
 
 **Deadline:** Before Week 4 class
 
@@ -14,51 +14,55 @@ In this workshop, you will practice data cleaning and manipulation techniques us
 
 By completing this workshop, you will be able to:
 
-1. Identify and diagnose data quality issues
-2. Handle missing values using appropriate strategies
+1. Diagnose data quality issues systematically
+2. Handle missing values using appropriate strategies (drop vs. fill)
 3. Convert data types correctly
-4. Filter data with multiple conditions
-5. Aggregate data using GroupBy operations
-6. Document your cleaning decisions
+4. Detect and remove duplicate rows
+5. Standardize text inconsistencies
+6. Document your cleaning decisions with rationale
+7. Identify invalid values using domain knowledge
 
 ---
 
 ## Dataset
 
-**Source:** datos.gov.co - MEN_ESTADISTICAS
+**Source:** Ministerio de Educacion Nacional (MEN) via datos.gov.co
 
 **Description:** Education statistics from the Colombian Ministry of Education containing:
-- Enrollment numbers by department, municipality, and education level
-- Dropout and graduation rates
-- Demographic breakdowns (gender, urban/rural, etc.)
-- Historical data across multiple years
+- Coverage rates (net and gross) by education level
+- Dropout, approval, failure, and repetition rates
+- Population data (ages 5-16) by department
+- Historical data across multiple years (2011-2024)
 
-**Size:** ~14,585 records, 41+ columns
+**Size:** 482 rows (dirty version, ~462 after cleaning) x 37 columns (one row per department per year)
+
+**Loading:** Data is loaded from a local CSV file at `../data/educacion_estadisticas.csv`
+
+**Key columns:** `ano`, `departamento`, `poblacion_5_16`, `cobertura_neta`, `desercion`, `aprobacion`, `reprobacion`, `repitencia`
 
 ---
 
 ## Workshop Structure
 
-### Part 1: Data Quality Assessment (5 issues to fix)
+### Part 1: Initial Inspection
+Run the inspection ritual (shape, head, dtypes, isnull, describe) and diagnose the 5 issues.
 
-You will diagnose and fix these 5 common data quality issues:
+### Parts 2-6: Fix the Issues
+Each part addresses one data quality issue with code and documentation:
 
-| Issue | Description | Technique |
-|-------|-------------|-----------|
-| 1 | Missing values in numeric columns | `fillna()` |
-| 2 | Missing values in categorical columns | `dropna()` or `fillna()` |
-| 3 | Incorrect data types | `astype()` |
-| 4 | Duplicate rows | `drop_duplicates()` |
-| 5 | Inconsistent categorical values | `str.upper()`, `str.strip()` |
+| Part | Issue | Technique |
+|------|-------|-----------|
+| 2 | Missing values | `fillna()` with 0 or median, `dropna(subset=...)` |
+| 3 | Data types | `pd.to_numeric()`, `astype()`, `str.replace()` |
+| 4 | Duplicates | `duplicated()`, `drop_duplicates()` |
+| 5 | Text inconsistencies | `str.upper()`, `str.strip()` |
+| 6 | Invalid values | `describe()` min/max, boolean masks, domain validation |
 
-### Part 2: Data Aggregation Tasks
+### Part 7: Final Verification
+Compare original vs. cleaned dataset statistics, confirm all issues resolved.
 
-After cleaning, you will perform aggregation analyses:
-
-1. **By Region:** Total enrollment by department
-2. **By Education Level:** Average dropout rate by education level (primary, secondary, etc.)
-3. **By Year:** Trend analysis of key metrics over time
-4. **Combined:** Multi-level grouping (department + year + level)
+### Part 8: Reflection
+Answer questions about your cleaning experience and project application.
 
 ---
 
@@ -66,7 +70,7 @@ After cleaning, you will perform aggregation analyses:
 
 | File | Description |
 |------|-------------|
-| `workshop_starter.ipynb` | Starter notebook with empty cells for your work |
+| `workshop_starter.ipynb` | Starter notebook with scaffolded exercises (hints and structure provided) |
 | `workshop_solution.ipynb` | Complete solution (only look after attempting!) |
 
 ---
@@ -87,14 +91,11 @@ For each of the 5 issues:
 3. Apply the appropriate fix
 4. Verify the fix worked
 
-### Step 3: Data Aggregation
+### Step 3: Verification
 
-Complete each aggregation task:
-1. Write the GroupBy code
-2. Interpret the results
-3. Answer the analysis questions
+Compare the original and cleaned datasets to quantify your improvements.
 
-### Step 4: Documentation
+### Step 4: Reflection
 
 Answer the reflection questions at the end:
 - What was the most challenging issue?
@@ -109,9 +110,9 @@ This workshop is for practice and feedback. Focus on:
 
 | Criterion | What we look for |
 |-----------|------------------|
-| Completeness | All tasks attempted |
+| Completeness | All 5 issues attempted |
 | Correctness | Appropriate techniques used |
-| Documentation | Cleaning decisions explained |
+| Documentation | Cleaning decisions explained with rationale |
 | Code Quality | Clean, readable code with comments |
 
 ---
@@ -120,12 +121,12 @@ This workshop is for practice and feedback. Focus on:
 
 ### Before You Start
 - Read through the entire notebook to understand the scope
-- Review your class notes on `fillna()`, `dropna()`, `astype()`, `groupby()`
+- Review your class notes on `fillna()`, `dropna()`, `astype()`, `drop_duplicates()`
 
 ### While Working
 - Check the data type BEFORE converting (some columns may already be correct)
-- Remember: `fillna()` returns a new object, use assignment or `inplace=True`
-- Use parentheses around each condition when filtering: `(cond1) & (cond2)`
+- Remember: `fillna()` returns a new object, use assignment
+- Always verify your fix worked before moving to the next issue
 
 ### If Stuck
 - Re-read the cell instructions carefully
@@ -154,7 +155,9 @@ These exact techniques will be needed for Milestone 1:
 |----------------|---------------------|
 | Missing value handling | Clean your datos.gov.co dataset |
 | Type conversion | Ensure numeric columns are numeric |
-| GroupBy | Create summary statistics by category |
+| Duplicate removal | Remove any duplicated records |
+| Text standardization | Standardize categorical values for grouping |
+| Domain validation | Identify impossible values using domain knowledge |
 | Documentation | Data cleaning section of your report |
 
 ---

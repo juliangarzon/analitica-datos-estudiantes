@@ -1,10 +1,10 @@
-# Week 7 Workshop: Visualization Principles
+# Week 7 Workshop: Bivariate & Multivariate Analysis
 
-## Creating Publication-Ready Figures with Budget Execution Data
+## Water Consumption Dataset - Deep Dive into Relationships
 
 **Duration:** 2 hours (homework or in-class workshop)
 
-**Dataset:** Budget Execution Data (EJECUCION_PRESUPUESTAL) from datos.gov.co
+**Dataset:** HISTORICO_CONSUMO (Water Consumption Data)
 
 ---
 
@@ -12,127 +12,103 @@
 
 By completing this workshop, you will:
 
-1. Create 5 different chart types with real budget data
-2. Apply a consistent, professional color palette
-3. Add proper titles, labels, and annotations
-4. Export publication-ready figures in multiple formats
+1. Build a complete correlation matrix analysis
+2. Test if relationships change by municipality
+3. Generate 5 actionable insights from bivariate analysis
+4. Practice the critical thinking skill of distinguishing correlation from causation
 
 ---
 
 ## Workshop Tasks
 
-### Part 1: Data Preparation and Color Palette (15 minutes)
+### Part 1: Complete Correlation Matrix Analysis (45 minutes)
 
-**Task 1.1: Load and Explore the Data**
+**Task 1.1: Calculate and Visualize Correlations**
 
-1. Load the budget execution dataset
-2. Identify numeric and categorical columns
-3. Create summary statistics
+1. Load the water consumption dataset
+2. Calculate the correlation matrix for all numeric variables
+3. Create a professional heatmap visualization with:
+   - Clear color scheme (RdYlGn or coolwarm)
+   - Annotation showing correlation values
+   - Appropriate title and labels
 
-**Task 1.2: Define a Professional Color Palette**
+**Task 1.2: Identify Key Correlations**
 
-Create a consistent color palette that you will use throughout:
-- Primary color (main data)
-- Secondary color (comparison/secondary data)
-- Accent color (highlighting important values)
-- Warning color (below-target or negative values)
-- Neutral color (reference lines, background elements)
+1. Extract all unique correlations (not duplicates, not diagonal)
+2. Rank them by absolute value
+3. Document the top 5 correlations with their:
+   - Variable pair
+   - Correlation coefficient (r)
+   - Interpretation (positive/negative, strong/moderate/weak)
 
-Recommended palettes:
-- Corporate blue: `['#2C3E50', '#3498DB', '#1ABC9C', '#E74C3C', '#95A5A6']`
-- Muted earth: `['#5D4E37', '#8B7355', '#CD853F', '#B22222', '#A9A9A9']`
-- Modern minimal: `['#1A1A2E', '#16213E', '#0F3460', '#E94560', '#EAEAEA']`
+**Task 1.3: Scatter Plot Analysis**
 
----
-
-### Part 2: Create 5 Chart Types (75 minutes)
-
-**Chart 1: Horizontal Bar Chart - Budget by Category (15 minutes)**
-
-Create a horizontal bar chart showing budget allocation by category:
-- Sort values from largest to smallest
-- Use a single professional color
-- Add value labels at the end of each bar
-- Include a clean title with context
-- Remove unnecessary gridlines and spines
-
-**Chart 2: Grouped Bar Chart - Approved vs Executed (15 minutes)**
-
-Create a grouped bar chart comparing approved budget vs executed budget:
-- Use two distinct colors (one for approved, one for executed)
-- Add a legend
-- Show the gap between approved and executed
-- Include percentage execution rate in annotations
-
-**Chart 3: Line Chart - Monthly Execution Trend (15 minutes)**
-
-Create a line chart showing monthly budget execution rate:
-- Include a target line for reference
-- Use color to differentiate actual vs target
-- Highlight months where execution was below target
-- Add annotations for key data points (start, end, any notable changes)
-
-**Chart 4: Stacked Bar Chart - Budget Composition (15 minutes)**
-
-Create a stacked bar chart showing how the budget is composed:
-- Use a sequential color palette (light to dark)
-- Add percentage labels within each segment
-- Include a legend
-- Consider horizontal orientation for readability
-
-**Chart 5: Small Multiples - Department Comparison (15 minutes)**
-
-Create a small multiples visualization comparing execution across departments:
-- Use consistent scales across all subplots
-- Highlight the department with lowest execution
-- Add reference lines at 90% target
-- Use minimal styling for each subplot
+For each of the top 3 correlations:
+1. Create a scatter plot with regression line
+2. Check for non-linear patterns
+3. Identify any outliers that might affect the correlation
+4. Document your observations
 
 ---
 
-### Part 3: Publication-Ready Formatting (20 minutes)
+### Part 2: Test Relationships by Municipality (45 minutes)
 
-**Task 3.1: Apply Consistent Styling**
+**Task 2.1: Select Key Variables**
 
-For each of your 5 charts, ensure:
+Choose two numeric variables that showed interesting correlation in Part 1.
+For example:
+- CONSUMO_FACTURADO vs NUMERO_SUSCRIPTORES
+- CONSUMO_FACTURADO vs VALOR_FACTURADO
 
-- [ ] Title is descriptive and left-aligned
-- [ ] Axis labels are clear and have units if applicable
-- [ ] Font sizes are consistent across all charts
-- [ ] Colors follow your defined palette
-- [ ] Legends are positioned appropriately
-- [ ] No unnecessary gridlines or borders
+**Task 2.2: Calculate Correlations by Group**
 
-**Task 3.2: Add Source Attribution**
+1. Group the data by MUNICIPIO (or DEPARTAMENTO if too many municipalities)
+2. Calculate the correlation for each group
+3. Create a summary table showing:
+   - Municipality name
+   - Sample size (n)
+   - Correlation coefficient (r)
 
-Add a footnote to each chart with:
-- Data source: "Source: datos.gov.co - Budget Execution Data"
-- Date of data (if available)
+**Task 2.3: Visualize Differences**
 
-**Task 3.3: Export Figures**
+1. Create a scatter plot colored by municipality (use top 5-10 municipalities)
+2. Compare the slopes visually
+3. Answer: Does the relationship change significantly by municipality?
 
-Export each chart in two formats:
-1. PNG at 300 DPI for reports
-2. SVG for presentations (vector format)
+**Task 2.4: Simpson's Paradox Check**
 
-Use consistent naming:
-- `chart1_budget_by_category.png`
-- `chart2_approved_vs_executed.png`
-- etc.
+1. Calculate the overall correlation (all data combined)
+2. Calculate correlations for each subgroup
+3. Document any cases where subgroup patterns differ from overall pattern
 
 ---
 
-### Part 4: Critical Analysis (10 minutes)
+### Part 3: Generate 5 Actionable Insights (30 minutes)
 
-Answer the following questions in your notebook:
+Based on your bivariate and multivariate analysis, generate 5 insights that could inform decision-making.
 
-1. **Which chart type was most effective** for communicating the budget story? Why?
+**For each insight, document:**
 
-2. **What insight would be missed** if you only used one chart type?
+1. **Finding:** What did you discover? (Be specific with numbers)
+2. **So What?:** Why does this matter for the water utility company?
+3. **Now What?:** What action could be taken based on this finding?
+4. **Caution:** Is this correlation or causation? What confounding variables might exist?
 
-3. **If you could only show one chart** to a decision-maker, which would you choose and why?
+**Example Insight Template:**
 
-4. **What additional data** would make these visualizations more impactful?
+```
+Insight #1: [Title]
+---------------------------------------------------------
+Finding: There is a strong positive correlation (r = 0.XX)
+         between [Variable A] and [Variable B].
+
+So What?: This suggests that [interpretation of business impact]
+
+Now What?: The utility company could [specific action]
+
+Caution: This is correlation, not causation. Possible
+         confounding variable: [variable that might explain both]
+```
 
 ---
 
@@ -140,18 +116,23 @@ Answer the following questions in your notebook:
 
 Your completed workshop should include:
 
-1. **Jupyter Notebook** (`workshop_solution.ipynb`) with:
+1. **Jupyter Notebook** with:
    - All code cells executed
-   - Clear markdown explanations for each chart
-   - Answers to critical analysis questions
+   - Clear markdown explanations
+   - Professional visualizations
+   - Answers to all questions
 
-2. **Exported Figures** (10 files total):
-   - 5 PNG files at 300 DPI
-   - 5 SVG files
+2. **Correlation Summary Table**
+   | Variable 1 | Variable 2 | r | Interpretation |
+   |------------|------------|---|----------------|
+   | ... | ... | ... | ... |
 
-3. **Color Palette Documentation**:
-   - Hex codes for your chosen palette
-   - Brief rationale for color choices
+3. **Municipality Comparison Table**
+   | Municipality | n | r | Notes |
+   |--------------|---|---|-------|
+   | ... | ... | ... | ... |
+
+4. **5 Actionable Insights** (documented as shown above)
 
 ---
 
@@ -159,91 +140,83 @@ Your completed workshop should include:
 
 | Criteria | Points | Description |
 |----------|--------|-------------|
-| Data-Ink Ratio | 20 | Charts are clean, no chartjunk |
-| Chart Type Selection | 20 | Appropriate chart for each data type |
-| Color Usage | 15 | Purposeful, consistent palette |
-| Labels & Titles | 15 | Clear, informative, professional |
-| Export Quality | 15 | High-resolution, properly named files |
-| Critical Analysis | 15 | Thoughtful answers to questions |
+| Correlation Analysis | 25 | Correct calculations, complete matrix |
+| Visualizations | 25 | Clear, labeled, professional charts |
+| Municipality Comparison | 20 | Correct grouping and comparison |
+| Insights Quality | 20 | Specific, actionable, well-reasoned |
+| Code Quality | 10 | Clean, commented, reproducible |
 | **Total** | **100** | |
 
 ---
 
 ## Tips for Success
 
-### Matplotlib Style Tips
+### Correlation Interpretation Guide
+
+| r Value | Interpretation |
+|---------|---------------|
+| 0.7 to 1.0 | Strong positive |
+| 0.3 to 0.7 | Moderate positive |
+| 0.0 to 0.3 | Weak positive |
+| -0.3 to 0.0 | Weak negative |
+| -0.7 to -0.3 | Moderate negative |
+| -1.0 to -0.7 | Strong negative |
+
+### Common Pitfalls to Avoid
+
+1. **Assuming causation from correlation**
+   - Always ask: "Could there be a third variable?"
+   - Use phrases like "is associated with" not "causes"
+
+2. **Ignoring sample size**
+   - Small groups can show spurious correlations
+   - Report n alongside r
+
+3. **Missing non-linear relationships**
+   - Always create scatter plots, not just numbers
+   - Correlation only measures LINEAR relationships
+
+4. **Forgetting about outliers**
+   - Outliers can artificially inflate or deflate correlation
+   - Consider robust alternatives if outliers are present
+
+### Key Python Functions
 
 ```python
-# Set a clean style
-plt.style.use('seaborn-v0_8-whitegrid')
+# Correlation matrix
+df.corr()
 
-# Or create custom style
-plt.rcParams['figure.figsize'] = (10, 6)
-plt.rcParams['figure.dpi'] = 100
-plt.rcParams['font.size'] = 11
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['axes.spines.top'] = False
-plt.rcParams['axes.spines.right'] = False
+# Single correlation
+df['var1'].corr(df['var2'])
+
+# Correlation by group
+df.groupby('category').apply(lambda x: x['var1'].corr(x['var2']))
+
+# Heatmap
+sns.heatmap(corr_matrix, annot=True, cmap='RdYlGn', center=0)
+
+# Scatter with regression
+sns.regplot(x='var1', y='var2', data=df)
+
+# Scatter with color by category
+sns.scatterplot(x='var1', y='var2', hue='category', data=df)
 ```
-
-### Color Best Practices
-
-| Do | Do Not |
-|-----|---------|
-| Use color to highlight key data | Use rainbow colors |
-| Keep palette to 5-7 colors max | Use different color for each bar |
-| Use sequential colors for ordered data | Use red-green (colorblind issues) |
-| Gray out less important data | Make everything equally prominent |
-
-### Exporting Tips
-
-```python
-# High-resolution PNG
-plt.savefig('chart.png', dpi=300, bbox_inches='tight',
-            facecolor='white', edgecolor='none')
-
-# Vector format for editing
-plt.savefig('chart.svg', format='svg', bbox_inches='tight')
-
-# PDF for printing
-plt.savefig('chart.pdf', format='pdf', bbox_inches='tight')
-```
-
-### Annotation Best Practices
-
-- Annotate only the most important values
-- Use consistent formatting for numbers
-- Position annotations to avoid overlap
-- Use subtle colors for annotations (gray or dark version of main color)
 
 ---
 
 ## Files Provided
 
-- `workshop_starter.ipynb` - Starter notebook with structure and hints
+- `workshop_starter.ipynb` - Starter notebook with structure
 - `workshop_solution.ipynb` - Complete solution (for reference after completion)
 
 ---
 
 ## Submission
 
-Submit your completed notebook and exported figures via the course platform by [deadline].
+Submit your completed notebook via the course platform by [deadline].
 
-Create a folder named: `Week7_Workshop_[YourName]/`
-
-Include:
-- `workshop_completed.ipynb`
-- `figures/` folder with all exported charts
+Name your file: `Week5_Workshop_[YourName].ipynb`
 
 ---
 
-## Additional Resources
-
-- [Edward Tufte - The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
-- [Matplotlib Gallery](https://matplotlib.org/stable/gallery/index.html)
-- [Seaborn Gallery](https://seaborn.pydata.org/examples/index.html)
-- [ColorBrewer - Color Advice for Maps](https://colorbrewer2.org/)
-
----
-
-*Remember: Good visualization is about communication, not decoration. Every element should serve the data.*
+*Good luck! Remember: Correlation does NOT equal causation!*

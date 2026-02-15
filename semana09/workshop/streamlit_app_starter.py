@@ -1,5 +1,5 @@
 """
-Week 8 Workshop: Budget Execution Dashboard
+Week 9 Workshop: Budget Execution Dashboard
 Streamlit App - STARTER TEMPLATE
 
 Instructions:
@@ -357,4 +357,4 @@ if show_data:
 # =============================================================================
 
 st.markdown('---')
-st.caption('Week 8 Workshop - Data Analytics Course | Built with Streamlit and Plotly')
+st.caption('Week 9 Workshop - Data Analytics Course | Built with Streamlit and Plotly')

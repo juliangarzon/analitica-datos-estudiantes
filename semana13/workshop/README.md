@@ -1,10 +1,8 @@
-# Week 13 Workshop: Introduction to Machine Learning
+# Week 13 Workshop: Inferential Statistics - Confidence Intervals & Hypothesis Testing
 
-## ML Data Preparation for Water Consumption Prediction
+## Overview
 
-### Overview
-
-In this workshop, you will prepare the Water Consumption dataset for machine learning, making thoughtful decisions about features, target variables, and data preprocessing. You will document your reasoning at each step, which is a critical skill for real-world ML projects.
+In this workshop, you will apply inferential statistics techniques to draw conclusions about population parameters using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS).
 
 **Duration:** 2-3 hours (independent work)
 
@@ -16,88 +14,71 @@ In this workshop, you will prepare the Water Consumption dataset for machine lea
 
 By completing this workshop, you will be able to:
 
-1. Define a clear ML problem statement from a dataset
-2. Select and justify appropriate features for prediction
-3. Handle data preprocessing for machine learning
-4. Implement train/test split with proper methodology
-5. Apply feature scaling correctly
-6. Build and interpret a baseline Decision Tree model
-7. Document ML decisions with clear rationale
+1. Calculate and interpret confidence intervals for different metrics
+2. Formulate and test statistical hypotheses
+3. Perform and interpret t-tests for group comparisons
+4. Translate statistical results into business language
+5. Visualize statistical significance effectively
 
 ---
 
 ## Dataset
 
-**Source:** datos.gov.co - HISTORICO_CONSUMO (Water Consumption)
+**Source:** datos.gov.co - MEN_ESTADISTICAS
 
-**Description:** Historical water consumption data from Colombian municipalities containing:
-- Consumption volumes (m3)
-- Billing amounts (COP)
-- Number of subscribers
-- Usage types (residential, commercial, industrial)
-- Geographic information (department, municipality)
-- Time dimension (year)
+**Description:** Education statistics from the Colombian Ministry of Education containing:
+- Enrollment numbers by department, municipality, and education level
+- Dropout and graduation rates
+- Demographic breakdowns (gender, urban/rural, etc.)
+- Historical data across multiple years
 
-This is the same dataset you explored in Weeks 4 and 5 (EDA).
+This is the same dataset you worked with in Week 3 (Data Cleaning) and subsequent weeks.
 
 ---
 
 ## Workshop Structure
 
-### Part 1: Problem Definition
+### Part 1: Confidence Intervals for 3 Metrics
 
-You will define a clear ML problem by:
+You will calculate 95% confidence intervals for:
 
-| Task | What you will do |
-|------|-----------------|
-| 1.1 | Explore potential target variables |
-| 1.2 | Choose between classification vs regression |
-| 1.3 | Write a formal problem statement |
-| 1.4 | Justify your choice |
+| Metric | What it tells us |
+|--------|------------------|
+| 1. Mean enrollment | Average number of students per record |
+| 2. Dropout rate | Average dropout percentage |
+| 3. Approval rate | Average approval/pass rate |
 
-### Part 2: Feature Selection
+For each, you must:
+- Calculate the CI manually AND using scipy
+- Interpret the CI in plain language
+- Visualize the CI on a distribution plot
 
-You will select and prepare features by:
+### Part 2: Hypothesis Testing (2 Tests)
 
-| Task | What you will do |
-|------|-----------------|
-| 2.1 | Identify all potential features |
-| 2.2 | Eliminate features that would cause data leakage |
-| 2.3 | Handle categorical variables (encoding) |
-| 2.4 | Document your feature selection rationale |
+You will perform two hypothesis tests:
 
-### Part 3: Data Preparation
+| Test | Comparison |
+|------|------------|
+| 1. Urban vs Rural | Compare dropout rates between urban and rural areas |
+| 2. Time Comparison | Compare enrollment between two different years |
 
-You will prepare data for ML by:
+For each test, you must:
+- State the null and alternative hypotheses
+- Perform the appropriate test (t-test)
+- Report the t-statistic and p-value
+- Make a decision at alpha = 0.05
+- Write a conclusion in business language
 
-| Task | What you will do |
-|------|-----------------|
-| 3.1 | Handle missing values |
-| 3.2 | Perform train/test split |
-| 3.3 | Apply feature scaling |
-| 3.4 | Verify data integrity after preprocessing |
+### Part 3: Business Interpretation
 
-### Part 4: Baseline Model
+Translate your findings into language that a non-technical stakeholder (e.g., Ministry official, school administrator) would understand.
 
-You will build a simple model to:
+### Part 4: Visualization of Statistical Significance
 
-| Task | What you will do |
-|------|-----------------|
-| 4.1 | Train a Decision Tree model |
-| 4.2 | Evaluate model performance |
-| 4.3 | Interpret the results |
-| 4.4 | Identify potential improvements |
-
-### Part 5: Documentation
-
-You will create a summary that:
-
-| Task | What you will do |
-|------|-----------------|
-| 5.1 | Summarize all preprocessing decisions |
-| 5.2 | Document feature selection rationale |
-| 5.3 | Record baseline model performance |
-| 5.4 | List next steps for Week 14 |
+Create publication-quality visualizations that:
+- Show the distributions being compared
+- Indicate whether differences are significant
+- Include confidence intervals where appropriate
 
 ---
 
@@ -105,8 +86,8 @@ You will create a summary that:
 
 | File | Description |
 |------|-------------|
-| `workshop_starter.ipynb` | Starter notebook with structure and hints |
-| `workshop_solution.ipynb` | Complete solution (only consult after attempting!) |
+| `workshop_starter.ipynb` | Starter notebook with empty cells for your work |
+| `workshop_solution.ipynb` | Complete solution (only look after attempting!) |
 
 ---
 
@@ -116,79 +97,40 @@ You will create a summary that:
 
 1. Open `workshop_starter.ipynb` in Jupyter or VS Code
 2. Run the setup cell to load libraries and dataset
-3. Review the dataset structure (you should be familiar with it from Weeks 4-5)
+3. Review the dataset structure
 
-### Step 2: Problem Definition (Part 1)
+### Step 2: Confidence Intervals (Part 1)
 
-For this workshop, you will focus on a **classification** problem:
+For each of the 3 metrics:
+1. Extract the relevant column
+2. Calculate sample statistics (mean, std, n)
+3. Compute the confidence interval
+4. Verify using `scipy.stats.t.interval()`
+5. Create a visualization
+6. Write the interpretation
 
-**Goal:** Predict whether a municipality's water consumption is HIGH or LOW.
+### Step 3: Hypothesis Tests (Part 2)
 
-Complete these tasks:
-1. Define "HIGH" and "LOW" consumption (use median as threshold)
-2. Create the target variable
-3. Verify class balance
-4. Write a formal problem statement
+For each of the 2 tests:
+1. Define H0 and H1 clearly
+2. Prepare the two groups
+3. Check assumptions (sample size, approximate normality)
+4. Perform the t-test using `scipy.stats.ttest_ind()`
+5. Report results and make a decision
+6. Write the conclusion
 
-**Example problem statement:**
-> "Given a municipality's characteristics (number of subscribers, usage type, year), predict whether their water consumption will be above or below the median consumption level."
+### Step 4: Business Interpretation (Part 3)
 
-### Step 3: Feature Selection (Part 2)
+Write a brief executive summary (5-7 sentences) that:
+- Summarizes key findings
+- Explains what they mean for education policy
+- Avoids statistical jargon
 
-Think critically about which features to use:
+### Step 5: Visualization (Part 4)
 
-1. **Cannot use:**
-   - CONSUMO_FACTURADO (this IS the target)
-   - VALOR_FACTURADO (directly derived from consumption)
-
-2. **Consider using:**
-   - NUMERO_SUSCRIPTORES (number of subscribers)
-   - USO (usage type - needs encoding)
-   - ANNO (year)
-   - DEPARTAMENTO (department - needs encoding)
-
-3. **Document your reasoning:**
-   - Why did you include each feature?
-   - Why did you exclude certain features?
-   - What assumptions are you making?
-
-### Step 4: Data Preparation (Part 3)
-
-Follow these steps carefully:
-
-1. **Handle missing values:**
-   - Check for missing values in selected features
-   - Decide: Drop rows or impute values?
-   - Document your decision
-
-2. **Train/Test Split:**
-   - Use 80/20 split
-   - Set random_state=42 for reproducibility
-   - Verify class distribution in both sets
-
-3. **Feature Scaling:**
-   - Apply StandardScaler
-   - Remember: fit_transform on train, transform on test
-   - Explain why this order matters
-
-### Step 5: Baseline Model (Part 4)
-
-Build your first model:
-
-1. Create a DecisionTreeClassifier with max_depth=3
-2. Train on the training set
-3. Evaluate on the test set
-4. Create a confusion matrix
-5. Interpret the results
-
-### Step 6: Documentation (Part 5)
-
-Complete the documentation section:
-
-1. Fill in the feature selection table
-2. Summarize preprocessing decisions
-3. Record baseline performance metrics
-4. List improvements for next week
+Create at least 2 visualizations:
+1. A comparison plot (boxplot or distribution overlay) with significance annotation
+2. A confidence interval plot showing the 3 metrics
 
 ---
 
@@ -198,85 +140,68 @@ This workshop is for practice and feedback. Focus on:
 
 | Criterion | What we look for |
 |-----------|------------------|
-| Problem Definition | Clear problem statement with justification |
-| Feature Selection | Thoughtful selection with documented rationale |
-| Data Preparation | Correct implementation of split and scaling |
-| Model Implementation | Working model with proper evaluation |
-| Documentation | Clear, complete documentation of all decisions |
+| Completeness | All tasks attempted |
+| Correctness | Proper statistical methods used |
+| Interpretation | Results explained correctly, avoiding common p-value mistakes |
+| Visualization | Clear, informative plots with proper labels |
+| Business Language | Technical findings translated for non-technical audience |
 
 ---
 
 ## Tips for Success
 
 ### Before You Start
-- Review Week 13 slides on ML fundamentals
-- Remember the difference between classification and regression
-- Think about what "data leakage" means
+- Review the class slides on confidence intervals and hypothesis testing
+- Remember the formula: CI = mean +/- t * (std / sqrt(n))
+- Know the difference between t-test types (independent vs paired)
 
 ### While Working
-- Document your decisions as you make them (not at the end)
-- Test each step before moving to the next
-- If stuck, simplify the problem first
+- Always check for missing values before calculations
+- Use `dropna()` to clean data before statistical tests
+- Remember: p-value < 0.05 means reject H0 (at alpha = 0.05)
+- Statistical significance != practical significance
 
 ### Common Mistakes to Avoid
-- Using the target variable as a feature (data leakage!)
-- Fitting the scaler on test data (data leakage!)
-- Forgetting to encode categorical variables
-- Not checking class balance in train/test sets
+- Saying "p-value is the probability H0 is true" (WRONG!)
+- Using paired t-test when groups are independent
+- Forgetting to state your hypotheses before testing
+- Ignoring sample size when interpreting results
 
 ### If Stuck
-- Re-read the cell instructions
-- Check the scikit-learn documentation
-- Review the in-class exercise
+- Re-read the cell instructions carefully
+- Check the scipy.stats documentation
+- Try a simpler version first
 - Only check the solution notebook as a last resort
 
 ---
 
-## Key Concepts Reference
+## Key Formulas Reference
 
-### Train/Test Split
-```python
-from sklearn.model_selection import train_test_split
+### Confidence Interval for Mean
+```
+CI = x_bar +/- t_critical * (s / sqrt(n))
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
-    test_size=0.2,      # 20% for testing
-    random_state=42     # For reproducibility
-)
+Where:
+- x_bar = sample mean
+- t_critical = t-value for desired confidence level
+- s = sample standard deviation
+- n = sample size
 ```
 
-### StandardScaler
-```python
-from sklearn.preprocessing import StandardScaler
-
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)  # Fit AND transform
-X_test_scaled = scaler.transform(X_test)        # Only transform
+### Standard Error
+```
+SE = s / sqrt(n)
 ```
 
-### Label Encoding
-```python
-from sklearn.preprocessing import LabelEncoder
-
-le = LabelEncoder()
-df['category_encoded'] = le.fit_transform(df['category'])
+### T-Statistic (two independent samples)
+```
+t = (x1_bar - x2_bar) / sqrt(s1^2/n1 + s2^2/n2)
 ```
 
-### Decision Tree
-```python
-from sklearn.tree import DecisionTreeClassifier
-
-model = DecisionTreeClassifier(max_depth=3, random_state=42)
-model.fit(X_train, y_train)
-predictions = model.predict(X_test)
+### Decision Rule
 ```
-
-### Evaluation Metrics
-```python
-from sklearn.metrics import accuracy_score, confusion_matrix
-
-accuracy = accuracy_score(y_test, predictions)
-cm = confusion_matrix(y_test, predictions)
+If p-value < alpha: Reject H0
+If p-value >= alpha: Fail to reject H0
 ```
 
 ---
@@ -286,36 +211,33 @@ cm = confusion_matrix(y_test, predictions)
 Submit your completed `workshop_starter.ipynb` via the course LMS before the deadline.
 
 Ensure that:
-- [ ] All cells have been executed (Kernel > Restart & Run All)
-- [ ] Problem statement is clearly defined
-- [ ] Feature selection is documented with rationale
-- [ ] Train/test split is correctly implemented
-- [ ] Feature scaling is properly applied
-- [ ] Baseline model is trained and evaluated
-- [ ] All documentation sections are complete
+- All cells have been executed (Kernel > Restart & Run All)
+- All confidence intervals are calculated and interpreted
+- Both hypothesis tests are complete with conclusions
+- The business summary is written
+- Visualizations are clear and labeled
 
 ---
 
 ## Connection to Project
 
-These techniques are essential for your final project:
+These techniques will be essential for your final project:
 
 | Workshop Skill | Project Application |
 |----------------|---------------------|
-| Problem definition | Framing your project's ML question |
-| Feature selection | Choosing predictors for your model |
-| Data preparation | Preprocessing your datos.gov.co dataset |
-| Model building | Implementing predictions for Milestone 3 |
-| Documentation | ML methodology section of your report |
+| Confidence intervals | Estimate population parameters from your sample |
+| Hypothesis testing | Compare groups in your datos.gov.co dataset |
+| Business interpretation | Executive summary section of your report |
+| Statistical visualization | Results section of your presentation |
 
 ---
 
 ## Resources
 
-- scikit-learn User Guide: https://scikit-learn.org/stable/user_guide.html
-- Train/Test Split: https://scikit-learn.org/stable/modules/cross_validation.html
-- Decision Trees: https://scikit-learn.org/stable/modules/tree.html
-- Feature Scaling: https://scikit-learn.org/stable/modules/preprocessing.html
+- scipy.stats documentation: https://docs.scipy.org/doc/scipy/reference/stats.html
+- Understanding p-values: https://www.nature.com/articles/nmeth.2698
+- Common statistical mistakes: https://www.nature.com/articles/nmeth.2900
+- Visualizing uncertainty: https://clauswilke.com/dataviz/
 
 ---
 

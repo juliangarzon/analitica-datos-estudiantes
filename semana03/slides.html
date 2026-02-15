@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 03 - Data Manipulation & Cleaning</title>
+    <title>Week 03 - Data Cleaning</title>
     <style>
         /* ===========================================
            DATA ANALYTICS COURSE - WEEK 3
-           Data Manipulation & Cleaning
+           Data Cleaning
            Universidad Cooperativa de Colombia
            Instructor: Julian Eduardo Garzon Giraldo, MsC
            =========================================== */
@@ -453,18 +453,130 @@
             position: relative;
         }
 
-        .process-step::after {
-            content: '';
-            position: absolute;
-            right: -25px;
-            top: 50%;
-            transform: translateY(-50%);
+        .process-arrow {
             font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* ===========================================
+           VISUAL DATAFRAME
+           =========================================== */
+        .dataframe-visual {
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .dataframe-visual .header-row {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: grid;
+            color: white;
+            font-weight: 600;
+        }
+
+        .dataframe-visual .data-row {
+            display: grid;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dataframe-visual .data-row:nth-child(even) {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .dataframe-visual .cell {
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .dataframe-visual .index-cell {
+            background: rgba(102, 126, 234, 0.1);
+            font-weight: 600;
             color: #667eea;
         }
 
-        .process-step:last-child::after {
-            display: none;
+        .cell-nan {
+            background: rgba(255, 118, 117, 0.15) !important;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        .cell-ok {
+            background: rgba(0, 184, 148, 0.1) !important;
+        }
+
+        /* ===========================================
+           FLOWCHART STYLES
+           =========================================== */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .flow-node {
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            min-width: 250px;
+        }
+
+        .flow-question {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            padding: 20px 50px;
+        }
+
+        .flow-answer-yes {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+        }
+
+        .flow-answer-no {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: white;
+        }
+
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .flow-branch-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        /* ===========================================
+           BEFORE/AFTER VISUAL
+           =========================================== */
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .before-after .arrow {
+            font-size: 2rem;
+            color: #667eea;
         }
 
         /* ===========================================
@@ -512,12 +624,12 @@
                 flex-direction: column;
             }
 
-            .process-step::after {
-                content: '';
-                right: auto;
-                bottom: -25px;
-                top: auto;
-                transform: none;
+            .flow-branch {
+                flex-direction: column;
+            }
+
+            .before-after {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -592,13 +704,28 @@
             color: #718096;
             margin-top: 10px;
         }
+
+        .strategy-card {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .strategy-card h4 {
+            margin-bottom: 8px;
+        }
+
+        .strategy-card p {
+            font-size: 0.95rem;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
     <!-- NAVIGATION -->
     <div class="nav-container">
         <button class="nav-btn" onclick="previousSlide()">Prev</button>
-        <span class="slide-counter" id="slideCounter">1 / 14</span>
+        <span class="slide-counter" id="slideCounter">1 / 18</span>
         <button class="nav-btn" onclick="nextSlide()">Next</button>
     </div>
 
@@ -608,7 +735,7 @@
              SLIDE 1: TITLE (HOOK)
              ========================================= -->
         <div class="slide title-slide">
-            <h1>Data Manipulation & Cleaning</h1>
+            <h1>Data Cleaning</h1>
             <h2>Week 3 - From Messy to Meaningful</h2>
             <div class="info">
                 <div>Julian Eduardo Garzon Giraldo, MsC</div>
@@ -645,7 +772,7 @@
         </div>
 
         <!-- =========================================
-             SLIDE 3: LEARNING OBJECTIVES (HOOK)
+             SLIDE 3: LEARNING OBJECTIVES
              ========================================= -->
         <div class="slide">
             <h1>What You'll Learn Today</h1>
@@ -653,22 +780,22 @@
                 <div>
                     <h2>Objectives</h2>
                     <ul class="list-styled list-check">
+                        <li>Understand what makes data "dirty"</li>
                         <li>Detect and handle missing values (NaN)</li>
                         <li>Convert data types correctly</li>
-                        <li>Filter with multiple conditions</li>
-                        <li>Aggregate data with GroupBy</li>
-                        <li>Create new calculated columns</li>
+                        <li>Remove duplicate rows</li>
+                        <li>Fix text inconsistencies</li>
                     </ul>
                 </div>
                 <div>
                     <h2>By the end you'll be able to:</h2>
                     <div class="card card-primary">
                         <p style="font-size: 1.2rem;">
-                            Transform a messy dataset with 14,000+ rows into clean, analysis-ready data using pandas.
+                            Take a messy, real-world dataset and systematically clean it so it is ready for analysis.
                         </p>
                     </div>
                     <div class="alert alert-info" style="margin-top: 20px;">
-                        <strong>Dataset:</strong> Education Statistics (MEN) - 14,585 records, 41+ columns
+                        <strong>Dataset:</strong> Education Statistics (MEN) - 14,585 records, 41+ columns from datos.gov.co
                     </div>
                 </div>
             </div>
@@ -705,7 +832,7 @@
                 </div>
 
                 <div class="analogy">
-                    In data terms: Check for problems, categorize issues, fix errors, then structure your clean data for analysis.
+                    In data terms: Inspect for problems, categorize issues, fix errors, then verify your clean data is ready for analysis.
                 </div>
             </div>
         </div>
@@ -722,7 +849,7 @@
                         <th>Laundry Problem</th>
                         <th>Data Problem</th>
                         <th>Example</th>
-                        <th>Solution</th>
+                        <th>Tool</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -736,7 +863,7 @@
                         <td>&#128094; Shoe in the shirt pile</td>
                         <td><strong>Wrong data types</strong></td>
                         <td>Numbers stored as text</td>
-                        <td><code class="code-inline">astype()</code></td>
+                        <td><code class="code-inline">astype()</code>, <code class="code-inline">to_datetime()</code></td>
                     </tr>
                     <tr>
                         <td>&#128085; Same shirt counted twice</td>
@@ -745,124 +872,351 @@
                         <td><code class="code-inline">drop_duplicates()</code></td>
                     </tr>
                     <tr>
-                        <td>&#129534; Stained clothes</td>
-                        <td><strong>Invalid values</strong></td>
-                        <td>Age = -5, Email without @</td>
-                        <td>Validation & filtering</td>
-                    </tr>
-                    <tr>
                         <td>&#129466; Inconsistent folding</td>
-                        <td><strong>Format inconsistencies</strong></td>
+                        <td><strong>Text inconsistencies</strong></td>
                         <td>"NY", "N.Y.", "New York"</td>
-                        <td><code class="code-inline">str.replace()</code>, mapping</td>
+                        <td><code class="code-inline">str.strip()</code>, <code class="code-inline">str.upper()</code></td>
                     </tr>
                 </tbody>
             </table>
+
+            <div class="alert alert-info" style="text-align: center;">
+                <strong>Today we tackle each of these four problems, one at a time.</strong>
+            </div>
         </div>
 
         <!-- =========================================
-             SLIDE 6: CONTENT - Detecting Missing Values
+             SLIDE 6: What is NaN?
+             ========================================= -->
+        <div class="slide">
+            <h1>What is NaN?</h1>
+
+            <div class="concept-box">
+                <p><strong>NaN stands for "Not a Number".</strong> It is how pandas marks a missing value: a cell where no data exists.</p>
+                <div class="analogy">
+                    Think of NaN like an empty seat in a classroom. The seat exists, but nobody is sitting there. You need to decide: leave it empty, or assign someone to it?
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin-top: 30px;">A DataFrame with Missing Values</h2>
+
+            <div class="dataframe-visual" style="max-width: 700px; margin: 20px auto;">
+                <div class="header-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell"></div>
+                    <div class="cell">Name</div>
+                    <div class="cell">Department</div>
+                    <div class="cell">Students</div>
+                    <div class="cell">Dropout %</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">0</div>
+                    <div class="cell">School A</div>
+                    <div class="cell">Antioquia</div>
+                    <div class="cell">450</div>
+                    <div class="cell">3.2</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">1</div>
+                    <div class="cell">School B</div>
+                    <div class="cell cell-nan">NaN</div>
+                    <div class="cell">320</div>
+                    <div class="cell cell-nan">NaN</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">2</div>
+                    <div class="cell">School C</div>
+                    <div class="cell">Bogota</div>
+                    <div class="cell cell-nan">NaN</div>
+                    <div class="cell">5.1</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">3</div>
+                    <div class="cell">School D</div>
+                    <div class="cell">Valle</div>
+                    <div class="cell">580</div>
+                    <div class="cell">2.8</div>
+                </div>
+            </div>
+
+            <div class="grid-3" style="margin-top: 20px;">
+                <div class="card card-light" style="text-align: center;">
+                    <h3>Data entry error</h3>
+                    <p>Someone forgot to type a value</p>
+                </div>
+                <div class="card card-light" style="text-align: center;">
+                    <h3>System failure</h3>
+                    <p>A sensor or API didn't respond</p>
+                </div>
+                <div class="card card-light" style="text-align: center;">
+                    <h3>Optional field</h3>
+                    <p>The field wasn't required</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 7: Detecting Missing Values
              ========================================= -->
         <div class="slide">
             <h1>Detecting Missing Values</h1>
+
             <div class="grid-2">
                 <div>
                     <h2>The Code</h2>
-                    <div class="code-block"><span class="comment"># Check for missing values (count the missing socks)</span>
-
-<span class="comment"># How many missing per column?</span>
+                    <div class="code-block"><span class="comment"># How many missing per column?</span>
 df.<span class="function">isnull</span>().<span class="function">sum</span>()
 
 <span class="comment"># Percentage missing per column</span>
 (df.<span class="function">isnull</span>().<span class="function">sum</span>() / <span class="function">len</span>(df)) * <span class="number">100</span>
 
 <span class="comment"># Total missing in entire dataset</span>
-df.<span class="function">isnull</span>().<span class="function">sum</span>().<span class="function">sum</span>()
-
-<span class="comment"># Rows with ANY missing value</span>
-df[df.<span class="function">isnull</span>().<span class="function">any</span>(axis=<span class="number">1</span>)]</div>
+df.<span class="function">isnull</span>().<span class="function">sum</span>().<span class="function">sum</span>()</div>
                 </div>
                 <div>
-                    <h2>What It Does</h2>
-                    <div class="card card-light">
-                        <p><strong>isnull()</strong> returns True/False for each cell</p>
-                        <p><strong>.sum()</strong> counts True values (missing)</p>
-                        <p><strong>.any(axis=1)</strong> checks if ANY column in a row is missing</p>
+                    <h2>What Each Part Does</h2>
+                    <div class="card card-light" style="margin-bottom: 15px;">
+                        <h3><code class="code-inline">isnull()</code></h3>
+                        <p>Returns True/False for every cell. True = missing.</p>
                     </div>
-                    <div class="alert alert-warning" style="margin-top: 20px;">
-                        <strong>Pro tip:</strong> Always check missing values FIRST before any analysis!
+                    <div class="card card-light" style="margin-bottom: 15px;">
+                        <h3><code class="code-inline">.sum()</code></h3>
+                        <p>Counts the True values (because True = 1).</p>
+                    </div>
+                    <div class="card card-light">
+                        <h3><code class="code-inline">.sum().sum()</code></h3>
+                        <p>First sum counts per column, second sum totals everything.</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <strong>Pro tip:</strong> Always check missing values FIRST before any analysis. It's the #1 step in every cleaning workflow.
             </div>
         </div>
 
         <!-- =========================================
-             SLIDE 7: CONTENT - Handling Missing Values
+             SLIDE 8: Decision Framework - Drop vs Fill
              ========================================= -->
         <div class="slide">
-            <h1>Handling Missing Values</h1>
+            <h1>When to Drop vs. When to Fill?</h1>
 
-            <div class="grid-2">
-                <div class="comparison-bad">
-                    <h3>Option 1: Remove (dropna)</h3>
-                    <div class="code-block" style="background: rgba(0,0,0,0.3); font-size: 0.9rem;"><span class="comment"># Drop rows with ANY missing</span>
-df_clean = df.<span class="function">dropna</span>()
+            <div class="concept-box" style="margin-bottom: 30px;">
+                <p><strong>This is the most important decision in data cleaning.</strong> There is no single right answer. It depends on how much is missing and what the data means.</p>
+            </div>
 
-<span class="comment"># Drop rows missing specific column</span>
-df_clean = df.<span class="function">dropna</span>(subset=[<span class="string">'grade'</span>])
-
-<span class="comment"># Drop columns with missing</span>
-df_clean = df.<span class="function">dropna</span>(axis=<span class="number">1</span>)</div>
-                    <p style="margin-top: 15px;"><strong>Use when:</strong> Missing is rare (&lt;5%) or row is useless without the value</p>
-                </div>
-
-                <div class="comparison-good">
-                    <h3>Option 2: Fill (fillna)</h3>
-                    <div class="code-block" style="background: rgba(0,0,0,0.3); font-size: 0.9rem;"><span class="comment"># Fill with a specific value</span>
-df[<span class="string">'grade'</span>].<span class="function">fillna</span>(<span class="number">0</span>)
-
-<span class="comment"># Fill with column mean</span>
-df[<span class="string">'grade'</span>].<span class="function">fillna</span>(df[<span class="string">'grade'</span>].<span class="function">mean</span>())
-
-<span class="comment"># Fill with previous value</span>
-df[<span class="string">'grade'</span>].<span class="function">fillna</span>(method=<span class="string">'ffill'</span>)</div>
-                    <p style="margin-top: 15px;"><strong>Use when:</strong> You need to keep all rows and have a reasonable replacement</p>
+            <div class="flowchart">
+                <div class="flow-node flow-question">How much of the column is missing?</div>
+                <div class="flow-arrow">&#8595;</div>
+                <div class="flow-branch">
+                    <div style="text-align: center;">
+                        <div class="flow-branch-label">&gt; 50% missing</div>
+                        <div class="flow-node flow-answer-no" style="border-radius: 12px;">
+                            <strong>Drop the column</strong><br>
+                            <small>Too little data to be useful</small>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="flow-branch-label">&lt; 5% missing</div>
+                        <div class="flow-node flow-answer-yes" style="border-radius: 12px;">
+                            <strong>Drop the rows</strong><br>
+                            <small>Safe: tiny data loss</small>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="flow-branch-label">5-50% missing</div>
+                        <div class="flow-node" style="border-radius: 12px; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white;">
+                            <strong>Fill with a value</strong><br>
+                            <small>Use 0, mean, or median</small>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="alert alert-info" style="margin-top: 30px;">
-                <strong>Decision Guide:</strong> If &gt;50% missing in a column, consider dropping the column. If &lt;5% missing, dropping rows is usually safe.
+            <div class="alert alert-info" style="margin-top: 20px;">
+                <strong>Key question:</strong> Is this column essential for your analysis? If yes, fill it. If not, consider dropping it.
             </div>
         </div>
 
         <!-- =========================================
-             SLIDE 8: CONTENT - Data Type Conversion
+             SLIDE 9: Handling Missing - dropna()
+             ========================================= -->
+        <div class="slide">
+            <h1>Removing Missing Values: dropna()</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p><strong>dropna() removes rows (or columns) that contain missing values.</strong> Use it when the missing data is rare or the row is useless without the value.</p>
+            </div>
+
+            <div class="code-block"><span class="comment"># Drop rows with ANY missing value (aggressive!)</span>
+df_clean = df.<span class="function">dropna</span>()
+
+<span class="comment"># Drop rows missing a SPECIFIC column (safer)</span>
+df_clean = df.<span class="function">dropna</span>(subset=[<span class="string">'department'</span>])
+
+<span class="comment"># Drop rows only if ALL values are missing</span>
+df_clean = df.<span class="function">dropna</span>(how=<span class="string">'all'</span>)
+
+<span class="comment"># Drop COLUMNS with missing (axis=1)</span>
+df_clean = df.<span class="function">dropna</span>(axis=<span class="number">1</span>)</div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="comparison-good">
+                    <h3>When to use dropna()</h3>
+                    <p style="margin-top: 10px;">&lt; 5% of rows are affected</p>
+                    <p>The missing column is critical (like a name or ID)</p>
+                    <p>You have plenty of data to spare</p>
+                </div>
+                <div class="comparison-bad">
+                    <h3>When NOT to use dropna()</h3>
+                    <p style="margin-top: 10px;">Many rows have missing values</p>
+                    <p>You'd lose too much data</p>
+                    <p>The missing pattern is not random</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 10: Handling Missing - fillna()
+             ========================================= -->
+        <div class="slide">
+            <h1>Filling Missing Values: fillna()</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p><strong>fillna() replaces NaN with a value you choose.</strong> The right replacement depends on what the column represents.</p>
+            </div>
+
+            <div class="code-block"><span class="comment"># Fill with a constant value</span>
+df[<span class="string">'students'</span>] = df[<span class="string">'students'</span>].<span class="function">fillna</span>(<span class="number">0</span>)
+
+<span class="comment"># Fill with the column average</span>
+df[<span class="string">'dropout_rate'</span>] = df[<span class="string">'dropout_rate'</span>].<span class="function">fillna</span>(df[<span class="string">'dropout_rate'</span>].<span class="function">mean</span>())
+
+<span class="comment"># Fill with the column median (robust to outliers)</span>
+df[<span class="string">'score'</span>] = df[<span class="string">'score'</span>].<span class="function">fillna</span>(df[<span class="string">'score'</span>].<span class="function">median</span>())
+
+<span class="comment"># Fill text columns with a label</span>
+df[<span class="string">'region'</span>] = df[<span class="string">'region'</span>].<span class="function">fillna</span>(<span class="string">'Unknown'</span>)</div>
+
+            <div class="grid-4" style="margin-top: 20px;">
+                <div class="strategy-card card card-info">
+                    <h4>Fill with 0</h4>
+                    <p>Counts, totals</p>
+                    <p><em>"Not reported = zero"</em></p>
+                </div>
+                <div class="strategy-card card card-success">
+                    <h4>Fill with mean</h4>
+                    <p>Symmetric data</p>
+                    <p><em>"Use the average"</em></p>
+                </div>
+                <div class="strategy-card card card-warning">
+                    <h4>Fill with median</h4>
+                    <p>Skewed data</p>
+                    <p><em>"Use the middle"</em></p>
+                </div>
+                <div class="strategy-card card card-primary">
+                    <h4>Fill with label</h4>
+                    <p>Text columns</p>
+                    <p><em>"Unknown"</em></p>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" style="margin-top: 20px;">
+                <strong>Common mistake:</strong> <code class="code-inline">df['col'].fillna(0)</code> does NOT change the original DataFrame. You must assign the result: <code class="code-inline">df['col'] = df['col'].fillna(0)</code>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 11: What Are Data Types?
+             ========================================= -->
+        <div class="slide">
+            <h1>What Are Data Types?</h1>
+
+            <div class="concept-box">
+                <p><strong>Every column in a DataFrame has a data type</strong> that tells pandas how to store and process the values.</p>
+                <div class="analogy">
+                    Think of it like putting things in the right boxes. If you put a book in the "food" box, the kitchen staff won't know what to do with it. Similarly, if a number is stored as text, pandas can't do math with it.
+                </div>
+            </div>
+
+            <table class="table-styled" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>pandas Type</th>
+                        <th>What It Stores</th>
+                        <th>Example</th>
+                        <th>Can Do Math?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="code-inline">int64</code></td>
+                        <td>Whole numbers</td>
+                        <td>42, 2020, 1500</td>
+                        <td style="color: #00b894; font-weight: bold;">Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">float64</code></td>
+                        <td>Decimal numbers</td>
+                        <td>3.14, 99.5, 0.0</td>
+                        <td style="color: #00b894; font-weight: bold;">Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">object</code></td>
+                        <td>Text (strings)</td>
+                        <td>"Bogota", "2020"</td>
+                        <td style="color: #d63031; font-weight: bold;">No</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">datetime64</code></td>
+                        <td>Dates and times</td>
+                        <td>2020-01-15</td>
+                        <td style="color: #00b894; font-weight: bold;">Yes (differences)</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">bool</code></td>
+                        <td>True / False</td>
+                        <td>True, False</td>
+                        <td style="color: #00b894; font-weight: bold;">Yes (True=1)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning">
+                <strong>The #1 type problem:</strong> A column looks like numbers ("2020", "1500") but pandas loaded it as <code class="code-inline">object</code> (text). You can't calculate the mean of text!
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 12: Converting Data Types
              ========================================= -->
         <div class="slide">
             <h1>Converting Data Types</h1>
+
             <div class="grid-2">
                 <div>
-                    <h2>The Problem</h2>
-                    <div class="concept-box" style="margin: 0;">
-                        <p>Numbers stored as text cannot be used for math:</p>
-                        <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># This fails if 'price' is text!</span>
-df[<span class="string">'price'</span>].<span class="function">mean</span>()  <span class="comment"># Error!</span>
-
-<span class="comment"># Check current types</span>
+                    <h2>Check current types</h2>
+                    <div class="code-block"><span class="comment"># See all column types</span>
 df.<span class="function">dtypes</span>
-<span class="comment"># price    object  (text!)</span>
-<span class="comment"># year     object  (text!)</span></div>
+
+<span class="comment"># Example output:</span>
+<span class="comment"># name        object   (text)</span>
+<span class="comment"># year        float64  (decimal?)</span>
+<span class="comment"># students    object   (text!)</span>
+<span class="comment"># active      object   (text!)</span></div>
+
+                    <div class="alert alert-info" style="margin-top: 15px;">
+                        <strong>Tip:</strong> Run <code class="code-inline">df.dtypes</code> right after loading. If a column you expect to be numeric says <code class="code-inline">object</code>, it needs conversion.
                     </div>
                 </div>
                 <div>
-                    <h2>The Solution</h2>
-                    <div class="code-block"><span class="comment"># Convert to integer</span>
+                    <h2>Fix them</h2>
+                    <div class="code-block"><span class="comment"># Convert text to integer</span>
 df[<span class="string">'year'</span>] = df[<span class="string">'year'</span>].<span class="function">astype</span>(<span class="function">int</span>)
 
-<span class="comment"># Convert to float (decimal)</span>
+<span class="comment"># Convert text to decimal</span>
 df[<span class="string">'price'</span>] = df[<span class="string">'price'</span>].<span class="function">astype</span>(<span class="function">float</span>)
 
-<span class="comment"># Convert to datetime</span>
+<span class="comment"># Convert to date</span>
 df[<span class="string">'date'</span>] = pd.<span class="function">to_datetime</span>(df[<span class="string">'date'</span>])
 
 <span class="comment"># Convert to category (saves memory)</span>
@@ -871,165 +1225,308 @@ df[<span class="string">'region'</span>] = df[<span class="string">'region'</spa
             </div>
 
             <div class="alert alert-danger" style="margin-top: 20px;">
-                <strong>Common Error:</strong> <code class="code-inline">astype(int)</code> fails if column has NaN values. Fill or drop NaN first!
+                <strong>Trap:</strong> <code class="code-inline">astype(int)</code> crashes if the column has NaN values. Always fill or drop NaN <strong>before</strong> converting to int.
+                <br><br>
+                <strong>Safe pattern:</strong> <code class="code-inline">df['year'] = df['year'].fillna(0).astype(int)</code>
             </div>
         </div>
 
         <!-- =========================================
-             SLIDE 9: CONTENT - The M&Ms Analogy (GroupBy)
+             SLIDE 13: What Are Duplicates?
              ========================================= -->
         <div class="slide">
-            <h1>GroupBy: Sorting Candy by Color</h1>
+            <h1>What Are Duplicates?</h1>
 
             <div class="concept-box">
-                <div class="laundry-icon">&#127852;</div>
-                <p><strong>GroupBy is like sorting M&Ms by color.</strong></p>
-
+                <p><strong>A duplicate is a row that appears more than once with identical values.</strong></p>
                 <div class="analogy">
-                    You have a bag of M&Ms. You want to know how many of each color.<br>
-                    GroupBy = "Put all red ones together, count them. Then blue ones, count them..."
+                    Imagine counting students in a classroom. If you accidentally count Maria twice, your total is wrong. Duplicates in data do the same thing: they inflate your counts and distort your averages.
                 </div>
+            </div>
 
-                <div class="grid-3" style="margin-top: 30px; text-align: center;">
-                    <div class="card card-danger">
-                        <h3 style="font-size: 2rem;">&#128308;</h3>
-                        <p>Red: 12</p>
-                    </div>
-                    <div class="card card-info">
-                        <h3 style="font-size: 2rem;">&#128309;</h3>
-                        <p>Blue: 18</p>
-                    </div>
-                    <div class="card card-success">
-                        <h3 style="font-size: 2rem;">&#128994;</h3>
-                        <p>Green: 15</p>
-                    </div>
+            <h2 style="text-align: center; margin-top: 20px;">Spot the Duplicate</h2>
+
+            <div class="dataframe-visual" style="max-width: 700px; margin: 20px auto;">
+                <div class="header-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell"></div>
+                    <div class="cell">School</div>
+                    <div class="cell">Department</div>
+                    <div class="cell">Year</div>
+                    <div class="cell">Students</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">0</div>
+                    <div class="cell">School A</div>
+                    <div class="cell">Antioquia</div>
+                    <div class="cell">2022</div>
+                    <div class="cell">450</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr; background: rgba(255, 118, 117, 0.15);">
+                    <div class="cell index-cell">1</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">School B</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">Bogota</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">2022</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">320</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr; background: rgba(255, 118, 117, 0.15);">
+                    <div class="cell index-cell">2</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">School B</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">Bogota</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">2022</div>
+                    <div class="cell" style="color: #d63031; font-weight: bold;">320</div>
+                </div>
+                <div class="data-row" style="grid-template-columns: 60px 1fr 1fr 1fr 1fr;">
+                    <div class="cell index-cell">3</div>
+                    <div class="cell">School C</div>
+                    <div class="cell">Valle</div>
+                    <div class="cell">2022</div>
+                    <div class="cell">580</div>
+                </div>
+            </div>
+
+            <div class="grid-3" style="margin-top: 10px;">
+                <div class="card card-light" style="text-align: center;">
+                    <h3>Data entry errors</h3>
+                    <p>Same record entered twice</p>
+                </div>
+                <div class="card card-light" style="text-align: center;">
+                    <h3>System glitches</h3>
+                    <p>API returned the same row twice</p>
+                </div>
+                <div class="card card-light" style="text-align: center;">
+                    <h3>Merging datasets</h3>
+                    <p>Overlapping records from two sources</p>
                 </div>
             </div>
         </div>
 
         <!-- =========================================
-             SLIDE 10: CONTENT - GroupBy Code
+             SLIDE 14: Removing Duplicates
              ========================================= -->
         <div class="slide">
-            <h1>GroupBy in Action</h1>
-            <div class="grid-2">
-                <div>
-                    <h2>Basic GroupBy</h2>
-                    <div class="code-block"><span class="comment"># Count students by department</span>
-df.<span class="function">groupby</span>(<span class="string">'department'</span>)[<span class="string">'student_id'</span>].<span class="function">count</span>()
+            <h1>Removing Duplicates</h1>
 
-<span class="comment"># Average grade by department</span>
-df.<span class="function">groupby</span>(<span class="string">'department'</span>)[<span class="string">'grade'</span>].<span class="function">mean</span>()
+            <div class="code-block"><span class="comment"># How many duplicates exist?</span>
+df.<span class="function">duplicated</span>().<span class="function">sum</span>()
 
-<span class="comment"># Total enrollment by year</span>
-df.<span class="function">groupby</span>(<span class="string">'year'</span>)[<span class="string">'students'</span>].<span class="function">sum</span>()</div>
+<span class="comment"># See the duplicate rows</span>
+df[df.<span class="function">duplicated</span>(keep=<span class="keyword">False</span>)]
+
+<span class="comment"># Remove exact duplicates (keep first occurrence)</span>
+df = df.<span class="function">drop_duplicates</span>()
+
+<span class="comment"># Remove duplicates based on specific columns</span>
+df = df.<span class="function">drop_duplicates</span>(subset=[<span class="string">'school'</span>, <span class="string">'year'</span>])</div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="card card-info">
+                    <h3>duplicated()</h3>
+                    <p style="margin-top: 10px;">Returns True/False for each row. True means "this row appeared before."</p>
+                    <p style="margin-top: 10px;"><code class="code-inline">keep=False</code> marks ALL copies as True (not just the second one).</p>
                 </div>
-                <div>
-                    <h2>Advanced GroupBy</h2>
-                    <div class="code-block"><span class="comment"># Group by MULTIPLE columns</span>
-df.<span class="function">groupby</span>([<span class="string">'year'</span>, <span class="string">'department'</span>])[<span class="string">'students'</span>].<span class="function">sum</span>()
-
-<span class="comment"># Multiple aggregations at once</span>
-df.<span class="function">groupby</span>(<span class="string">'department'</span>).<span class="function">agg</span>({
-    <span class="string">'students'</span>: <span class="string">'sum'</span>,
-    <span class="string">'grade'</span>: <span class="string">'mean'</span>,
-    <span class="string">'school_id'</span>: <span class="string">'count'</span>
-})</div>
+                <div class="card card-success">
+                    <h3>drop_duplicates()</h3>
+                    <p style="margin-top: 10px;">Removes the duplicate rows, keeping the first occurrence by default.</p>
+                    <p style="margin-top: 10px;"><code class="code-inline">subset=</code> lets you check only specific columns for duplication.</p>
                 </div>
             </div>
 
-            <div class="alert alert-success">
-                <strong>Pattern:</strong> <code class="code-inline">df.groupby('CATEGORY')['VALUE'].AGGREGATION()</code>
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <strong>Be careful:</strong> Not all duplicates are errors. A school reporting the same data for two different grades may look duplicated but is valid. Use <code class="code-inline">subset=</code> to check only the columns that should be unique.
             </div>
         </div>
 
         <!-- =========================================
-             SLIDE 11: CONTENT - Filtering with Conditions
+             SLIDE 15: String Inconsistencies
              ========================================= -->
         <div class="slide">
-            <h1>Filtering with Multiple Conditions</h1>
-            <div class="grid-2">
+            <h1>Fixing Text Inconsistencies</h1>
+
+            <div class="concept-box" style="margin-bottom: 20px;">
+                <p><strong>To pandas, "Bogota", "BOGOTA", and " bogota " are three completely different values.</strong> This breaks grouping and counting.</p>
+            </div>
+
+            <div class="before-after">
                 <div>
-                    <h2>Single Condition</h2>
-                    <div class="code-block"><span class="comment"># Students with grade > 80</span>
-df[df[<span class="string">'grade'</span>] > <span class="number">80</span>]
-
-<span class="comment"># Only Bogota</span>
-df[df[<span class="string">'city'</span>] == <span class="string">'Bogota'</span>]
-
-<span class="comment"># Exclude nulls</span>
-df[df[<span class="string">'grade'</span>].<span class="function">notna</span>()]</div>
+                    <h3 style="text-align: center; color: #d63031;">Before</h3>
+                    <div class="dataframe-visual">
+                        <div class="header-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell"></div>
+                            <div class="cell">Department</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell">Bogota</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell">BOGOTA</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell">&nbsp; bogota &nbsp;</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">3</div>
+                            <div class="cell">BOGOTA</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #d63031; margin-top: 10px;"><strong>nunique() = 3</strong> (wrong!)</p>
                 </div>
+                <div class="arrow" style="text-align: center; font-size: 3rem;">&#8594;</div>
                 <div>
-                    <h2>Multiple Conditions</h2>
-                    <div class="code-block"><span class="comment"># AND: Both must be true</span>
-df[(df[<span class="string">'grade'</span>] > <span class="number">80</span>) & (df[<span class="string">'year'</span>] == <span class="number">2023</span>)]
-
-<span class="comment"># OR: Either can be true</span>
-df[(df[<span class="string">'city'</span>] == <span class="string">'Bogota'</span>) | (df[<span class="string">'city'</span>] == <span class="string">'Medellin'</span>)]
-
-<span class="comment"># IN: Match any in list</span>
-cities = [<span class="string">'Bogota'</span>, <span class="string">'Medellin'</span>, <span class="string">'Cali'</span>]
-df[df[<span class="string">'city'</span>].<span class="function">isin</span>(cities)]</div>
+                    <h3 style="text-align: center; color: #00b894;">After</h3>
+                    <div class="dataframe-visual" style="border-color: #00b894;">
+                        <div class="header-row" style="grid-template-columns: 60px 1fr; background: linear-gradient(135deg, #00b894, #00cec9);">
+                            <div class="cell"></div>
+                            <div class="cell">Department</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">0</div>
+                            <div class="cell cell-ok">BOGOTA</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">1</div>
+                            <div class="cell cell-ok">BOGOTA</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">2</div>
+                            <div class="cell cell-ok">BOGOTA</div>
+                        </div>
+                        <div class="data-row" style="grid-template-columns: 60px 1fr;">
+                            <div class="cell index-cell">3</div>
+                            <div class="cell cell-ok">BOGOTA</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #00b894; margin-top: 10px;"><strong>nunique() = 1</strong> (correct!)</p>
                 </div>
             </div>
 
-            <div class="alert alert-danger" style="margin-top: 20px;">
-                <strong>Common Mistake:</strong> Using <code class="code-inline">and</code> instead of <code class="code-inline">&</code>. Always use <code class="code-inline">&</code> (and) and <code class="code-inline">|</code> (or) in pandas!
-            </div>
+            <div class="code-block" style="margin-top: 20px;"><span class="comment"># Standardize: uppercase + remove whitespace</span>
+df[<span class="string">'department'</span>] = df[<span class="string">'department'</span>].str.<span class="function">upper</span>().str.<span class="function">strip</span>()
+
+<span class="comment"># Check the result</span>
+<span class="function">print</span>(df[<span class="string">'department'</span>].<span class="function">nunique</span>())   <span class="comment"># Should be fewer unique values now</span>
+<span class="function">print</span>(df[<span class="string">'department'</span>].<span class="function">unique</span>())    <span class="comment"># See all standardized values</span></div>
         </div>
 
         <!-- =========================================
-             SLIDE 12: CONTENT - Complete Cleaning Workflow
+             SLIDE 16: Complete Cleaning Workflow
              ========================================= -->
         <div class="slide">
-            <h1>The 5-Step Cleaning Process</h1>
+            <h1>The 5-Step Cleaning Workflow</h1>
 
             <div class="process-flow">
                 <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
                     <strong>1. Inspect</strong><br>
-                    <code style="font-size: 0.8rem;">df.info()</code>
+                    <code style="font-size: 0.8rem;">df.info()</code><br>
+                    <code style="font-size: 0.8rem;">df.dtypes</code>
                 </div>
-                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                <div class="process-arrow">&#8594;</div>
+                <div class="process-step" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);">
                     <strong>2. Missing</strong><br>
-                    <code style="font-size: 0.8rem;">isnull().sum()</code>
+                    <code style="font-size: 0.8rem;">isnull().sum()</code><br>
+                    <code style="font-size: 0.8rem;">fillna() / dropna()</code>
                 </div>
-                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                <div class="process-arrow">&#8594;</div>
+                <div class="process-step" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">
                     <strong>3. Types</strong><br>
-                    <code style="font-size: 0.8rem;">astype()</code>
+                    <code style="font-size: 0.8rem;">astype()</code><br>
+                    <code style="font-size: 0.8rem;">to_datetime()</code>
                 </div>
-                <div class="process-step" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
-                    <strong>4. Filter</strong><br>
-                    <code style="font-size: 0.8rem;">df[condition]</code>
+                <div class="process-arrow">&#8594;</div>
+                <div class="process-step" style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);">
+                    <strong>4. Duplicates</strong><br>
+                    <code style="font-size: 0.8rem;">duplicated()</code><br>
+                    <code style="font-size: 0.8rem;">drop_duplicates()</code>
                 </div>
+                <div class="process-arrow">&#8594;</div>
                 <div class="process-step" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
-                    <strong>5. Aggregate</strong><br>
-                    <code style="font-size: 0.8rem;">groupby()</code>
+                    <strong>5. Consistency</strong><br>
+                    <code style="font-size: 0.8rem;">str.upper()</code><br>
+                    <code style="font-size: 0.8rem;">str.strip()</code>
                 </div>
             </div>
 
-            <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Complete example with Education data</span>
+            <div class="code-block" style="font-size: 0.85rem;"><span class="comment"># Complete cleaning workflow example</span>
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
 <span class="comment"># 1. Load and inspect</span>
 df = pd.<span class="function">read_csv</span>(<span class="string">'education_stats.csv'</span>)
 <span class="function">print</span>(df.<span class="function">shape</span>, df.<span class="function">dtypes</span>)
 
-<span class="comment"># 2. Handle missing</span>
-df[<span class="string">'dropout_rate'</span>].<span class="function">fillna</span>(df[<span class="string">'dropout_rate'</span>].<span class="function">mean</span>(), inplace=<span class="keyword">True</span>)
+<span class="comment"># 2. Handle missing values</span>
+df[<span class="string">'students'</span>] = df[<span class="string">'students'</span>].<span class="function">fillna</span>(<span class="number">0</span>)
+df = df.<span class="function">dropna</span>(subset=[<span class="string">'department'</span>])
 
-<span class="comment"># 3. Fix types</span>
-df[<span class="string">'year'</span>] = df[<span class="string">'year'</span>].<span class="function">astype</span>(<span class="function">int</span>)
+<span class="comment"># 3. Fix data types</span>
+df[<span class="string">'year'</span>] = df[<span class="string">'year'</span>].<span class="function">fillna</span>(<span class="number">0</span>).<span class="function">astype</span>(<span class="function">int</span>)
 
-<span class="comment"># 4. Filter to recent years</span>
-df = df[df[<span class="string">'year'</span>] >= <span class="number">2020</span>]
+<span class="comment"># 4. Remove duplicates</span>
+df = df.<span class="function">drop_duplicates</span>()
 
-<span class="comment"># 5. Aggregate by department</span>
-summary = df.<span class="function">groupby</span>(<span class="string">'department'</span>).<span class="function">agg</span>({<span class="string">'students'</span>: <span class="string">'sum'</span>, <span class="string">'dropout_rate'</span>: <span class="string">'mean'</span>})</div>
+<span class="comment"># 5. Standardize text</span>
+df[<span class="string">'department'</span>] = df[<span class="string">'department'</span>].str.<span class="function">upper</span>().str.<span class="function">strip</span>()</div>
         </div>
 
         <!-- =========================================
-             SLIDE 13: SUMMARY - Key Functions
+             SLIDE 17: In-Class Exercise
+             ========================================= -->
+        <div class="slide">
+            <h1>In-Class Exercise</h1>
+
+            <div class="concept-box" style="text-align: center; margin-bottom: 30px;">
+                <p style="font-size: 1.4rem;"><strong>Now it's your turn!</strong></p>
+                <p style="font-size: 1.1rem;">Open the exercise notebook and follow along.</p>
+                <p style="margin-top: 15px; font-size: 0.95rem; opacity: 0.8;">
+                    <code class="code-inline">semana03/exercise/exercise.ipynb</code>
+                </p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card card-info">
+                    <h3 style="text-align: center;">Part 1</h3>
+                    <p style="text-align: center; margin-top: 10px; font-size: 1.05rem;">
+                        <strong>Inspect the Data</strong>
+                    </p>
+                    <p style="text-align: center; margin-top: 8px;">
+                        shape, dtypes, isnull, describe
+                    </p>
+                </div>
+                <div class="card card-warning">
+                    <h3 style="text-align: center;">Part 2</h3>
+                    <p style="text-align: center; margin-top: 10px; font-size: 1.05rem;">
+                        <strong>Handle Missing Values</strong>
+                    </p>
+                    <p style="text-align: center; margin-top: 8px;">
+                        fillna, dropna, decision framework
+                    </p>
+                </div>
+                <div class="card card-success">
+                    <h3 style="text-align: center;">Part 3</h3>
+                    <p style="text-align: center; margin-top: 10px; font-size: 1.05rem;">
+                        <strong>Fix Types, Duplicates & Text</strong>
+                    </p>
+                    <p style="text-align: center; margin-top: 8px;">
+                        astype, drop_duplicates, str.upper
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="alert alert-info" style="text-align: center;">
+                    <strong>Duration:</strong> ~30 minutes<br>
+                    All code is already written for you. Just run each cell and read the explanations.
+                </div>
+                <div class="alert alert-success" style="text-align: center;">
+                    <strong>How to work:</strong><br>
+                    Read the markdown, run the code, observe the output, understand why.
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 18: Summary Toolkit
              ========================================= -->
         <div class="slide">
             <h1>Your Data Cleaning Toolkit</h1>
@@ -1037,61 +1534,45 @@ summary = df.<span class="function">groupby</span>(<span class="string">'departm
             <table class="table-styled">
                 <thead>
                     <tr>
-                        <th>Task</th>
-                        <th>Function</th>
-                        <th>Quick Example</th>
+                        <th>Problem</th>
+                        <th>Detect</th>
+                        <th>Fix</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Find missing values</td>
+                        <td><strong>Missing values</strong></td>
                         <td><code class="code-inline">isnull().sum()</code></td>
-                        <td><code>df.isnull().sum()</code></td>
+                        <td><code class="code-inline">fillna()</code> or <code class="code-inline">dropna()</code></td>
                     </tr>
                     <tr>
-                        <td>Fill missing values</td>
-                        <td><code class="code-inline">fillna(value)</code></td>
-                        <td><code>df['col'].fillna(0)</code></td>
+                        <td><strong>Wrong types</strong></td>
+                        <td><code class="code-inline">dtypes</code></td>
+                        <td><code class="code-inline">astype()</code> or <code class="code-inline">to_datetime()</code></td>
                     </tr>
                     <tr>
-                        <td>Remove missing rows</td>
-                        <td><code class="code-inline">dropna()</code></td>
-                        <td><code>df.dropna(subset=['col'])</code></td>
+                        <td><strong>Duplicates</strong></td>
+                        <td><code class="code-inline">duplicated().sum()</code></td>
+                        <td><code class="code-inline">drop_duplicates()</code></td>
                     </tr>
                     <tr>
-                        <td>Change data type</td>
-                        <td><code class="code-inline">astype(type)</code></td>
-                        <td><code>df['year'].astype(int)</code></td>
-                    </tr>
-                    <tr>
-                        <td>Group and aggregate</td>
-                        <td><code class="code-inline">groupby().agg()</code></td>
-                        <td><code>df.groupby('cat')['val'].mean()</code></td>
-                    </tr>
-                    <tr>
-                        <td>Filter rows</td>
-                        <td><code class="code-inline">df[condition]</code></td>
-                        <td><code>df[df['col'] > 10]</code></td>
+                        <td><strong>Text inconsistencies</strong></td>
+                        <td><code class="code-inline">nunique()</code> + <code class="code-inline">unique()</code></td>
+                        <td><code class="code-inline">str.upper().str.strip()</code></td>
                     </tr>
                 </tbody>
             </table>
-        </div>
 
-        <!-- =========================================
-             SLIDE 14: SUMMARY - Next Steps
-             ========================================= -->
-        <div class="slide">
-            <h1>Summary & Next Steps</h1>
-            <div class="grid-2">
+            <div class="grid-2" style="margin-top: 30px;">
                 <div>
                     <h2>What We Learned</h2>
                     <div class="card card-info">
                         <ul style="list-style: none;">
                             <li style="padding: 8px 0;">Data cleaning = sorting dirty laundry</li>
-                            <li style="padding: 8px 0;"><code class="code-inline">isnull()</code> finds missing values</li>
-                            <li style="padding: 8px 0;"><code class="code-inline">fillna()</code> / <code class="code-inline">dropna()</code> handles them</li>
-                            <li style="padding: 8px 0;"><code class="code-inline">astype()</code> fixes data types</li>
-                            <li style="padding: 8px 0;"><code class="code-inline">groupby()</code> = sorting M&Ms by color</li>
+                            <li style="padding: 8px 0;">NaN = empty seat in a classroom</li>
+                            <li style="padding: 8px 0;">Drop vs. fill depends on how much is missing</li>
+                            <li style="padding: 8px 0;">Always fix types before doing math</li>
+                            <li style="padding: 8px 0;">Standardize text before grouping</li>
                         </ul>
                     </div>
                 </div>
@@ -1108,11 +1589,11 @@ summary = df.<span class="function">groupby</span>(<span class="string">'departm
                 </div>
             </div>
 
-            <div class="alert alert-success" style="margin-top: 30px; text-align: center;">
-                <strong>Remember:</strong> 80% of data work is cleaning. Master this, and you're 80% of the way to being a great analyst!
+            <div class="alert alert-success" style="margin-top: 20px; text-align: center;">
+                <strong>Next week:</strong> Data Filtering & Selection - learning to find exactly the rows you need.
             </div>
 
-            <div style="text-align: center; margin-top: 30px;">
+            <div style="text-align: center; margin-top: 20px;">
                 <div class="card card-success" style="display: inline-block;">
                     <h3 style="margin: 0;">Questions?</h3>
                     <p style="margin: 10px 0 0 0;">Let's discuss before the exercise!</p>
