@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this workshop, you will practice data cleaning techniques using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS).
+In this workshop, you will practice data cleaning techniques using the Health Indicators dataset (Mortality and Morbidity) from Colombia's Ministry of Health and Social Protection.
 
 **Duration:** 2 hours (independent work)
 
@@ -26,19 +26,15 @@ By completing this workshop, you will be able to:
 
 ## Dataset
 
-**Source:** Ministerio de Educacion Nacional (MEN) via datos.gov.co
+**Source:** Ministerio de Salud y Proteccion Social via datos.gov.co
 
-**Description:** Education statistics from the Colombian Ministry of Education containing:
-- Coverage rates (net and gross) by education level
-- Dropout, approval, failure, and repetition rates
-- Population data (ages 5-16) by department
-- Historical data across multiple years (2011-2024)
+**Description:** Mortality and morbidity indicators for Colombian municipalities including mortality rates (general, infant, neonatal, fetal, maternal), birth indicators (low weight, cesarean rate, institutional deliveries, prenatal checkups), and teen fertility rates.
 
-**Size:** 482 rows (dirty version, ~462 after cleaning) x 37 columns (one row per department per year)
+**Size:** 532 rows (dirty version, ~512 after cleaning) x 15 columns (one row per municipality per year)
 
-**Loading:** Data is loaded from a local CSV file at `../data/educacion_estadisticas.csv`
+**Loading:** Data is loaded from a local CSV file at `../data/indicadores_salud.csv`
 
-**Key columns:** `ano`, `departamento`, `poblacion_5_16`, `cobertura_neta`, `desercion`, `aprobacion`, `reprobacion`, `repitencia`
+**Key columns:** `ano`, `departamento`, `municipio`, `mortalidad_general`, `mortalidad_infantil`, `bajo_peso_nacer`, `partos_institucionales`, `partos_cesarea`
 
 ---
 
@@ -52,11 +48,11 @@ Each part addresses one data quality issue with code and documentation:
 
 | Part | Issue | Technique |
 |------|-------|-----------|
-| 2 | Missing values | `fillna()` with 0 or median, `dropna(subset=...)` |
-| 3 | Data types | `pd.to_numeric()`, `astype()`, `str.replace()` |
+| 2 | Missing values | `fillna()` with 0 for mortalidad_materna, median for rates, `dropna(subset=...)` for departamento |
+| 3 | Data types | `pd.to_numeric()`, `astype()`, `str.replace()` for ano and cod_municipio |
 | 4 | Duplicates | `duplicated()`, `drop_duplicates()` |
-| 5 | Text inconsistencies | `str.upper()`, `str.strip()` |
-| 6 | Invalid values | `describe()` min/max, boolean masks, domain validation |
+| 5 | Text inconsistencies | `str.upper()`, `str.strip()` on departamento |
+| 6 | Invalid values | `describe()` min/max, boolean masks, domain validation on percentage columns |
 
 ### Part 7: Final Verification
 Compare original vs. cleaned dataset statistics, confirm all issues resolved.
@@ -124,8 +120,9 @@ This workshop is for practice and feedback. Focus on:
 - Review your class notes on `fillna()`, `dropna()`, `astype()`, `drop_duplicates()`
 
 ### While Working
-- Check the data type BEFORE converting (some columns may already be correct)
+- Check `ano` and `cod_municipio` types early, they may not be what you expect
 - Remember: `fillna()` returns a new object, use assignment
+- Percentage columns like `bajo_peso_nacer`, `partos_cesarea`, `partos_institucionales` should be between 0 and 100
 - Always verify your fix worked before moving to the next issue
 
 ### If Stuck
@@ -154,10 +151,10 @@ These exact techniques will be needed for Milestone 1:
 | Workshop Skill | Project Application |
 |----------------|---------------------|
 | Missing value handling | Clean your datos.gov.co dataset |
-| Type conversion | Ensure numeric columns are numeric |
+| Type conversion | Ensure `ano` and code columns are integers, rates are floats |
 | Duplicate removal | Remove any duplicated records |
-| Text standardization | Standardize categorical values for grouping |
-| Domain validation | Identify impossible values using domain knowledge |
+| Text standardization | Standardize department and municipality names for grouping |
+| Domain validation | Check that mortality rates and percentages fall within valid ranges |
 | Documentation | Data cleaning section of your report |
 
 ---

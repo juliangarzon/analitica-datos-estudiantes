@@ -1,11 +1,12 @@
 # Diccionario de Datos / Data Dictionary
 
-## Dataset: Estadisticas en Educacion en Preescolar, Basica y Media
+## Dataset: Indicadores de Mortalidad y Morbilidad por Municipio
 
-**Fuente / Source:** Ministerio de Educacion Nacional (MEN) - datos.gov.co
-**Periodo / Period:** 2011 - 2024
-**Granularidad / Granularity:** Un registro por departamento por ano
-**Registros esperados / Expected rows:** 462 (sin duplicados)
+**Fuente / Source:** Ministerio de Salud y Proteccion Social - datos.gov.co
+**URL:** https://www.datos.gov.co/Salud-y-Protecci-n-Social/Indicadores-mortalidad-y-morbilidad-seg-n-departam/4e4i-ua65
+**Periodo / Period:** 2005 - 2020
+**Granularidad / Granularity:** Un registro por municipio por ano / One record per municipality per year
+**Registros esperados / Expected rows:** 512 (sin duplicados / without duplicates)
 
 ---
 
@@ -13,56 +14,47 @@
 
 | Columna | Descripcion (ES) | Description (EN) | Tipo esperado | Rango esperado |
 |---------|-------------------|-------------------|---------------|----------------|
-| `ano` | Ano del reporte | Reporting year | int64 | 2011 - 2024 |
-| `c_digo_departamento` | Codigo DANE del departamento | DANE department code | int64 | 5 - 99 |
-| `departamento` | Nombre del departamento | Department name | string | 34 departamentos unicos |
-| `poblacion_5_16` | Poblacion entre 5 y 16 anos | Population aged 5-16 | int64 | > 0 |
-| `tasa_matriculacion_5_16` | Tasa de matriculacion (5-16 anos) | Enrollment rate (5-16) | float64 | 0 - 100 |
-| `cobertura_neta` | Cobertura neta total | Net coverage (total) | float64 | 0 - 100 |
-| `cobertura_neta_transicion` | Cobertura neta en transicion | Net coverage (transition/preschool) | float64 | 0 - 100 |
-| `cobertura_neta_primaria` | Cobertura neta en primaria | Net coverage (primary) | float64 | 0 - 100 |
-| `cobertura_neta_secundaria` | Cobertura neta en secundaria | Net coverage (secondary) | float64 | 0 - 100 |
-| `cobertura_neta_media` | Cobertura neta en media | Net coverage (high school) | float64 | 0 - 100 |
-| `cobertura_bruta` | Cobertura bruta total | Gross coverage (total) | float64 | 0 - 200+ |
-| `cobertura_bruta_transicion` | Cobertura bruta en transicion | Gross coverage (transition) | float64 | 0 - 200+ |
-| `cobertura_bruta_primaria` | Cobertura bruta en primaria | Gross coverage (primary) | float64 | 0 - 200+ |
-| `cobertura_bruta_secundaria` | Cobertura bruta en secundaria | Gross coverage (secondary) | float64 | 0 - 200+ |
-| `cobertura_bruta_media` | Cobertura bruta en media | Gross coverage (high school) | float64 | 0 - 200+ |
-| `tamano_promedio_grupo` | Tamano promedio del grupo | Average class size | float64 | > 0 |
-| `sedes_conectadas_a_internet` | % de sedes con internet | % of schools with internet | float64 | 0 - 100 |
-| `desercion` | Tasa de desercion total | Total dropout rate | float64 | 0 - 100 |
-| `desercion_transicion` | Desercion en transicion | Dropout rate (transition) | float64 | 0 - 100 |
-| `desercion_primaria` | Desercion en primaria | Dropout rate (primary) | float64 | 0 - 100 |
-| `desercion_secundaria` | Desercion en secundaria | Dropout rate (secondary) | float64 | 0 - 100 |
-| `desercion_media` | Desercion en media | Dropout rate (high school) | float64 | 0 - 100 |
-| `aprobacion` | Tasa de aprobacion total | Total approval rate | float64 | 0 - 100 |
-| `aprobacion_transicion` | Aprobacion en transicion | Approval rate (transition) | float64 | 0 - 100 |
-| `aprobacion_primaria` | Aprobacion en primaria | Approval rate (primary) | float64 | 0 - 100 |
-| `aprobacion_secundaria` | Aprobacion en secundaria | Approval rate (secondary) | float64 | 0 - 100 |
-| `aprobacion_media` | Aprobacion en media | Approval rate (high school) | float64 | 0 - 100 |
-| `reprobacion` | Tasa de reprobacion total | Total failure rate | float64 | 0 - 100 |
-| `reprobacion_transicion` | Reprobacion en transicion | Failure rate (transition) | float64 | 0 - 100 |
-| `reprobacion_primaria` | Reprobacion en primaria | Failure rate (primary) | float64 | 0 - 100 |
-| `reprobacion_secundaria` | Reprobacion en secundaria | Failure rate (secondary) | float64 | 0 - 100 |
-| `reprobacion_media` | Reprobacion en media | Failure rate (high school) | float64 | 0 - 100 |
-| `repitencia` | Tasa de repitencia total | Total repetition rate | float64 | 0 - 100 |
-| `repitencia_transicion` | Repitencia en transicion | Repetition rate (transition) | float64 | 0 - 100 |
-| `repitencia_primaria` | Repitencia en primaria | Repetition rate (primary) | float64 | 0 - 100 |
-| `repitencia_secundaria` | Repitencia en secundaria | Repetition rate (secondary) | float64 | 0 - 100 |
-| `repitencia_media` | Repitencia en media | Repetition rate (high school) | float64 | 0 - 100 |
+| `cod_departamento` | Codigo DIVIPOLA del departamento | DIVIPOLA department code | int64 | 5 - 99 |
+| `departamento` | Nombre del departamento | Department name | string | 22 departamentos unicos / 22 unique departments |
+| `cod_municipio` | Codigo DIVIPOLA del municipio | DIVIPOLA municipality code | int64 | 5001 - 99001 |
+| `municipio` | Nombre del municipio | Municipality name | string | 32 municipios unicos / 32 unique municipalities |
+| `ano` | Ano del reporte | Reporting year | int64 | 2005 - 2020 |
+| `bajo_peso_nacer` | Porcentaje de nacidos vivos con bajo peso | % of live births with low weight | float64 | 0 - 100 |
+| `controles_prenatales` | Promedio de controles prenatales | Average prenatal checkups | float64 | 0 - 15 |
+| `fecundidad_adolescente` | Tasa de fecundidad en mujeres 15-19 anos | Teen fertility rate (15-19 years) | float64 | 0 - 200 |
+| `mortalidad_fetal` | Tasa de mortalidad fetal | Fetal mortality rate | float64 | 0 - 200 |
+| `mortalidad_general` | Tasa de mortalidad general | General mortality rate | float64 | 0 - 20 |
+| `mortalidad_infantil` | Tasa de mortalidad infantil (<1 ano) | Infant mortality rate (<1 year) | float64 | 0 - 100 |
+| `mortalidad_materna` | Razon de mortalidad materna por 100,000 | Maternal mortality ratio per 100K | float64 | 0 - 500 |
+| `mortalidad_neonatal` | Tasa de mortalidad neonatal | Neonatal mortality rate | float64 | 0 - 50 |
+| `partos_cesarea` | Porcentaje de partos por cesarea | % cesarean deliveries | float64 | 0 - 100 |
+| `partos_institucionales` | Porcentaje de partos institucionales | % institutional deliveries | float64 | 0 - 100 |
+
+---
+
+## Problemas de Calidad Conocidos (Version Sucia) / Known Quality Issues (Dirty Version)
+
+1. **Valores faltantes / Missing values:** Varias columnas de indicadores tienen valores nulos, asi como la columna `departamento`. Some indicator columns and the `departamento` column contain null values.
+2. **Ano como float / Year as float:** La columna `ano` esta almacenada como float (e.g., 2015.0) en lugar de int. The `ano` column is stored as float instead of int.
+3. **Codigo municipio con formato incorrecto / Municipality code with bad format:** La columna `cod_municipio` contiene comas (e.g., "5,001") y valores "sin dato". The `cod_municipio` column has commas and "sin dato" entries.
+4. **Inconsistencias en texto / Text inconsistencies:** La columna `departamento` tiene problemas de mayusculas/minusculas y espacios en blanco. The `departamento` column has case and whitespace inconsistencies.
+5. **Valores invalidos / Invalid values:** Algunas columnas de porcentaje tienen valores menores a 0 o mayores a 100. Some percentage columns have values below 0 or above 100.
 
 ---
 
 ## Notas / Notes
 
-- **Cobertura neta** (net coverage): Porcentaje de la poblacion en edad correspondiente que esta matriculada en el nivel educativo apropiado. No puede superar 100%.
-- **Cobertura bruta** (gross coverage): Incluye estudiantes de cualquier edad en el nivel educativo. Puede superar 100% si hay estudiantes en extra-edad.
-- **Desercion** (dropout): Porcentaje de estudiantes que abandonan el sistema educativo durante el ano escolar.
-- **Aprobacion** (approval): Porcentaje de estudiantes que aprueban el ano escolar.
-- **Reprobacion** (failure): Porcentaje de estudiantes que reprueban el ano escolar.
-- **Repitencia** (repetition): Porcentaje de estudiantes que repiten el ano escolar.
-- Las columnas `tamano_promedio_grupo` y `sedes_conectadas_a_internet` solo estan disponibles hasta 2017.
+- **Mortalidad general** (general mortality): Tasa de defunciones por cada 1,000 habitantes. Number of deaths per 1,000 population.
+- **Mortalidad infantil** (infant mortality): Defunciones de menores de 1 ano por cada 1,000 nacidos vivos. Deaths of children under 1 year per 1,000 live births.
+- **Mortalidad neonatal** (neonatal mortality): Defunciones en los primeros 28 dias de vida por cada 1,000 nacidos vivos. Deaths in the first 28 days of life per 1,000 live births.
+- **Mortalidad fetal** (fetal mortality): Defunciones fetales por cada 1,000 nacimientos (vivos y muertos). Fetal deaths per 1,000 births (live and still).
+- **Mortalidad materna** (maternal mortality): Defunciones maternas por cada 100,000 nacidos vivos. Maternal deaths per 100,000 live births.
+- **Bajo peso al nacer** (low birth weight): Porcentaje de nacidos vivos con peso inferior a 2,500 gramos. Percentage of live births weighing less than 2,500 grams.
+- **Partos institucionales** (institutional deliveries): Porcentaje de partos atendidos en instituciones de salud. Percentage of deliveries attended in health institutions.
+- **Partos cesarea** (cesarean deliveries): Porcentaje de partos realizados por cesarea. Percentage of deliveries performed by cesarean section.
+- **Fecundidad adolescente** (teen fertility): Numero de nacimientos por cada 1,000 mujeres entre 15 y 19 anos. Number of births per 1,000 women aged 15-19.
+- **Controles prenatales** (prenatal checkups): Promedio de visitas de control prenatal por embarazo. Average number of prenatal care visits per pregnancy.
 
-## Departamentos de Colombia
+## Municipios / Municipalities
 
-El dataset incluye los 32 departamentos de Colombia, mas Bogota D.C. y un registro nacional. Ejemplos: Antioquia, Atlantico, Bogota D.C., Bolivar, Boyaca, Caldas, Caqueta, Cauca, Cesar, Cordoba, Cundinamarca, Choco, Huila, La Guajira, Magdalena, Meta, Narino, Norte de Santander, Quindio, Risaralda, Santander, Sucre, Tolima, Valle del Cauca, Arauca, Casanare, Putumayo, San Andres, Amazonas, Guainia, Guaviare, Vaupes, Vichada.
+El dataset incluye 32 municipios de 22 departamentos de Colombia. Los datos cubren capitales departamentales y municipios representativos. / The dataset includes 32 municipalities from 22 Colombian departments. Data covers departmental capitals and representative municipalities.
