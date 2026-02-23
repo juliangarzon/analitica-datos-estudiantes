@@ -927,14 +927,14 @@ COMBINE into a table:
             <div class="code-example"><span class="comment"># GroupBy basic pattern:</span>
 <span class="comment"># df.groupby('column_to_split_by')['column_to_measure'].operation()</span>
 
-<span class="comment"># Average consumption BY use type</span>
-df.groupby(<span class="string">'USO'</span>)[<span class="string">'CONSUMO_FACTURADO'</span>].mean()
+<span class="comment"># Average consumption BY stratum/category</span>
+df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_ACUEDUCTO'</span>].mean()
 
-<span class="comment"># Total billing BY department</span>
-df.groupby(<span class="string">'DEPARTAMENTO'</span>)[<span class="string">'VALOR_FACTURADO'</span>].sum()
+<span class="comment"># Total consumption BY municipality</span>
+df.groupby(<span class="string">'MUNICIPIO'</span>)[<span class="string">'CONSUMO_ACUEDUCTO'</span>].sum()
 
 <span class="comment"># Count records BY stratum</span>
-df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_FACTURADO'</span>].count()</div>
+df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_ACUEDUCTO'</span>].count()</div>
             <div class="concept-grid" style="margin-top: 30px;">
                 <div class="concept-card success">
                     <h3>The Pattern</h3>
@@ -961,20 +961,20 @@ df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_
         <div class="slide">
             <h1>GroupBy with Water Consumption Data</h1>
             <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 20px;">Real questions answered with one line of code</p>
-            <div class="code-example"><span class="comment"># Question: Do commercial users consume more than residential?</span>
-df.groupby(<span class="string">'USO'</span>)[<span class="string">'CONSUMO_FACTURADO'</span>].mean()
-<span class="comment"># USO
-# Comercial       12,450.3
-# Industrial      45,320.7
-# Residencial      2,180.5</span>
+            <div class="code-example"><span class="comment"># Question: Which stratum/category consumes the most water?</span>
+df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_ACUEDUCTO'</span>].mean()
+<span class="comment"># ESTRATO
+# Industrial      45,320.3
+# Comercial       12,450.7
+# Estrato6         3,180.5</span>
 
-<span class="comment"># Question: Which department has the most subscribers?</span>
-df.groupby(<span class="string">'DEPARTAMENTO'</span>)[<span class="string">'NUMERO_SUSCRIPTORES'</span>].sum().sort_values(ascending=<span class="keyword">False</span>).head(<span class="number">5</span>)
+<span class="comment"># Question: Which municipality has the most subscribers?</span>
+df.groupby(<span class="string">'MUNICIPIO'</span>)[<span class="string">'SUSCRIPTORES_ACUEDUCTO'</span>].sum().sort_values(ascending=<span class="keyword">False</span>).head(<span class="number">5</span>)
 
 <span class="comment"># Question: What is the median consumption per stratum?</span>
-df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_FACTURADO'</span>].median()</div>
+df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_ACUEDUCTO'</span>].median()</div>
             <div class="alert-box success" style="margin-top: 30px;">
-                <strong>Why GroupBy matters for EDA:</strong> Instead of one mean for the entire dataset, you get one mean per group. This reveals patterns you would never see in a single number. "Average consumption is 5,000 m3" hides the fact that commercial users consume 20x more than residential users.
+                <strong>Why GroupBy matters for EDA:</strong> Instead of one mean for the entire dataset, you get one mean per group. This reveals patterns you would never see in a single number. "Average consumption is 5,000 m3" hides the fact that industrial users consume 20x more than residential users.
             </div>
             <div class="alert-box warning" style="margin-top: 15px;">
                 <strong>Tip:</strong> Add <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">.sort_values(ascending=False)</code> to see the largest groups first. Add <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">.head(10)</code> to see just the top 10.
@@ -1399,9 +1399,9 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
                         <div>
                             <h3 style="color: white; margin-bottom: 20px;">Variables to Analyze:</h3>
                             <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- CONSUMO_FACTURADO (billed consumption)</li>
-                                <li style="padding: 8px 0;">- VALOR_FACTURADO (billed amount)</li>
-                                <li style="padding: 8px 0;">- NUMERO_SUSCRIPTORES (subscribers)</li>
+                                <li style="padding: 8px 0;">- producci_n_t (production in tons)</li>
+                                <li style="padding: 8px 0;">- rea_sembrada_ha (area planted in ha)</li>
+                                <li style="padding: 8px 0;">- rendimiento_t_ha (yield in t/ha)</li>
                             </ul>
                         </div>
                     </div>
@@ -1433,14 +1433,14 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
                     </div>
                 </div>
                 <div>
-                    <h2>Next Week (Week 6) - Milestone 1:</h2>
+                    <h2>Next Week (Week 6) - Bivariate Analysis:</h2>
                     <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                        <h3 style="color: white; margin-bottom: 15px;">Cleaning + Univariate EDA Evaluation</h3>
+                        <h3 style="color: white; margin-bottom: 15px;">EDA Part 2: Relationships Between Variables</h3>
                         <ul style="list-style: none; line-height: 2;">
-                            <li>Submit your cleaned dataset + univariate analysis</li>
-                            <li>No bivariate required (that comes in Week 7)</li>
-                            <li>Focus: data quality, distributions, insights</li>
-                            <li>Review the rubric and prepare your notebook</li>
+                            <li>How do variables relate to each other?</li>
+                            <li>Correlation, scatter plots, grouped comparisons</li>
+                            <li>Then: Milestone 1 evaluation in Week 7</li>
+                            <li>Start reviewing the rubric and preparing your notebook</li>
                         </ul>
                     </div>
                 </div>

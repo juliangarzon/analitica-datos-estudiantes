@@ -1411,7 +1411,7 @@ df.<span class="function">query</span>(<span class="string">'2020 <= ano <= 2023
             <div class="code-block"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
 <span class="comment"># 1. Load and quick-clean (Week 3 skills)</span>
-df = pd.<span class="function">read_csv</span>(<span class="string">'../../semana03/data/educacion_estadisticas.csv'</span>)
+df = pd.<span class="function">read_csv</span>(<span class="string">'../data/educacion_estadisticas.csv'</span>)
 df[<span class="string">'departamento'</span>] = df[<span class="string">'departamento'</span>].str.<span class="function">upper</span>().str.<span class="function">strip</span>()
 df[<span class="string">'ano'</span>] = df[<span class="string">'ano'</span>].<span class="function">fillna</span>(<span class="number">0</span>).<span class="function">astype</span>(<span class="function">int</span>)
 

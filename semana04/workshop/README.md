@@ -2,11 +2,14 @@
 
 ## Overview
 
-In this workshop, you will practice advanced data filtering techniques using the Education Statistics dataset from Colombia's Ministry of Education (MEN_ESTADISTICAS). You will answer real analytical questions by building single and combined filters.
+| Field | Value |
+|-------|-------|
+| Topic | Data Filtering & Selection |
+| Dataset | Traffic Accident Vehicles (`vehiculos_accidentes`) |
+| Duration | ~2 hours |
+| Deliverable | Completed notebook with filtering exercises |
 
-**Duration:** 2 hours (independent work)
-
-**Deadline:** Before Week 5 class
+Practice filtering techniques to answer analytical questions about vehicles involved in traffic accidents across Colombia. This is independent work with scaffolded hints.
 
 ---
 
@@ -24,30 +27,42 @@ By completing this workshop, you will be able to:
 
 ## Dataset
 
-**Source:** Ministerio de Educacion Nacional (MEN) via datos.gov.co
+**Source:** Ministerio de Transporte via datos.gov.co - Vehiculos Involucrados en un Accidente de Transito
 
-**Description:** Same Education Statistics dataset from Week 3, containing:
-- Coverage rates (net and gross) by education level
-- Dropout, approval, failure, and repetition rates
-- Population data (ages 5-16) by department
-- Historical data across multiple years (2011-2024)
+**URL:** https://www.datos.gov.co/resource/6jmc-vaxk
 
-**Loading:** Data is loaded from `../../semana03/data/educacion_estadisticas.csv`. A quick-clean setup cell applies the Week 3 cleaning steps before you start filtering.
+**Size:** ~20,000 records of vehicles involved in traffic accidents in Colombia (December 2022-2025).
+
+### Columns
+
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `marca_vehiculo` | Vehicle brand | text | AKT, YAMAHA, CHEVROLET |
+| `modelo_vehiculo` | Model year | int | 2026, 2015, 1998 |
+| `tipo_vehiculo` | Vehicle type | text | MOTOCICLETA, AUTOMOVIL, CAMIONETA |
+| `edad_vehiculo` | Vehicle age in years | float | 1, 10, 25 |
+| `fecha_accidente` | Accident date (month/year) | text | 12/2025, 12/2023 |
+| `gravedad_accidente` | Accident severity | text | CON HERIDOS, CON MUERTOS |
+| `departamento_accidente` | Department | text | ANTIOQUIA, BOGOTA D.C. |
+| `municipio_accidente` | Municipality | text | MEDELLIN, BOGOTA, CALI |
+| `autoridad_de_transito` | Transit authority | text | STRIA DE TTOyTTE MEDELLIN |
+
+**Loading:** Data is loaded from `../data/vehiculos_accidentes.csv`. No cleaning is needed for this dataset (it is already clean).
 
 ---
 
 ## Workshop Structure
 
-### Part 1: Single Condition Filters
+### Part 1: Single Condition Filters (20 min)
 Practice individual filters with each comparison operator. Build confidence with the basic pattern before combining.
 
-### Part 2: Combining Conditions
-Use AND, OR, and NOT to answer questions that require multiple criteria. Practice with both boolean indexing and .query().
+### Part 2: Combining Conditions (30 min)
+Use AND, OR, and NOT to answer questions that require multiple criteria. Practice both boolean indexing and .isin().
 
-### Part 3: Convenience Methods
-Use .isin(), .between(), and .str.contains() for common filtering patterns.
+### Part 3: Convenience Methods (20 min)
+Use .isin(), .between(), .str.contains(), .str.startswith(), and .query() for common filtering patterns.
 
-### Part 4: Analytical Questions
+### Part 4: Analytical Questions (30 min)
 Translate real questions into filter code and interpret the results. This is the core skill for EDA.
 
 ### Part 5: Reflection
@@ -69,16 +84,16 @@ Document your approach and connect filtering skills to your project.
 ### Step 1: Setup
 
 1. Open `workshop_starter.ipynb` in Jupyter or VS Code
-2. Run the setup cell to load and quick-clean the dataset
-3. Review the dataset structure
+2. Run the setup cell to load the dataset
+3. Review the dataset structure (columns, value counts, etc.)
 
 ### Step 2: Work Through Parts 1-4
 
 For each task:
 1. Read the question carefully
 2. Translate the question into a filter condition
-3. Write and run the code
-4. Interpret the result (how many rows? which departments?)
+3. Write and run the code (use the hints provided)
+4. Interpret the result (how many rows? which vehicle types? which departments?)
 
 ### Step 3: Reflection
 
@@ -119,17 +134,6 @@ This workshop is for practice and feedback. Focus on:
 
 ---
 
-## Submission
-
-Submit your completed `workshop_starter.ipynb` via the course LMS before the deadline.
-
-Ensure that:
-- All cells have been executed (run all)
-- Your code produces the expected outputs
-- Your interpretation cells are filled in
-
----
-
 ## Connection to Project
 
 These filtering skills are essential for Milestone 1:
@@ -145,11 +149,21 @@ These filtering skills are essential for Milestone 1:
 
 ---
 
+## Submission
+
+Submit your completed `workshop_starter.ipynb` via the course LMS before the Week 5 class.
+
+Ensure that:
+- All cells have been executed (run all)
+- Your code produces the expected outputs
+- Your interpretation cells are filled in
+
+---
+
 ## Resources
 
 - Pandas Boolean Indexing: https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing
 - Pandas .query() Method: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html
-- Real Python - Filtering DataFrames: https://realpython.com/python-data-cleaning-numpy-pandas/
 
 ---
 

@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | **Topic** | EDA Part 1 - Univariate Analysis |
-| **Dataset** | Water Consumption (HISTORICO_CONSUMO) |
+| **Dataset** | Evaluaciones Agropecuarias (EVA) |
 | **Duration** | 60-90 minutes |
 | **Deliverable** | Completed notebook with analysis of 3 variables |
 
@@ -13,7 +13,7 @@
 
 ## Objective
 
-Apply the **5-step univariate analysis framework** to three different variables from the water consumption dataset. Document your findings and determine the appropriate statistics for each variable based on its distribution.
+Apply the **5-step univariate analysis framework** to three different variables from the agricultural evaluations dataset. Document your findings and determine the appropriate statistics for each variable based on its distribution.
 
 ---
 
@@ -35,20 +35,20 @@ For each variable, you must complete:
 
 You must analyze the following **3 variables**:
 
-### Variable 1: CONSUMO_FACTURADO
-- **Description:** Billed water consumption in cubic meters (m3)
-- **Expected finding:** Right-skewed distribution with upper outliers
-- **Story to investigate:** Who are the heavy users?
+### Variable 1: producci_n_t
+- **Description:** Agricultural production in tons
+- **Expected finding:** Right-skewed distribution (few high-production crops dominate)
+- **Story to investigate:** Which crops or regions produce the most?
 
-### Variable 2: VALOR_FACTURADO
-- **Description:** Billed amount in Colombian Pesos (COP)
-- **Expected finding:** Similar pattern to consumption (they are correlated)
-- **Story to investigate:** Does the billing match consumption patterns?
+### Variable 2: rea_sembrada_ha
+- **Description:** Area planted in hectares
+- **Expected finding:** Right-skewed (few large-area operations, many small farms)
+- **Story to investigate:** Does more land always mean more production?
 
-### Variable 3: NUMERO_SUSCRIPTORES
-- **Description:** Number of subscribers/users in each municipality
-- **Expected finding:** Right-skewed (few large municipalities, many small ones)
-- **Story to investigate:** Urban vs rural distribution
+### Variable 3: rendimiento_t_ha
+- **Description:** Yield in tons per hectare (production / area)
+- **Expected finding:** Less skewed than raw production (ratio variable normalizes for farm size)
+- **Story to investigate:** Which crops are the most efficient per hectare?
 
 ---
 
@@ -79,9 +79,9 @@ After analyzing each variable individually, use **GroupBy** to compare statistic
 
 | Task | GroupBy Column | Value Column | Operation |
 |------|---------------|-------------|-----------|
-| 1 | USO (use type) | CONSUMO_FACTURADO | .mean() |
-| 2 | ESTRATO (stratum) | CONSUMO_FACTURADO | .median() |
-| 3 | DEPARTAMENTO | CONSUMO_FACTURADO | .count() and .sum() |
+| 1 | grupo_de_cultivo (crop group) | producci_n_t | .mean() |
+| 2 | ciclo_de_cultivo (crop cycle) | rendimiento_t_ha | .median() |
+| 3 | departamento | producci_n_t | .count() and .sum() |
 
 **Pattern:** `df.groupby('GROUP')['VALUE'].operation()`
 
@@ -93,9 +93,9 @@ At the end of your notebook, create a summary table like this:
 
 | Variable | Mean | Median | Distribution | Outliers (%) | Best Measure |
 |----------|------|--------|--------------|--------------|--------------|
-| CONSUMO_FACTURADO | ? | ? | ? | ? | ? |
-| VALOR_FACTURADO | ? | ? | ? | ? | ? |
-| NUMERO_SUSCRIPTORES | ? | ? | ? | ? | ? |
+| producci_n_t | ? | ? | ? | ? | ? |
+| rea_sembrada_ha | ? | ? | ? | ? | ? |
+| rendimiento_t_ha | ? | ? | ? | ? | ? |
 
 ---
 
@@ -124,11 +124,11 @@ At the end of your notebook, create a summary table like this:
 
 3. **Interpret, don't just calculate**
    - Numbers alone are not enough
-   - What does each finding mean in context?
+   - What does each finding mean in the context of Colombian agriculture?
 
 4. **Compare variables**
    - Are there similarities in their distributions?
-   - What might explain the patterns you see?
+   - Why might yield behave differently from raw production?
 
 5. **Document your decisions**
    - Explain why you chose median over mean (if applicable)
@@ -146,7 +146,7 @@ At the end of your notebook, create a summary table like this:
 
 ## Resources
 
-- **Dataset source:** [datos.gov.co - HISTORICO_CONSUMO](https://www.datos.gov.co/dataset/HISTORICO-CONSUMO/wcpc-hgdr)
+- **Dataset source:** [datos.gov.co - Evaluaciones Agropecuarias](https://www.datos.gov.co/resource/2pnw-mmge)
 - **pandas documentation:** https://pandas.pydata.org/docs/
 - **matplotlib documentation:** https://matplotlib.org/stable/contents.html
 
