@@ -745,16 +745,16 @@ Mode:    12 (appears twice)
             </div>
             <div class="visual-demo">
                 <h3 style="margin-bottom: 15px;">Visual: Low vs High Standard Deviation</h3>
-                <pre>
-Low std (consistent):          High std (spread out):
-        *****                          *
-       *******                        * *
-      *********                      *   *
-     ***********                    *     *
-    *************                  *       *
-   _______________                ___________
-       mean                          mean
-                </pre>
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                        <canvas id="chartStdLow" width="230" height="200"></canvas>
+                        <p style="margin-top: 8px; font-weight: bold; color: #667eea;">Low std (consistent)</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <canvas id="chartStdHigh" width="230" height="200"></canvas>
+                        <p style="margin-top: 8px; font-weight: bold; color: #f093fb;">High std (spread out)</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -763,23 +763,9 @@ Low std (consistent):          High std (spread out):
             <h1>The 68-95-99.7 Rule</h1>
             <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 30px;">For normally distributed data</p>
             <div class="visual-demo">
-                <pre style="font-size: 1rem;">
-                         99.7% (within 3 std)
-                   |_______________________________|
-                         95% (within 2 std)
-                     |_______________________|
-                         68% (within 1 std)
-                       |_______________|
-
-                              *****
-                            *********
-                          *************
-                        *****************
-                      *********************
-                    *************************
-                  |_____|_____|_____|_____|_____|
-                 -3std -2std -1std mean +1std +2std +3std
-                </pre>
+                <div style="max-width: 650px; height: 320px; margin: 0 auto;">
+                    <canvas id="chartEmpirical"></canvas>
+                </div>
             </div>
             <div class="stat-box">
                 <div class="stat-item" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
@@ -811,16 +797,81 @@ Low std (consistent):          High std (spread out):
             </div>
             <div class="visual-demo">
                 <h3 style="margin-bottom: 15px;">Quartiles: Dividing Data into 4 Parts</h3>
-                <pre>
-Sorted data: [2, 4, 5, 7, 8, 10, 12, 15, 18, 20, 25, 30]
+                <svg width="100%" viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 700px; margin: 0 auto; display: block;">
+                    <!-- Quartile background regions -->
+                    <rect x="30" y="50" width="120" height="50" rx="6" fill="#74b9ff" opacity="0.25"/>
+                    <rect x="150" y="50" width="160" height="50" rx="6" fill="#00b894" opacity="0.25"/>
+                    <rect x="310" y="50" width="170" height="50" rx="6" fill="#f093fb" opacity="0.25"/>
+                    <rect x="480" y="50" width="190" height="50" rx="6" fill="#764ba2" opacity="0.25"/>
 
-    |------ 25% ------|------ 25% ------|------ 25% ------|------ 25% ------|
-    2  4  5  |  7  8  10  |  12  15  18  |  20  25  30
-             Q1=6         Q2=11           Q3=19
-           (25th %)     (50th %/median)  (75th %)
+                    <!-- Quartile region labels (top) -->
+                    <text x="90" y="44" text-anchor="middle" fill="#0984e3" font-size="11" font-weight="bold">25%</text>
+                    <text x="230" y="44" text-anchor="middle" fill="#00b894" font-size="11" font-weight="bold">25%</text>
+                    <text x="395" y="44" text-anchor="middle" fill="#a855f7" font-size="11" font-weight="bold">25%</text>
+                    <text x="575" y="44" text-anchor="middle" fill="#764ba2" font-size="11" font-weight="bold">25%</text>
 
-IQR (Interquartile Range) = Q3 - Q1 = 19 - 6 = 13
-                </pre>
+                    <!-- Number line axis -->
+                    <line x1="30" y1="75" x2="670" y2="75" stroke="#555" stroke-width="2"/>
+
+                    <!-- Data point positions (evenly spaced across 30..670):
+                         Values: 2,4,5,7,8,10,12,15,18,20,25,30
+                         Map: value -> x  using linear scale min=2 max=30 range=28
+                         x = 30 + (value - 2) / 28 * 640  -->
+                    <!-- Data point circles -->
+                    <circle cx="30"  cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="76"  cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="99"  cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="144" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="167" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="213" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="259" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="327" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="396" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="442" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="556" cy="75" r="6" fill="#2c3e50"/>
+                    <circle cx="670" cy="75" r="6" fill="#2c3e50"/>
+
+                    <!-- Data point labels (above circles) -->
+                    <text x="30"  y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">2</text>
+                    <text x="76"  y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">4</text>
+                    <text x="99"  y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">5</text>
+                    <text x="144" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">7</text>
+                    <text x="167" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">8</text>
+                    <text x="213" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">10</text>
+                    <text x="259" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">12</text>
+                    <text x="327" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">15</text>
+                    <text x="396" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">18</text>
+                    <text x="442" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">20</text>
+                    <text x="556" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">25</text>
+                    <text x="670" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">30</text>
+
+                    <!-- Vertical dashed lines at Q1=6, Q2=11, Q3=19
+                         Q1=6:  x = 30 + (6-2)/28*640  = 30 + 91.4  = 121
+                         Q2=11: x = 30 + (11-2)/28*640 = 30 + 205.7 = 236
+                         Q3=19: x = 30 + (19-2)/28*640 = 30 + 388.6 = 389 -->
+                    <line x1="121" y1="45" x2="121" y2="105" stroke="#0984e3" stroke-width="2.5" stroke-dasharray="6,3"/>
+                    <line x1="236" y1="45" x2="236" y2="105" stroke="#00b894" stroke-width="2.5" stroke-dasharray="6,3"/>
+                    <line x1="389" y1="45" x2="389" y2="105" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+                    <!-- Quartile labels below the line -->
+                    <text x="121" y="122" text-anchor="middle" fill="#0984e3" font-size="12" font-weight="bold">Q1 = 6</text>
+                    <text x="121" y="136" text-anchor="middle" fill="#0984e3" font-size="10">(25th %)</text>
+                    <text x="236" y="122" text-anchor="middle" fill="#00b894" font-size="12" font-weight="bold">Q2 = 11</text>
+                    <text x="236" y="136" text-anchor="middle" fill="#00b894" font-size="10">(Median)</text>
+                    <text x="389" y="122" text-anchor="middle" fill="#a855f7" font-size="12" font-weight="bold">Q3 = 19</text>
+                    <text x="389" y="136" text-anchor="middle" fill="#a855f7" font-size="10">(75th %)</text>
+
+                    <!-- IQR bracket between Q1 and Q3 -->
+                    <line x1="121" y1="160" x2="389" y2="160" stroke="#e17055" stroke-width="2.5"/>
+                    <line x1="121" y1="153" x2="121" y2="167" stroke="#e17055" stroke-width="2.5"/>
+                    <line x1="389" y1="153" x2="389" y2="167" stroke="#e17055" stroke-width="2.5"/>
+                    <!-- Arrowheads on the bracket -->
+                    <polygon points="125,157 121,153 117,157" fill="#e17055"/>
+                    <polygon points="393,157 389,153 385,157" fill="#e17055"/>
+                    <polygon points="125,163 121,167 117,163" fill="#e17055"/>
+                    <polygon points="393,163 389,167 385,163" fill="#e17055"/>
+                    <text x="255" y="180" text-anchor="middle" fill="#e17055" font-size="13" font-weight="bold">IQR = Q3 - Q1 = 13</text>
+                </svg>
             </div>
             <div class="feature-grid" style="grid-template-columns: repeat(4, 1fr);">
                 <div class="feature-card" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
@@ -1037,43 +1088,25 @@ df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_
             <div class="distribution-visual">
                 <div class="distribution-card">
                     <h3 style="color: #0984e3;">Normal (Bell Curve)</h3>
-                    <pre>
-        *
-       ***
-      *****
-     *******
-    *********
-   ***********
-  *************
- ***************
-    </pre>
+                    <div style="height: 150px; margin: 10px 0;">
+                        <canvas id="chartDistNormal"></canvas>
+                    </div>
                     <p>Most values near center</p>
                     <p style="color: #666; font-size: 0.9rem;">Example: Heights, test scores</p>
                 </div>
                 <div class="distribution-card">
                     <h3 style="color: #f093fb;">Right Skewed</h3>
-                    <pre>
-   *
-   **
-   ***
-   ****
-   *****
-   ******
-   *******
-   ********___
-    </pre>
+                    <div style="height: 150px; margin: 10px 0;">
+                        <canvas id="chartDistSkewed"></canvas>
+                    </div>
                     <p>Long tail to the right</p>
                     <p style="color: #666; font-size: 0.9rem;">Example: Income, house prices</p>
                 </div>
                 <div class="distribution-card">
                     <h3 style="color: #00b894;">Bimodal</h3>
-                    <pre>
-    *         *
-   ***       ***
-  *****     *****
- *******   *******
-********* *********
-    </pre>
+                    <div style="height: 150px; margin: 10px 0;">
+                        <canvas id="chartDistBimodal"></canvas>
+                    </div>
                     <p>Two peaks</p>
                     <p style="color: #666; font-size: 0.9rem;">Example: Mixed populations</p>
                 </div>
@@ -1091,24 +1124,18 @@ df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_
                 <div class="comparison-card good">
                     <h3>Right (Positive) Skew</h3>
                     <p style="font-size: 2rem; margin: 15px 0;">Mean > Median</p>
-                    <pre style="font-size: 0.8rem; margin: 15px 0; color: white;">
-   *
-   **
-   ***
-   ****___tail-->
-                    </pre>
+                    <div style="height: 120px; margin: 15px 0;">
+                        <canvas id="chartSkewRight"></canvas>
+                    </div>
                     <p>Tail points RIGHT</p>
                     <p style="margin-top: 10px; font-size: 0.9rem;">Income, water consumption, prices</p>
                 </div>
                 <div class="comparison-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
                     <h3>Left (Negative) Skew</h3>
                     <p style="font-size: 2rem; margin: 15px 0;">Mean < Median</p>
-                    <pre style="font-size: 0.8rem; margin: 15px 0; color: white;">
-             *
-            **
-           ***
-<--tail___****
-                    </pre>
+                    <div style="height: 120px; margin: 15px 0;">
+                        <canvas id="chartSkewLeft"></canvas>
+                    </div>
                     <p>Tail points LEFT</p>
                     <p style="margin-top: 10px; font-size: 0.9rem;">Age at death, exam scores (ceiling)</p>
                 </div>
@@ -1155,19 +1182,83 @@ df.groupby(<span class="string">'ESTRATO'</span>)[<span class="string">'CONSUMO_
             <h1>Detecting Outliers: The IQR Method</h1>
             <div class="visual-demo">
                 <h3 style="margin-bottom: 15px;">The 1.5 x IQR Rule</h3>
-                <pre style="font-size: 1rem;">
-        Lower Fence                              Upper Fence
-             |                                        |
-             v                                        v
-    [outlier]  |----[  Q1  |  Q2  |  Q3  ]---|  [outlier]
-               |         Box Plot            |
-               |<------- 1.5 x IQR --------->|
+                <div style="max-width: 700px; margin: 0 auto;">
+                    <svg width="100%" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="display: block; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        <!-- Outlier zone shading (left) -->
+                        <rect x="20" y="75" width="90" height="60" rx="4" fill="#ff7675" fill-opacity="0.08"/>
+                        <!-- Outlier zone shading (right) -->
+                        <rect x="590" y="75" width="90" height="60" rx="4" fill="#ff7675" fill-opacity="0.08"/>
 
-    Lower Fence = Q1 - 1.5 x IQR
-    Upper Fence = Q3 + 1.5 x IQR
+                        <!-- Outlier zone labels -->
+                        <text x="65" y="30" text-anchor="middle" fill="#ff7675" font-size="11" font-weight="bold">OUTLIER</text>
+                        <text x="65" y="43" text-anchor="middle" fill="#ff7675" font-size="11" font-weight="bold">ZONE</text>
+                        <text x="635" y="30" text-anchor="middle" fill="#ff7675" font-size="11" font-weight="bold">OUTLIER</text>
+                        <text x="635" y="43" text-anchor="middle" fill="#ff7675" font-size="11" font-weight="bold">ZONE</text>
 
-    Anything outside the fences = OUTLIER
-                </pre>
+                        <!-- Whisker lines (lower fence to Q1, Q3 to upper fence) -->
+                        <line x1="110" y1="105" x2="230" y2="105" stroke="#636e72" stroke-width="2"/>
+                        <line x1="470" y1="105" x2="590" y2="105" stroke="#636e72" stroke-width="2"/>
+
+                        <!-- Fence dashed verticals -->
+                        <line x1="110" y1="55" x2="110" y2="135" stroke="#e17055" stroke-width="2" stroke-dasharray="5,3"/>
+                        <line x1="590" y1="55" x2="590" y2="135" stroke="#e17055" stroke-width="2" stroke-dasharray="5,3"/>
+
+                        <!-- Fence caps -->
+                        <line x1="110" y1="90" x2="110" y2="120" stroke="#636e72" stroke-width="2.5"/>
+                        <line x1="590" y1="90" x2="590" y2="120" stroke="#636e72" stroke-width="2.5"/>
+
+                        <!-- Box (Q1 to Q3) -->
+                        <rect x="230" y="75" width="240" height="60" rx="4" fill="#667eea" fill-opacity="0.25" stroke="#667eea" stroke-width="2.5"/>
+
+                        <!-- Median line -->
+                        <line x1="350" y1="73" x2="350" y2="137" stroke="white" stroke-width="3"/>
+                        <line x1="350" y1="73" x2="350" y2="137" stroke="#00b894" stroke-width="2.5"/>
+
+                        <!-- Outlier circles (left) -->
+                        <circle cx="40" cy="105" r="7" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+                        <circle cx="65" cy="95" r="7" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+                        <circle cx="80" cy="110" r="6" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+
+                        <!-- Outlier circles (right) -->
+                        <circle cx="620" cy="105" r="7" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+                        <circle cx="650" cy="95" r="7" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+                        <circle cx="670" cy="110" r="6" fill="#ff7675" fill-opacity="0.3" stroke="#ff7675" stroke-width="2"/>
+
+                        <!-- Labels: Q1, Q2 (Median), Q3 -->
+                        <text x="230" y="65" text-anchor="middle" fill="#667eea" font-size="11" font-weight="bold">Q1</text>
+                        <text x="350" y="65" text-anchor="middle" fill="#00b894" font-size="11" font-weight="bold">Q2</text>
+                        <text x="470" y="65" text-anchor="middle" fill="#667eea" font-size="11" font-weight="bold">Q3</text>
+
+                        <!-- 1.5 x IQR bracket (left side: lower fence to Q1) -->
+                        <line x1="110" y1="150" x2="110" y2="160" stroke="#e17055" stroke-width="1.5"/>
+                        <line x1="230" y1="150" x2="230" y2="160" stroke="#e17055" stroke-width="1.5"/>
+                        <line x1="110" y1="155" x2="230" y2="155" stroke="#e17055" stroke-width="1.5"/>
+                        <text x="170" y="170" text-anchor="middle" fill="#e17055" font-size="10" font-weight="bold">1.5 x IQR</text>
+
+                        <!-- IQR bracket (Q1 to Q3) -->
+                        <line x1="230" y1="150" x2="230" y2="160" stroke="#667eea" stroke-width="1.5"/>
+                        <line x1="470" y1="150" x2="470" y2="160" stroke="#667eea" stroke-width="1.5"/>
+                        <line x1="230" y1="155" x2="470" y2="155" stroke="#667eea" stroke-width="1.5"/>
+                        <text x="350" y="170" text-anchor="middle" fill="#667eea" font-size="10" font-weight="bold">IQR</text>
+
+                        <!-- 1.5 x IQR bracket (right side: Q3 to upper fence) -->
+                        <line x1="470" y1="150" x2="470" y2="160" stroke="#e17055" stroke-width="1.5"/>
+                        <line x1="590" y1="150" x2="590" y2="160" stroke="#e17055" stroke-width="1.5"/>
+                        <line x1="470" y1="155" x2="590" y2="155" stroke="#e17055" stroke-width="1.5"/>
+                        <text x="530" y="170" text-anchor="middle" fill="#e17055" font-size="10" font-weight="bold">1.5 x IQR</text>
+
+                        <!-- Lower fence label -->
+                        <text x="110" y="190" text-anchor="middle" fill="#e17055" font-size="10" font-weight="bold">Lower Fence</text>
+                        <text x="110" y="202" text-anchor="middle" fill="#e17055" font-size="9">Q1 - 1.5 x IQR</text>
+
+                        <!-- Upper fence label -->
+                        <text x="590" y="190" text-anchor="middle" fill="#e17055" font-size="10" font-weight="bold">Upper Fence</text>
+                        <text x="590" y="202" text-anchor="middle" fill="#e17055" font-size="9">Q3 + 1.5 x IQR</text>
+
+                        <!-- Bottom summary -->
+                        <text x="350" y="215" text-anchor="middle" fill="#636e72" font-size="12" font-weight="bold">Anything outside the fences = OUTLIER</text>
+                    </svg>
+                </div>
             </div>
             <div class="code-example"><span class="comment"># Outlier detection with IQR method</span>
 q1 = df[<span class="string">'consumption'</span>].quantile(<span class="number">0.25</span>)
@@ -1193,12 +1284,9 @@ outliers = df[(df[<span class="string">'consumption'</span>] < lower_bound) |
                     <h3>What is a Histogram?</h3>
                     <p>A histogram divides values into "bins" and counts how many fall in each bin.</p>
                     <div class="visual-demo" style="margin-top: 15px; padding: 15px;">
-                        <pre style="font-size: 0.85rem;">
-Consumption (m3):  0-5  5-10 10-15 15-20 20-25 25+
-                   ===  ==== ===== ===== ===== ===
-Frequency:         ||   |||| ||||| |||   ||    |
-Count:             2    4    5     3     2     1
-                        </pre>
+                        <div style="width: 280px; height: 160px; margin: 0 auto;">
+                            <canvas id="chartHistogramExample"></canvas>
+                        </div>
                     </div>
                 </div>
                 <div class="concept-card success">
@@ -1230,26 +1318,47 @@ sns.histplot(df[<span class="string">'consumption'</span>], bins=<span class="nu
             <h1>Visualization: Box Plots</h1>
             <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 20px;">The 5-number summary in one picture</p>
             <div class="visual-demo">
-                <pre style="font-size: 1.1rem;">
-                     outliers
-                        o
-                        o
-                        |
-         |--------------|--------------|  <-- maximum (or upper fence)
-         |              |              |
-         |    Upper     |              |
-         |   Quartile   |              |  <-- Q3 (75th percentile)
-         |              |              |
-    |----|==============|==============|----| <-- median (Q2)
-         |              |              |
-         |    Lower     |              |  <-- Q1 (25th percentile)
-         |   Quartile   |              |
-         |              |              |
-         |--------------|--------------|  <-- minimum (or lower fence)
-                        |
-                        o
-                     outliers
-                </pre>
+                <div style="max-width: 650px; margin: 0 auto;">
+                    <svg viewBox="0 0 650 260" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        <!-- Whisker lines -->
+                        <line x1="80" y1="130" x2="180" y2="130" stroke="#636e72" stroke-width="2" stroke-dasharray="6,3"/>
+                        <line x1="460" y1="130" x2="560" y2="130" stroke="#636e72" stroke-width="2" stroke-dasharray="6,3"/>
+                        <!-- Whisker caps -->
+                        <line x1="80" y1="110" x2="80" y2="150" stroke="#636e72" stroke-width="2"/>
+                        <line x1="560" y1="110" x2="560" y2="150" stroke="#636e72" stroke-width="2"/>
+                        <!-- Box (Q1 to Q3) -->
+                        <rect x="180" y="90" width="280" height="80" rx="4" fill="#667eea" fill-opacity="0.25" stroke="#667eea" stroke-width="2.5"/>
+                        <!-- Median line -->
+                        <line x1="320" y1="88" x2="320" y2="172" stroke="white" stroke-width="3"/>
+                        <line x1="320" y1="88" x2="320" y2="172" stroke="#764ba2" stroke-width="2.5"/>
+                        <!-- Outlier dots (lower) -->
+                        <circle cx="30" cy="130" r="7" fill="none" stroke="#f5576c" stroke-width="2"/>
+                        <circle cx="52" cy="115" r="7" fill="none" stroke="#f5576c" stroke-width="2"/>
+                        <!-- Outlier dots (upper) -->
+                        <circle cx="600" cy="130" r="7" fill="none" stroke="#f5576c" stroke-width="2"/>
+                        <circle cx="622" cy="145" r="7" fill="none" stroke="#f5576c" stroke-width="2"/>
+                        <!-- IQR bracket -->
+                        <line x1="180" y1="195" x2="180" y2="205" stroke="#667eea" stroke-width="1.5"/>
+                        <line x1="460" y1="195" x2="460" y2="205" stroke="#667eea" stroke-width="1.5"/>
+                        <line x1="180" y1="200" x2="460" y2="200" stroke="#667eea" stroke-width="1.5"/>
+                        <text x="320" y="220" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="13">IQR (Interquartile Range)</text>
+                        <!-- Labels -->
+                        <text x="80" y="75" text-anchor="middle" fill="#636e72" font-size="11">Lower</text>
+                        <text x="80" y="87" text-anchor="middle" fill="#636e72" font-size="11">Whisker</text>
+                        <text x="180" y="75" text-anchor="middle" fill="#667eea" font-size="11" font-weight="bold">Q1 (25th)</text>
+                        <text x="320" y="75" text-anchor="middle" fill="#764ba2" font-size="11" font-weight="bold">Median (Q2)</text>
+                        <text x="460" y="75" text-anchor="middle" fill="#667eea" font-size="11" font-weight="bold">Q3 (75th)</text>
+                        <text x="560" y="75" text-anchor="middle" fill="#636e72" font-size="11">Upper</text>
+                        <text x="560" y="87" text-anchor="middle" fill="#636e72" font-size="11">Whisker</text>
+                        <!-- Outlier labels -->
+                        <text x="41" y="165" text-anchor="middle" fill="#f5576c" font-size="11" font-weight="bold">Outliers</text>
+                        <text x="611" y="170" text-anchor="middle" fill="#f5576c" font-size="11" font-weight="bold">Outliers</text>
+                        <!-- Label connector lines -->
+                        <line x1="180" y1="87" x2="180" y2="90" stroke="#667eea" stroke-width="1" opacity="0.5"/>
+                        <line x1="320" y1="75" x2="320" y2="88" stroke="#764ba2" stroke-width="1" opacity="0.5"/>
+                        <line x1="460" y1="87" x2="460" y2="90" stroke="#667eea" stroke-width="1" opacity="0.5"/>
+                    </svg>
+                </div>
             </div>
             <div class="code-example"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
 <span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
@@ -1345,15 +1454,100 @@ iqr = q3 - q1
 outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class="number">1.5</span>*iqr) |
               (df[<span class="string">'consumption'</span>] > q3 + <span class="number">1.5</span>*iqr)]
 <span class="function">print</span>(<span class="string">f"Outliers: {len(outliers)} ({len(outliers)/len(df)*100:.1f}%)"</span>)</div>
+
+            <!-- Output Preview -->
+            <div style="margin-top: 25px; background: #f8f9fa; border-radius: 15px; padding: 25px; border: 2px solid #e9ecef;">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px; font-size: 1rem;">
+                    Output Preview
+                </h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
+                    <div>
+                        <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 8px; font-weight: bold;">Histogram (Step 4 - left)</p>
+                        <div style="position: relative; height: 200px;">
+                            <canvas id="chartCompleteHist"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 8px; font-weight: bold;">Box Plot (Step 4 - right)</p>
+                        <svg width="100%" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto;">
+                            <!-- Scale: data range ~0-100, map to x 30..290
+                                 x = 30 + value/100 * 260
+                                 Q1=8 -> 50.8,  Median=15 -> 69,  Q3=28 -> 102.8
+                                 Whisker low=0 -> 30,  Whisker high=58 -> 180.8
+                                 Outlier 85 -> 251,  Outlier 92 -> 269.2 -->
+
+                            <!-- Axis line -->
+                            <line x1="30" y1="130" x2="290" y2="130" stroke="#ccc" stroke-width="1"/>
+                            <!-- Tick marks and labels -->
+                            <line x1="30" y1="125" x2="30" y2="135" stroke="#999" stroke-width="1"/>
+                            <text x="30" y="148" text-anchor="middle" fill="#666" font-size="10">0</text>
+                            <line x1="95" y1="125" x2="95" y2="135" stroke="#999" stroke-width="1"/>
+                            <text x="95" y="148" text-anchor="middle" fill="#666" font-size="10">25</text>
+                            <line x1="160" y1="125" x2="160" y2="135" stroke="#999" stroke-width="1"/>
+                            <text x="160" y="148" text-anchor="middle" fill="#666" font-size="10">50</text>
+                            <line x1="225" y1="125" x2="225" y2="135" stroke="#999" stroke-width="1"/>
+                            <text x="225" y="148" text-anchor="middle" fill="#666" font-size="10">75</text>
+                            <line x1="290" y1="125" x2="290" y2="135" stroke="#999" stroke-width="1"/>
+                            <text x="290" y="148" text-anchor="middle" fill="#666" font-size="10">100</text>
+
+                            <!-- Left whisker: 0 to Q1 -->
+                            <line x1="30" y1="80" x2="51" y2="80" stroke="#0984e3" stroke-width="2"/>
+                            <line x1="30" y1="70" x2="30" y2="90" stroke="#0984e3" stroke-width="2"/>
+
+                            <!-- Box: Q1 to Q3 -->
+                            <rect x="51" y="60" width="52" height="40" rx="3" fill="#0984e3" opacity="0.25" stroke="#0984e3" stroke-width="2"/>
+
+                            <!-- Median line inside box -->
+                            <line x1="69" y1="58" x2="69" y2="102" stroke="#00b894" stroke-width="3"/>
+
+                            <!-- Right whisker: Q3 to upper fence (Q3 + 1.5*IQR = 28 + 30 = 58) -->
+                            <line x1="103" y1="80" x2="181" y2="80" stroke="#0984e3" stroke-width="2"/>
+                            <line x1="181" y1="70" x2="181" y2="90" stroke="#0984e3" stroke-width="2"/>
+
+                            <!-- Outlier dots at 85 and 92 -->
+                            <circle cx="251" cy="80" r="5" fill="none" stroke="#e17055" stroke-width="2"/>
+                            <circle cx="269" cy="80" r="5" fill="none" stroke="#e17055" stroke-width="2"/>
+
+                            <!-- Labels -->
+                            <text x="51" y="115" text-anchor="middle" fill="#0984e3" font-size="9" font-weight="bold">Q1=8</text>
+                            <text x="69" y="52" text-anchor="middle" fill="#00b894" font-size="9" font-weight="bold">Med=15</text>
+                            <text x="103" y="115" text-anchor="middle" fill="#0984e3" font-size="9" font-weight="bold">Q3=28</text>
+                            <text x="251" y="52" text-anchor="middle" fill="#e17055" font-size="9" font-weight="bold">85</text>
+                            <text x="269" y="52" text-anchor="middle" fill="#e17055" font-size="9" font-weight="bold">92</text>
+
+                            <!-- Mean marker (diamond) at mean ~22 -> x = 30 + 22/100*260 = 87.2 -->
+                            <polygon points="87,74 93,80 87,86 81,80" fill="#ff7675" stroke="#ff7675" stroke-width="1"/>
+                            <text x="87" y="115" text-anchor="middle" fill="#ff7675" font-size="9" font-weight="bold">Mean</text>
+
+                            <!-- Title -->
+                            <text x="160" y="18" text-anchor="middle" fill="#2c3e50" font-size="11" font-weight="bold">Water Consumption (m3)</text>
+
+                            <!-- Annotation: "Right skewed: Mean > Median" -->
+                            <text x="160" y="175" text-anchor="middle" fill="#764ba2" font-size="10" font-style="italic">Right skewed: Mean (22) > Median (15)</text>
+
+                            <!-- Annotation for outliers -->
+                            <text x="260" y="38" text-anchor="middle" fill="#e17055" font-size="9">Outliers</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Slide 22: Demo -->
         <div class="slide">
             <div class="demo-section">
                 <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Water Consumption Dataset - HISTORICO_CONSUMO</div>
+                <div style="font-size: 1.5rem; margin-bottom: 30px;">Water Consumption Dataset - HISTORICO_CONSUMO</div>
 
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
+                <!-- Histogram preview -->
+                <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 15px; padding: 20px 30px; margin: 0 auto 30px; max-width: 480px;">
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 10px;">Sample Distribution Preview</p>
+                    <div style="position: relative; height: 200px;">
+                        <canvas id="chartDemoHist"></canvas>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 20px 0;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
                         <div>
                             <h3 style="color: white; margin-bottom: 20px;">What we will analyze:</h3>
@@ -1473,6 +1667,17 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
             slides[currentSlide].style.display = 'flex';
             slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
             updateCounter();
+
+            // Resize Chart.js charts that were hidden (rendered at 0x0)
+            if (typeof Chart !== 'undefined') {
+                var canvases = slides[currentSlide].querySelectorAll('canvas');
+                canvases.forEach(function(canvas) {
+                    var chart = Chart.getChart(canvas);
+                    if (chart) {
+                        chart.resize();
+                    }
+                });
+            }
         }
 
         function nextSlide() {
@@ -1494,6 +1699,670 @@ outliers = df[(df[<span class="string">'consumption'</span>] < q1 - <span class=
 
         // Initialize
         showSlide(0);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // --- Gaussian helper ---
+        function gaussian(x, mean, std) {
+            return Math.exp(-0.5 * Math.pow((x - mean) / std, 2)) / (std * Math.sqrt(2 * Math.PI));
+        }
+
+        function generateGaussianData(mean, std, from, to, steps) {
+            var xs = [], ys = [];
+            var step = (to - from) / steps;
+            for (var i = 0; i <= steps; i++) {
+                var x = from + i * step;
+                xs.push(x);
+                ys.push(gaussian(x, mean, std));
+            }
+            return { xs: xs, ys: ys };
+        }
+
+        // Shared chart defaults
+        Chart.defaults.animation = false;
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+
+        function lineChartConfig(labels, datasets, opts) {
+            opts = opts || {};
+            return {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: opts.legend !== undefined ? opts.legend : { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: {
+                            display: opts.xDisplay !== undefined ? opts.xDisplay : false,
+                            grid: { display: false },
+                            ticks: opts.xTicks || {}
+                        },
+                        y: {
+                            display: false,
+                            grid: { display: false },
+                            beginAtZero: true
+                        }
+                    },
+                    elements: {
+                        point: { radius: 0 },
+                        line: { tension: 0.4, borderWidth: opts.lineWidth || 2.5 }
+                    }
+                }
+            };
+        }
+
+        // ========================================
+        // Chart A: Low vs High Standard Deviation
+        // ========================================
+        (function() {
+            var low = generateGaussianData(0, 1, -5, 5, 80);
+            var high = generateGaussianData(0, 3, -5, 5, 80);
+            var labelsRound = low.xs.map(function(v) { return v.toFixed(1); });
+
+            new Chart(document.getElementById('chartStdLow'), lineChartConfig(
+                labelsRound,
+                [{
+                    data: low.ys,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.15)',
+                    fill: true
+                }]
+            ));
+
+            new Chart(document.getElementById('chartStdHigh'), lineChartConfig(
+                labelsRound,
+                [{
+                    data: high.ys,
+                    borderColor: '#f093fb',
+                    backgroundColor: 'rgba(240, 147, 251, 0.15)',
+                    fill: true
+                }]
+            ));
+        })();
+
+        // ========================================
+        // Chart B: 68-95-99.7 Rule
+        // ========================================
+        (function() {
+            var d = generateGaussianData(0, 1, -4, 4, 200);
+            var labels = d.xs;
+            var bellY = d.ys;
+
+            // Build three fill datasets for the shaded regions.
+            // Each dataset copies the bell curve only within its range, else null.
+            function regionData(lo, hi) {
+                return bellY.map(function(y, i) {
+                    var x = labels[i];
+                    return (x >= lo && x <= hi) ? y : null;
+                });
+            }
+
+            var region3 = regionData(-3, 3);
+            var region2 = regionData(-2, 2);
+            var region1 = regionData(-1, 1);
+
+            // Custom ticks at std dev positions
+            var tickPositions = [-3, -2, -1, 0, 1, 2, 3];
+            var tickLabels = ['-3\u03C3', '-2\u03C3', '-1\u03C3', '\u03BC', '+1\u03C3', '+2\u03C3', '+3\u03C3'];
+
+            new Chart(document.getElementById('chartEmpirical'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '99.7%',
+                            data: region3,
+                            borderColor: 'transparent',
+                            backgroundColor: 'rgba(102, 126, 234, 0.15)',
+                            fill: true, spanGaps: false,
+                            pointRadius: 0, tension: 0.4
+                        },
+                        {
+                            label: '95%',
+                            data: region2,
+                            borderColor: 'transparent',
+                            backgroundColor: 'rgba(0, 184, 148, 0.2)',
+                            fill: true, spanGaps: false,
+                            pointRadius: 0, tension: 0.4
+                        },
+                        {
+                            label: '68%',
+                            data: region1,
+                            borderColor: 'transparent',
+                            backgroundColor: 'rgba(116, 185, 255, 0.3)',
+                            fill: true, spanGaps: false,
+                            pointRadius: 0, tension: 0.4
+                        },
+                        {
+                            label: 'Bell curve',
+                            data: bellY,
+                            borderColor: '#2c3e50',
+                            borderWidth: 2,
+                            fill: false,
+                            pointRadius: 0, tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 5, bottom: 10, left: 10, right: 10 }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                filter: function(item) { return item.text !== 'Bell curve'; },
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded',
+                                font: { size: 13, weight: 'bold' },
+                                padding: 16
+                            }
+                        },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: { display: false },
+                            ticks: {
+                                autoSkip: false,
+                                maxTicksLimit: 7,
+                                callback: function(value, index) {
+                                    var x = labels[index];
+                                    // Match only the closest point to each integer position
+                                    for (var t = 0; t < tickPositions.length; t++) {
+                                        if (Math.abs(x - tickPositions[t]) < 0.025) return tickLabels[t];
+                                    }
+                                    return '';
+                                },
+                                maxRotation: 0,
+                                font: { size: 13, weight: 'bold' },
+                                color: '#2c3e50',
+                                padding: 8
+                            }
+                        },
+                        y: {
+                            display: false,
+                            beginAtZero: true
+                        }
+                    },
+                    elements: {
+                        line: { tension: 0.4 }
+                    }
+                }
+            });
+        })();
+
+        // ========================================
+        // Chart C: Three distribution shapes
+        // ========================================
+        (function() {
+            // Normal
+            var normal = generateGaussianData(0, 1, -4, 4, 60);
+
+            new Chart(document.getElementById('chartDistNormal'), lineChartConfig(
+                normal.xs.map(function(v) { return v.toFixed(1); }),
+                [{
+                    data: normal.ys,
+                    borderColor: '#0984e3',
+                    backgroundColor: 'rgba(9, 132, 227, 0.15)',
+                    fill: true
+                }]
+            ));
+
+            // Right skewed: use a log-normal-like shape
+            var skewX = [], skewY = [];
+            for (var i = 0; i <= 60; i++) {
+                var x = 0.1 + i * 0.1; // 0.1 to 6.1
+                skewX.push(x.toFixed(1));
+                // Log-normal PDF approximation
+                var lnx = Math.log(x);
+                skewY.push(Math.exp(-0.5 * lnx * lnx) / (x * Math.sqrt(2 * Math.PI)));
+            }
+
+            new Chart(document.getElementById('chartDistSkewed'), lineChartConfig(
+                skewX,
+                [{
+                    data: skewY,
+                    borderColor: '#f093fb',
+                    backgroundColor: 'rgba(240, 147, 251, 0.15)',
+                    fill: true
+                }]
+            ));
+
+            // Bimodal: sum of two gaussians
+            var biX = [], biY = [];
+            for (var j = 0; j <= 60; j++) {
+                var bx = -5 + j * (10 / 60);
+                biX.push(bx.toFixed(1));
+                biY.push(0.5 * gaussian(bx, -1.5, 0.8) + 0.5 * gaussian(bx, 1.5, 0.8));
+            }
+
+            new Chart(document.getElementById('chartDistBimodal'), lineChartConfig(
+                biX,
+                [{
+                    data: biY,
+                    borderColor: '#00b894',
+                    backgroundColor: 'rgba(0, 184, 148, 0.15)',
+                    fill: true
+                }]
+            ));
+        })();
+
+        // ========================================
+        // Chart D: Skewness (right and left)
+        // ========================================
+        (function() {
+            // Right skew data (log-normal shape)
+            var rX = [], rY = [];
+            for (var i = 0; i <= 50; i++) {
+                var x = 0.1 + i * 0.12;
+                rX.push(x.toFixed(1));
+                var lnx = Math.log(x);
+                rY.push(Math.exp(-0.5 * lnx * lnx) / (x * Math.sqrt(2 * Math.PI)));
+            }
+            // Compute approximate mean and median indices
+            var rTotal = rY.reduce(function(a, b) { return a + b; }, 0);
+            var rCumSum = 0, rMedianIdx = 0;
+            for (var m = 0; m < rY.length; m++) {
+                rCumSum += rY[m];
+                if (rCumSum >= rTotal / 2 && rMedianIdx === 0) rMedianIdx = m;
+            }
+            var rWeighted = 0;
+            for (var w = 0; w < rY.length; w++) rWeighted += w * rY[w];
+            var rMeanIdx = Math.round(rWeighted / rTotal);
+
+            // Left skew: mirror the right skew data
+            var lX = rX.slice();
+            var lY = rY.slice().reverse();
+            var lMedianIdx = rY.length - 1 - rMedianIdx;
+            var lMeanIdx = rY.length - 1 - rMeanIdx;
+
+            // Custom plugin to draw vertical mean/median lines without chartjs-plugin-annotation
+            var verticalLinePlugin = {
+                id: 'verticalLines',
+                afterDraw: function(chart) {
+                    var lines = chart.options.plugins.verticalLines;
+                    if (!lines) return;
+                    var ctx = chart.ctx;
+                    var xScale = chart.scales.x;
+                    var yScale = chart.scales.y;
+                    var top = yScale.top;
+                    var bottom = yScale.bottom;
+
+                    lines.forEach(function(line) {
+                        var xPixel = xScale.getPixelForValue(line.index);
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(xPixel, top);
+                        ctx.lineTo(xPixel, bottom);
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = line.color || 'rgba(255,255,255,0.95)';
+                        if (line.dash) ctx.setLineDash(line.dash);
+                        ctx.stroke();
+                        // Label
+                        if (line.label) {
+                            ctx.font = 'bold 10px "Segoe UI", sans-serif';
+                            ctx.fillStyle = line.color || 'white';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(line.label, xPixel, line.labelAtTop ? top - 4 : bottom + 12);
+                        }
+                        ctx.restore();
+                    });
+                }
+            };
+
+            function skewChart(canvasId, dataY, dataX, medianIdx, meanIdx) {
+                new Chart(document.getElementById(canvasId), {
+                    type: 'line',
+                    plugins: [verticalLinePlugin],
+                    data: {
+                        labels: dataX,
+                        datasets: [{
+                            data: dataY,
+                            borderColor: 'rgba(255,255,255,0.9)',
+                            backgroundColor: 'rgba(255,255,255,0.15)',
+                            fill: true,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: { padding: { bottom: 16 } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                            verticalLines: [
+                                { index: medianIdx, color: 'rgba(255,255,255,0.95)', dash: null, label: 'Median', labelAtTop: true },
+                                { index: meanIdx, color: 'rgba(255,255,255,0.95)', dash: [5, 3], label: 'Mean', labelAtTop: false }
+                            ]
+                        },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false, beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            skewChart('chartSkewRight', rY, rX, rMedianIdx, rMeanIdx);
+            skewChart('chartSkewLeft', lY, lX, lMedianIdx, lMeanIdx);
+        })();
+
+        // ========================================
+        // Chart E: Slide 21 - Complete Analysis Histogram
+        // ========================================
+        (function() {
+            // Generate right-skewed synthetic water consumption data
+            // Using a log-normal-ish distribution: most values 5-30, tail to 100+
+            function generateSkewedData(n, seed) {
+                var data = [];
+                // Simple seeded pseudo-random (Mulberry32)
+                var t = seed || 42;
+                function rand() {
+                    t = (t + 0x6D2B79F5) | 0;
+                    var r = Math.imul(t ^ (t >>> 15), 1 | t);
+                    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+                    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+                }
+                for (var i = 0; i < n; i++) {
+                    // Box-Muller for normal, then exponentiate for log-normal
+                    var u1 = rand(), u2 = rand();
+                    var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+                    var val = Math.exp(2.5 + z * 0.7); // mean ~12, skewed right
+                    data.push(Math.max(0, val));
+                }
+                return data;
+            }
+
+            var rawData = generateSkewedData(500, 42);
+
+            // Bin the data into ~20 bins from 0 to max
+            var maxVal = 100;
+            var numBins = 20;
+            var binWidth = maxVal / numBins;
+            var bins = new Array(numBins).fill(0);
+            var binLabels = [];
+            for (var b = 0; b < numBins; b++) {
+                binLabels.push(Math.round(b * binWidth));
+            }
+            rawData.forEach(function(v) {
+                var idx = Math.min(Math.floor(v / binWidth), numBins - 1);
+                if (idx >= 0) bins[idx]++;
+            });
+
+            // Compute mean and median
+            var sorted = rawData.slice().sort(function(a, b) { return a - b; });
+            var dataMean = rawData.reduce(function(a, b) { return a + b; }, 0) / rawData.length;
+            var dataMedian = sorted[Math.floor(sorted.length / 2)];
+
+            // Find bin indices for mean and median
+            var meanBinIdx = Math.min(Math.floor(dataMean / binWidth), numBins - 1);
+            var medianBinIdx = Math.min(Math.floor(dataMedian / binWidth), numBins - 1);
+
+            // Vertical line plugin for bar charts (reuse concept)
+            var histLinePlugin = {
+                id: 'histVerticalLines',
+                afterDraw: function(chart) {
+                    var lines = chart.options.plugins.histVerticalLines;
+                    if (!lines) return;
+                    var ctx = chart.ctx;
+                    var xScale = chart.scales.x;
+                    var yScale = chart.scales.y;
+                    var top = yScale.top;
+                    var bottom = yScale.bottom;
+
+                    lines.forEach(function(line) {
+                        var xPixel = xScale.getPixelForValue(line.index);
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(xPixel, top);
+                        ctx.lineTo(xPixel, bottom);
+                        ctx.lineWidth = 2.5;
+                        ctx.strokeStyle = line.color;
+                        if (line.dash) ctx.setLineDash(line.dash);
+                        ctx.stroke();
+                        if (line.label) {
+                            ctx.font = 'bold 10px "Segoe UI", sans-serif';
+                            ctx.fillStyle = line.color;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(line.label, xPixel, top - 4);
+                        }
+                        ctx.restore();
+                    });
+                }
+            };
+
+            new Chart(document.getElementById('chartCompleteHist'), {
+                type: 'bar',
+                plugins: [histLinePlugin],
+                data: {
+                    labels: binLabels,
+                    datasets: [{
+                        data: bins,
+                        backgroundColor: 'rgba(9, 132, 227, 0.7)',
+                        borderColor: 'rgba(9, 132, 227, 1)',
+                        borderWidth: 1,
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        histVerticalLines: [
+                            { index: meanBinIdx, color: '#ff7675', dash: [5, 3], label: 'Mean=' + Math.round(dataMean) },
+                            { index: medianBinIdx, color: '#00b894', dash: null, label: 'Median=' + Math.round(dataMedian) }
+                        ]
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 9 },
+                                color: '#666',
+                                maxRotation: 0
+                            },
+                            title: {
+                                display: true,
+                                text: 'Consumption (m3)',
+                                font: { size: 10 },
+                                color: '#666'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { font: { size: 9 }, color: '#666' },
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency',
+                                font: { size: 10 },
+                                color: '#666'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
+        // ========================================
+        // Chart: Slide 18 - Histogram Example (concept card)
+        // ========================================
+        (function() {
+            new Chart(document.getElementById('chartHistogramExample'), {
+                type: 'bar',
+                data: {
+                    labels: ['0-5', '5-10', '10-15', '15-20', '20-25', '25+'],
+                    datasets: [{
+                        label: 'Frequency',
+                        data: [2, 4, 5, 3, 2, 1],
+                        backgroundColor: [
+                            'rgba(9, 132, 227, 0.55)',
+                            'rgba(9, 132, 227, 0.65)',
+                            'rgba(9, 132, 227, 0.8)',
+                            'rgba(9, 132, 227, 0.65)',
+                            'rgba(9, 132, 227, 0.55)',
+                            'rgba(9, 132, 227, 0.45)'
+                        ],
+                        borderColor: '#0984e3',
+                        borderWidth: 1,
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        title: {
+                            display: true,
+                            text: 'Water Consumption Distribution',
+                            font: { size: 11, weight: 'bold' },
+                            color: '#2c3e50',
+                            padding: { bottom: 6 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 9 },
+                                color: '#666',
+                                maxRotation: 0
+                            },
+                            title: {
+                                display: true,
+                                text: 'Consumption (m\u00B3)',
+                                font: { size: 9 },
+                                color: '#999'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: {
+                                font: { size: 9 },
+                                color: '#666',
+                                stepSize: 1
+                            },
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency',
+                                font: { size: 9 },
+                                color: '#999'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
+        // ========================================
+        // Chart F: Slide 22 - Demo Histogram Preview
+        // ========================================
+        (function() {
+            // Generate right-skewed data that looks like water consumption
+            function rand32(seed) {
+                var t = seed;
+                return function() {
+                    t = (t + 0x6D2B79F5) | 0;
+                    var r = Math.imul(t ^ (t >>> 15), 1 | t);
+                    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+                    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+                };
+            }
+            var rng = rand32(123);
+            var demoData = [];
+            for (var i = 0; i < 400; i++) {
+                var u1 = rng(), u2 = rng();
+                var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+                demoData.push(Math.max(0, Math.exp(2.7 + z * 0.65)));
+            }
+
+            var dMax = 80;
+            var dBins = 15;
+            var dBinW = dMax / dBins;
+            var dCounts = new Array(dBins).fill(0);
+            var dLabels = [];
+            for (var b = 0; b < dBins; b++) dLabels.push(Math.round(b * dBinW));
+            demoData.forEach(function(v) {
+                var idx = Math.min(Math.floor(v / dBinW), dBins - 1);
+                if (idx >= 0) dCounts[idx]++;
+            });
+
+            new Chart(document.getElementById('chartDemoHist'), {
+                type: 'bar',
+                data: {
+                    labels: dLabels,
+                    datasets: [{
+                        data: dCounts,
+                        backgroundColor: 'rgba(255, 255, 255, 0.35)',
+                        borderColor: 'rgba(255, 255, 255, 0.7)',
+                        borderWidth: 1,
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 9 },
+                                color: 'rgba(255,255,255,0.7)',
+                                maxRotation: 0
+                            },
+                            title: {
+                                display: true,
+                                text: 'Consumption (m3)',
+                                font: { size: 10 },
+                                color: 'rgba(255,255,255,0.6)'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: {
+                                font: { size: 9 },
+                                color: 'rgba(255,255,255,0.7)'
+                            },
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count',
+                                font: { size: 10 },
+                                color: 'rgba(255,255,255,0.6)'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
     </script>
 </body>
 </html>

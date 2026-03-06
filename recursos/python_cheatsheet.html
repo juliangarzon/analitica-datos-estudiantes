@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Analytics Cheat Sheet - Analitica de Datos</title>
+    <style>
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #f7fafc;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 48px 32px 36px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .header .python-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            position: relative;
+        }
+
+        /* ============================================================
+           TABLE OF CONTENTS
+           ============================================================ */
+        .toc {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .toc-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .toc a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 16px;
+            color: #fff;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .toc a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .toc a .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* TOC accent colors */
+        .toc-0  { background: #636e72; }
+        .toc-1  { background: #0984e3; }
+        .toc-2  { background: #00cec9; }
+        .toc-3  { background: #00b894; }
+        .toc-4  { background: #6c5ce7; }
+        .toc-5  { background: #f39c12; color: #2d3748; }
+        .toc-5 .num { background: rgba(0,0,0,0.15); color: #2d3748; }
+        .toc-6  { background: #e17055; }
+        .toc-7  { background: #e84393; }
+        .toc-8  { background: #0984e3; }
+        .toc-9  { background: #00b894; }
+        .toc-10 { background: #764ba2; }
+
+        /* ============================================================
+           MAIN CONTENT GRID
+           ============================================================ */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 24px 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+            overflow: hidden;
+            border-top: 4px solid #667eea;
+            break-inside: avoid;
+        }
+
+        .card-header {
+            padding: 16px 20px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .card-body {
+            padding: 0 20px 20px;
+        }
+
+        /* Card accent colors (top border + badge) */
+        .card-accent-0  { border-top-color: #636e72; }
+        .card-accent-0  .badge { background: #636e72; }
+        .card-accent-1  { border-top-color: #0984e3; }
+        .card-accent-1  .badge { background: #0984e3; }
+        .card-accent-2  { border-top-color: #00cec9; }
+        .card-accent-2  .badge { background: #00cec9; }
+        .card-accent-3  { border-top-color: #00b894; }
+        .card-accent-3  .badge { background: #00b894; }
+        .card-accent-4  { border-top-color: #6c5ce7; }
+        .card-accent-4  .badge { background: #6c5ce7; }
+        .card-accent-5  { border-top-color: #f39c12; }
+        .card-accent-5  .badge { background: #f39c12; }
+        .card-accent-6  { border-top-color: #e17055; }
+        .card-accent-6  .badge { background: #e17055; }
+        .card-accent-7  { border-top-color: #e84393; }
+        .card-accent-7  .badge { background: #e84393; }
+        .card-accent-8  { border-top-color: #0984e3; }
+        .card-accent-8  .badge { background: #0984e3; }
+        .card-accent-9  { border-top-color: #00b894; }
+        .card-accent-9  .badge { background: #00b894; }
+        .card-accent-10 { border-top-color: #764ba2; }
+        .card-accent-10 .badge { background: #764ba2; }
+
+        /* ============================================================
+           CODE BLOCKS
+           ============================================================ */
+        .code-block {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            color: #e2e8f0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .code-block code {
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        /* Syntax colors */
+        .kw  { color: #c792ea; }  /* keywords: import, from, def, if, for, print */
+        .fn  { color: #82aaff; }  /* function calls, methods */
+        .st  { color: #c3e88d; }  /* strings */
+        .cm  { color: #637777; font-style: italic; }  /* comments */
+        .nb  { color: #ffcb6b; }  /* built-in names, classes */
+        .op  { color: #89ddff; }  /* operators */
+        .num { color: #f78c6c; }  /* numbers */
+        .var { color: #e2e8f0; }  /* variables */
+        .par { color: #89ddff; }  /* parentheses, brackets */
+
+        /* ============================================================
+           DESCRIPTIONS
+           ============================================================ */
+        .desc {
+            font-size: 0.85rem;
+            color: #718096;
+            margin: 8px 0 4px;
+            font-style: italic;
+        }
+
+        .desc-label {
+            font-size: 0.82rem;
+            color: #4a5568;
+            font-weight: 600;
+            margin: 14px 0 4px;
+            padding-left: 2px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            text-align: center;
+            padding: 28px 24px 36px;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            border-top: 1px solid #e2e8f0;
+            background: #fff;
+        }
+
+        .footer strong {
+            color: #718096;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 20px 16px 40px;
+            }
+
+            .header {
+                padding: 36px 20px 28px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .toc {
+                padding: 14px 16px;
+            }
+
+            .toc a {
+                font-size: 0.72rem;
+                padding: 4px 10px;
+            }
+
+            .code-block {
+                font-size: 0.74rem;
+                padding: 12px 14px;
+            }
+        }
+
+        /* ============================================================
+           PRINT STYLES
+           ============================================================ */
+        @media print {
+            body {
+                background: #fff;
+                font-size: 9pt;
+                color: #000;
+            }
+
+            .header {
+                background: none !important;
+                color: #000;
+                padding: 20px 0 12px;
+                border-bottom: 3px solid #667eea;
+            }
+
+            .header::before {
+                display: none;
+            }
+
+            .header h1 {
+                font-size: 18pt;
+                color: #4a2c8a;
+            }
+
+            .header .subtitle {
+                color: #555;
+            }
+
+            .header .python-badge {
+                border-color: #999;
+                background: none;
+                color: #555;
+            }
+
+            .toc {
+                position: static;
+                box-shadow: none;
+                padding: 10px 0;
+                border-bottom: 1px solid #ccc;
+                break-after: avoid;
+            }
+
+            .toc a {
+                color: #000 !important;
+                background: none !important;
+                border: 1px solid #ccc;
+                font-size: 7pt;
+                padding: 2px 6px;
+            }
+
+            .toc a .num {
+                background: #eee;
+                color: #000;
+            }
+
+            .content {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+                padding: 14px 0;
+                max-width: 100%;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                border-top-width: 3px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .code-block {
+                background: #fff !important;
+                color: #000 !important;
+                border: 1px solid #ccc;
+                border-left: 3px solid #667eea;
+                padding: 10px 12px;
+                font-size: 7.5pt;
+            }
+
+            .code-block .kw  { color: #7b2d8e; }
+            .code-block .fn  { color: #2c5aa0; }
+            .code-block .st  { color: #2e7d32; }
+            .code-block .cm  { color: #888; }
+            .code-block .nb  { color: #b8860b; }
+            .code-block .op  { color: #333; }
+            .code-block .num { color: #c62828; }
+            .code-block .var { color: #000; }
+
+            .footer {
+                font-size: 8pt;
+                color: #555;
+                padding: 12px 0;
+            }
+
+            a {
+                text-decoration: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================
+     HEADER
+     ================================================================ -->
+<header class="header">
+    <h1>Python Analytics Cheat Sheet</h1>
+    <p class="subtitle">Analitica de Datos &mdash; Universidad Cooperativa de Colombia</p>
+    <span class="python-badge">pandas &bull; numpy &bull; matplotlib &bull; seaborn &bull; plotly &bull; scikit-learn</span>
+</header>
+
+<!-- ================================================================
+     TABLE OF CONTENTS
+     ================================================================ -->
+<nav class="toc">
+    <div class="toc-inner">
+        <a href="#sec0" class="toc-0"><span class="num">0</span> Setup</a>
+        <a href="#sec1" class="toc-1"><span class="num">1</span> Carga</a>
+        <a href="#sec2" class="toc-2"><span class="num">2</span> Inspeccion</a>
+        <a href="#sec3" class="toc-3"><span class="num">3</span> Limpieza</a>
+        <a href="#sec4" class="toc-4"><span class="num">4</span> Seleccion</a>
+        <a href="#sec5" class="toc-5"><span class="num">5</span> GroupBy</a>
+        <a href="#sec6" class="toc-6"><span class="num">6</span> Estadistica</a>
+        <a href="#sec7" class="toc-7"><span class="num">7</span> matplotlib</a>
+        <a href="#sec8" class="toc-8"><span class="num">8</span> seaborn</a>
+        <a href="#sec9" class="toc-9"><span class="num">9</span> plotly</a>
+        <a href="#sec10" class="toc-10"><span class="num">10</span> ML</a>
+    </div>
+</nav>
+
+<!-- ================================================================
+     CONTENT GRID
+     ================================================================ -->
+<main class="content">
+
+    <!-- ============================================================
+         SECTION 0: ENVIRONMENT SETUP
+         ============================================================ -->
+    <section class="card card-accent-0" id="sec0">
+        <div class="card-header">
+            <span class="badge">0</span>
+            <h2>Configuracion del Entorno</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Crear y activar un entorno virtual para aislar dependencias del proyecto.</p>
+
+            <p class="desc-label">Entorno virtual</p>
+            <div class="code-block"><code><span class="cm"># Create virtual environment</span>
+<span class="var">python</span> <span class="op">-</span><span class="var">m</span> <span class="var">venv</span> <span class="st">.venv</span>
+
+<span class="cm"># Activate (macOS/Linux)</span>
+<span class="kw">source</span> <span class="st">.venv/bin/activate</span>
+
+<span class="cm"># Activate (Windows)</span>
+<span class="st">.venv\Scripts\activate</span></code></div>
+
+            <p class="desc-label">Instalar paquetes</p>
+            <div class="code-block"><code><span class="cm"># Install all course packages</span>
+<span class="var">pip</span> <span class="var">install</span> <span class="var">pandas</span> <span class="var">numpy</span> <span class="var">matplotlib</span> <span class="var">seaborn</span> <span class="var">plotly</span> <span class="var">scikit-learn</span> <span class="var">jupyter</span>
+
+<span class="cm"># Verify installation</span>
+<span class="var">pip</span> <span class="var">list</span>
+<span class="var">python</span> <span class="op">-</span><span class="var">c</span> <span class="st">"import pandas; print(pandas.__version__)"</span>
+
+<span class="cm"># Launch Jupyter</span>
+<span class="var">jupyter</span> <span class="var">notebook</span></code></div>
+
+            <p class="desc-label">Comandos utiles de pip</p>
+            <div class="code-block"><code><span class="var">pip</span> <span class="var">install</span> <span class="var">package_name</span>          <span class="cm"># Install a package</span>
+<span class="var">pip</span> <span class="var">install</span> <span class="op">-</span><span class="var">r</span> <span class="st">requirements.txt</span>   <span class="cm"># Install from file</span>
+<span class="var">pip</span> <span class="var">freeze</span> <span class="op">&gt;</span> <span class="st">requirements.txt</span>     <span class="cm"># Save current packages</span>
+<span class="var">pip</span> <span class="var">uninstall</span> <span class="var">package_name</span>        <span class="cm"># Remove a package</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 1: DATA LOADING
+         ============================================================ -->
+    <section class="card card-accent-1" id="sec1">
+        <div class="card-header">
+            <span class="badge">1</span>
+            <h2>Carga de Datos</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Leer archivos de datos en un DataFrame de pandas.</p>
+
+            <p class="desc-label">CSV basico</p>
+            <div class="code-block"><code><span class="kw">import</span> <span class="nb">pandas</span> <span class="kw">as</span> <span class="nb">pd</span>
+
+<span class="cm"># Basic CSV</span>
+<span class="var">df</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">read_csv</span><span class="par">(</span><span class="st">'file.csv'</span><span class="par">)</span></code></div>
+
+            <p class="desc-label">CSV con opciones avanzadas</p>
+            <div class="code-block"><code><span class="var">df</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">read_csv</span><span class="par">(</span><span class="st">'file.csv'</span><span class="par">,</span>
+    <span class="var">encoding</span><span class="op">=</span><span class="st">'utf-8'</span><span class="par">,</span>          <span class="cm"># or 'latin-1'</span>
+    <span class="var">sep</span><span class="op">=</span><span class="st">';'</span><span class="par">,</span>                   <span class="cm"># delimiter</span>
+    <span class="var">decimal</span><span class="op">=</span><span class="st">','</span><span class="par">,</span>               <span class="cm"># decimal separator</span>
+    <span class="var">thousands</span><span class="op">=</span><span class="st">'.'</span><span class="par">,</span>             <span class="cm"># thousands separator</span>
+    <span class="var">na_values</span><span class="op">=</span><span class="par">[</span><span class="st">'N/A'</span><span class="par">,</span> <span class="st">''</span><span class="par">],</span>     <span class="cm"># treat as NaN</span>
+    <span class="var">dtype</span><span class="op">=</span><span class="par">{</span><span class="st">'col'</span><span class="op">:</span> <span class="nb">str</span><span class="par">}</span>         <span class="cm"># force column type</span>
+<span class="par">)</span></code></div>
+
+            <p class="desc-label">Desde URL y Excel</p>
+            <div class="code-block"><code><span class="cm"># From URL</span>
+<span class="var">df</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">read_csv</span><span class="par">(</span><span class="st">'https://datos.gov.co/...'</span><span class="par">)</span>
+
+<span class="cm"># Excel</span>
+<span class="var">df</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">read_excel</span><span class="par">(</span><span class="st">'file.xlsx'</span><span class="par">,</span> <span class="var">sheet_name</span><span class="op">=</span><span class="st">'Sheet1'</span><span class="par">)</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2: DATA INSPECTION
+         ============================================================ -->
+    <section class="card card-accent-2" id="sec2">
+        <div class="card-header">
+            <span class="badge">2</span>
+            <h2>Inspeccion de Datos</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Explorar la estructura, tipos y calidad de un DataFrame.</p>
+
+            <div class="code-block"><code><span class="var">df</span><span class="op">.</span><span class="fn">head</span><span class="par">()</span>              <span class="cm"># First 5 rows</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">tail</span><span class="par">()</span>              <span class="cm"># Last 5 rows</span>
+<span class="var">df</span><span class="op">.</span><span class="var">shape</span>               <span class="cm"># (rows, columns)</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">info</span><span class="par">()</span>              <span class="cm"># Column types, non-null counts</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">describe</span><span class="par">()</span>          <span class="cm"># Statistics for numeric columns</span>
+<span class="var">df</span><span class="op">.</span><span class="var">dtypes</span>              <span class="cm"># Data types</span>
+<span class="var">df</span><span class="op">.</span><span class="var">columns</span>             <span class="cm"># Column names</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">nunique</span><span class="par">()</span>           <span class="cm"># Unique values per column</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">isnull</span><span class="par">()</span><span class="op">.</span><span class="fn">sum</span><span class="par">()</span>      <span class="cm"># Missing values per column</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">duplicated</span><span class="par">()</span><span class="op">.</span><span class="fn">sum</span><span class="par">()</span>  <span class="cm"># Count duplicates</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">value_counts</span><span class="par">()</span>  <span class="cm"># Frequency table</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3: DATA CLEANING
+         ============================================================ -->
+    <section class="card card-accent-3" id="sec3">
+        <div class="card-header">
+            <span class="badge">3</span>
+            <h2>Limpieza de Datos</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Manejar valores faltantes, tipos incorrectos, texto sucio y duplicados.</p>
+
+            <p class="desc-label">Valores faltantes</p>
+            <div class="code-block"><code><span class="var">df</span><span class="op">.</span><span class="fn">dropna</span><span class="par">()</span>                        <span class="cm"># Remove rows with NaN</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">dropna</span><span class="par">(</span><span class="var">subset</span><span class="op">=</span><span class="par">[</span><span class="st">'col'</span><span class="par">])</span>          <span class="cm"># Only if 'col' is NaN</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">fillna</span><span class="par">(</span><span class="num">0</span><span class="par">)</span>                       <span class="cm"># Replace NaN with 0</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">fillna</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">median</span><span class="par">())</span>      <span class="cm"># Replace with median</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">interpolate</span><span class="par">()</span>            <span class="cm"># Interpolate</span></code></div>
+
+            <p class="desc-label">Conversion de tipos</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">astype</span><span class="par">(</span><span class="nb">int</span><span class="par">)</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">astype</span><span class="par">(</span><span class="nb">float</span><span class="par">)</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'date'</span><span class="par">]</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">to_datetime</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'date'</span><span class="par">])</span></code></div>
+
+            <p class="desc-label">Limpieza de texto</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="var">str</span><span class="op">.</span><span class="fn">strip</span><span class="par">()</span>        <span class="cm"># Remove whitespace</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="var">str</span><span class="op">.</span><span class="fn">lower</span><span class="par">()</span>        <span class="cm"># Lowercase</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="var">str</span><span class="op">.</span><span class="fn">replace</span><span class="par">(</span><span class="st">','</span><span class="par">,</span> <span class="st">''</span><span class="par">)</span>  <span class="cm"># Remove char</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="var">str</span><span class="op">.</span><span class="fn">title</span><span class="par">()</span>        <span class="cm"># Title Case</span></code></div>
+
+            <p class="desc-label">Duplicados y columnas</p>
+            <div class="code-block"><code><span class="var">df</span><span class="op">.</span><span class="fn">drop_duplicates</span><span class="par">()</span>                     <span class="cm"># Remove exact dupes</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">drop_duplicates</span><span class="par">(</span><span class="var">subset</span><span class="op">=</span><span class="par">[</span><span class="st">'col'</span><span class="par">])</span>       <span class="cm"># Based on column</span>
+
+<span class="cm"># Rename</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">rename</span><span class="par">(</span><span class="var">columns</span><span class="op">=</span><span class="par">{</span><span class="st">'old'</span><span class="op">:</span> <span class="st">'new'</span><span class="par">})</span>
+<span class="var">df</span><span class="op">.</span><span class="var">columns</span> <span class="op">=</span> <span class="par">[</span><span class="st">'col1'</span><span class="par">,</span> <span class="st">'col2'</span><span class="par">,</span> <span class="st">'col3'</span><span class="par">]</span>   <span class="cm"># Rename all</span>
+
+<span class="cm"># Drop columns</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">drop</span><span class="par">(</span><span class="var">columns</span><span class="op">=</span><span class="par">[</span><span class="st">'col1'</span><span class="par">,</span> <span class="st">'col2'</span><span class="par">])</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4: DATA SELECTION & FILTERING
+         ============================================================ -->
+    <section class="card card-accent-4" id="sec4">
+        <div class="card-header">
+            <span class="badge">4</span>
+            <h2>Seleccion y Filtrado</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Seleccionar columnas, filas y aplicar condiciones booleanas.</p>
+
+            <p class="desc-label">Seleccionar columnas y filas</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span>                  <span class="cm"># Single column (Series)</span>
+<span class="var">df</span><span class="par">[[</span><span class="st">'col1'</span><span class="par">,</span> <span class="st">'col2'</span><span class="par">]]</span>      <span class="cm"># Multiple columns (DataFrame)</span>
+
+<span class="var">df</span><span class="op">.</span><span class="var">loc</span><span class="par">[</span><span class="num">0</span><span class="par">]</span>                  <span class="cm"># By label/index</span>
+<span class="var">df</span><span class="op">.</span><span class="var">iloc</span><span class="par">[</span><span class="num">0</span><span class="op">:</span><span class="num">5</span><span class="par">]</span>               <span class="cm"># By position (first 5)</span>
+<span class="var">df</span><span class="op">.</span><span class="var">loc</span><span class="par">[</span><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span> <span class="op">&gt;</span> <span class="num">10</span><span class="par">]</span>     <span class="cm"># By condition</span></code></div>
+
+            <p class="desc-label">Filtros booleanos</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="var">df</span><span class="par">[</span><span class="st">'age'</span><span class="par">]</span> <span class="op">&gt;</span> <span class="num">18</span><span class="par">]</span>                           <span class="cm"># Single</span>
+<span class="var">df</span><span class="par">[(</span><span class="var">df</span><span class="par">[</span><span class="st">'age'</span><span class="par">]</span> <span class="op">&gt;</span> <span class="num">18</span><span class="par">)</span> <span class="op">&amp;</span> <span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'city'</span><span class="par">]</span> <span class="op">==</span> <span class="st">'NYC'</span><span class="par">)]</span> <span class="cm"># AND</span>
+<span class="var">df</span><span class="par">[(</span><span class="var">df</span><span class="par">[</span><span class="st">'age'</span><span class="par">]</span> <span class="op">&gt;</span> <span class="num">18</span><span class="par">)</span> <span class="op">|</span> <span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'city'</span><span class="par">]</span> <span class="op">==</span> <span class="st">'NYC'</span><span class="par">)]</span> <span class="cm"># OR</span>
+<span class="var">df</span><span class="par">[</span><span class="op">~</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'age'</span><span class="par">]</span> <span class="op">&gt;</span> <span class="num">18</span><span class="par">)]</span>                        <span class="cm"># NOT</span>
+<span class="var">df</span><span class="par">[</span><span class="var">df</span><span class="par">[</span><span class="st">'city'</span><span class="par">]</span><span class="op">.</span><span class="fn">isin</span><span class="par">([</span><span class="st">'NYC'</span><span class="par">,</span> <span class="st">'LA'</span><span class="par">])]</span>           <span class="cm"># In list</span></code></div>
+
+            <p class="desc-label">Query y ordenamiento</p>
+            <div class="code-block"><code><span class="cm"># Query syntax (cleaner)</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">query</span><span class="par">(</span><span class="st">'age &gt; 18 and city == "NYC"'</span><span class="par">)</span>
+
+<span class="cm"># Sorting</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">sort_values</span><span class="par">(</span><span class="st">'col'</span><span class="par">)</span>                    <span class="cm"># Ascending</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">sort_values</span><span class="par">(</span><span class="st">'col'</span><span class="par">,</span> <span class="var">ascending</span><span class="op">=</span><span class="kw">False</span><span class="par">)</span>   <span class="cm"># Descending</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">sort_values</span><span class="par">([</span><span class="st">'col1'</span><span class="par">,</span> <span class="st">'col2'</span><span class="par">])</span>         <span class="cm"># Multiple</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5: GROUPBY & AGGREGATION
+         ============================================================ -->
+    <section class="card card-accent-5" id="sec5">
+        <div class="card-header">
+            <span class="badge">5</span>
+            <h2>GroupBy y Agregacion</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Agrupar datos por categorias y calcular estadisticas por grupo.</p>
+
+            <p class="desc-label">GroupBy basico</p>
+            <div class="code-block"><code><span class="var">df</span><span class="op">.</span><span class="fn">groupby</span><span class="par">(</span><span class="st">'category'</span><span class="par">)[</span><span class="st">'value'</span><span class="par">]</span><span class="op">.</span><span class="fn">mean</span><span class="par">()</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">groupby</span><span class="par">(</span><span class="st">'category'</span><span class="par">)[</span><span class="st">'value'</span><span class="par">]</span><span class="op">.</span><span class="fn">sum</span><span class="par">()</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">groupby</span><span class="par">(</span><span class="st">'category'</span><span class="par">)[</span><span class="st">'value'</span><span class="par">]</span><span class="op">.</span><span class="fn">count</span><span class="par">()</span></code></div>
+
+            <p class="desc-label">Agregaciones multiples</p>
+            <div class="code-block"><code><span class="cm"># Multiple agg functions on one column</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">groupby</span><span class="par">(</span><span class="st">'category'</span><span class="par">)[</span><span class="st">'value'</span><span class="par">]</span><span class="op">.</span><span class="fn">agg</span><span class="par">([</span>
+    <span class="st">'mean'</span><span class="par">,</span> <span class="st">'median'</span><span class="par">,</span> <span class="st">'std'</span><span class="par">,</span> <span class="st">'count'</span>
+<span class="par">])</span>
+
+<span class="cm"># Different functions per column</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">groupby</span><span class="par">(</span><span class="st">'category'</span><span class="par">)</span><span class="op">.</span><span class="fn">agg</span><span class="par">({</span>
+    <span class="st">'value1'</span><span class="op">:</span> <span class="st">'mean'</span><span class="par">,</span>
+    <span class="st">'value2'</span><span class="op">:</span> <span class="st">'sum'</span><span class="par">,</span>
+    <span class="st">'value3'</span><span class="op">:</span> <span class="par">[</span><span class="st">'min'</span><span class="par">,</span> <span class="st">'max'</span><span class="par">]</span>
+<span class="par">})</span></code></div>
+
+            <p class="desc-label">Tablas de frecuencia y pivot</p>
+            <div class="code-block"><code><span class="cm"># Value counts</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">value_counts</span><span class="par">()</span>                 <span class="cm"># Frequency</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">value_counts</span><span class="par">(</span><span class="var">normalize</span><span class="op">=</span><span class="kw">True</span><span class="par">)</span>  <span class="cm"># Proportions</span>
+
+<span class="cm"># Pivot table</span>
+<span class="nb">pd</span><span class="op">.</span><span class="fn">pivot_table</span><span class="par">(</span><span class="var">df</span><span class="par">,</span>
+    <span class="var">values</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span>
+    <span class="var">index</span><span class="op">=</span><span class="st">'row_var'</span><span class="par">,</span>
+    <span class="var">columns</span><span class="op">=</span><span class="st">'col_var'</span><span class="par">,</span>
+    <span class="var">aggfunc</span><span class="op">=</span><span class="st">'mean'</span>
+<span class="par">)</span>
+
+<span class="cm"># Cross tabulation</span>
+<span class="nb">pd</span><span class="op">.</span><span class="fn">crosstab</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col1'</span><span class="par">],</span> <span class="var">df</span><span class="par">[</span><span class="st">'col2'</span><span class="par">])</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6: STATISTICS
+         ============================================================ -->
+    <section class="card card-accent-6" id="sec6">
+        <div class="card-header">
+            <span class="badge">6</span>
+            <h2>Estadistica Descriptiva</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Medidas de tendencia central, dispersion y correlacion.</p>
+
+            <p class="desc-label">Tendencia central</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">mean</span><span class="par">()</span>       <span class="cm"># Mean (average)</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">median</span><span class="par">()</span>     <span class="cm"># Median (middle value)</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">mode</span><span class="par">()</span>       <span class="cm"># Mode (most frequent)</span></code></div>
+
+            <p class="desc-label">Dispersion</p>
+            <div class="code-block"><code><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">std</span><span class="par">()</span>        <span class="cm"># Standard deviation</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">var</span><span class="par">()</span>        <span class="cm"># Variance</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">min</span><span class="par">()</span>        <span class="cm"># Minimum</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">max</span><span class="par">()</span>        <span class="cm"># Maximum</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">quantile</span><span class="par">(</span><span class="num">0.25</span><span class="par">)</span>  <span class="cm"># Q1</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">quantile</span><span class="par">(</span><span class="num">0.75</span><span class="par">)</span>  <span class="cm"># Q3</span></code></div>
+
+            <p class="desc-label">Correlacion y resumen</p>
+            <div class="code-block"><code><span class="cm"># Correlation</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col1'</span><span class="par">]</span><span class="op">.</span><span class="fn">corr</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col2'</span><span class="par">])</span>    <span class="cm"># Between two columns</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">corr</span><span class="par">()</span>                       <span class="cm"># Correlation matrix</span>
+
+<span class="cm"># Full summary</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">describe</span><span class="par">()</span>                   <span class="cm"># Numeric stats</span>
+<span class="var">df</span><span class="op">.</span><span class="fn">describe</span><span class="par">(</span><span class="var">include</span><span class="op">=</span><span class="st">'all'</span><span class="par">)</span>      <span class="cm"># Include non-numeric</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 7: MATPLOTLIB
+         ============================================================ -->
+    <section class="card card-accent-7" id="sec7">
+        <div class="card-header">
+            <span class="badge">7</span>
+            <h2>Visualizacion - matplotlib</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Graficos estaticos: histogramas, dispersion, barras, cajas y lineas.</p>
+
+            <p class="desc-label">Histograma y dispersion</p>
+            <div class="code-block"><code><span class="kw">import</span> <span class="nb">matplotlib.pyplot</span> <span class="kw">as</span> <span class="nb">plt</span>
+
+<span class="cm"># Histogram</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">figure</span><span class="par">(</span><span class="var">figsize</span><span class="op">=</span><span class="par">(</span><span class="num">10</span><span class="par">,</span> <span class="num">6</span><span class="par">))</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">hist</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">],</span> <span class="var">bins</span><span class="op">=</span><span class="num">30</span><span class="par">,</span> <span class="var">color</span><span class="op">=</span><span class="st">'steelblue'</span><span class="par">,</span> <span class="var">edgecolor</span><span class="op">=</span><span class="st">'white'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">xlabel</span><span class="par">(</span><span class="st">'Value'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">ylabel</span><span class="par">(</span><span class="st">'Frequency'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">title</span><span class="par">(</span><span class="st">'Distribution of Values'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Scatter plot</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">scatter</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'x'</span><span class="par">],</span> <span class="var">df</span><span class="par">[</span><span class="st">'y'</span><span class="par">],</span> <span class="var">alpha</span><span class="op">=</span><span class="num">0.5</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span></code></div>
+
+            <p class="desc-label">Barras, cajas y lineas</p>
+            <div class="code-block"><code><span class="cm"># Bar chart</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'category'</span><span class="par">]</span><span class="op">.</span><span class="fn">value_counts</span><span class="par">()</span><span class="op">.</span><span class="fn">plot</span><span class="par">(</span><span class="var">kind</span><span class="op">=</span><span class="st">'bar'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">title</span><span class="par">(</span><span class="st">'Counts by Category'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Box plot</span>
+<span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">]</span><span class="op">.</span><span class="fn">plot</span><span class="par">(</span><span class="var">kind</span><span class="op">=</span><span class="st">'box'</span><span class="par">)</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Line chart</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">plot</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'date'</span><span class="par">],</span> <span class="var">df</span><span class="par">[</span><span class="st">'value'</span><span class="par">])</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span></code></div>
+
+            <p class="desc-label">Subplots y guardar</p>
+            <div class="code-block"><code><span class="cm"># Multiple subplots</span>
+<span class="var">fig</span><span class="par">,</span> <span class="var">axes</span> <span class="op">=</span> <span class="nb">plt</span><span class="op">.</span><span class="fn">subplots</span><span class="par">(</span><span class="num">1</span><span class="par">,</span> <span class="num">3</span><span class="par">,</span> <span class="var">figsize</span><span class="op">=</span><span class="par">(</span><span class="num">15</span><span class="par">,</span> <span class="num">5</span><span class="par">))</span>
+<span class="var">axes</span><span class="par">[</span><span class="num">0</span><span class="par">]</span><span class="op">.</span><span class="fn">hist</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col1'</span><span class="par">])</span>
+<span class="var">axes</span><span class="par">[</span><span class="num">1</span><span class="par">]</span><span class="op">.</span><span class="fn">scatter</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'x'</span><span class="par">],</span> <span class="var">df</span><span class="par">[</span><span class="st">'y'</span><span class="par">])</span>
+<span class="var">axes</span><span class="par">[</span><span class="num">2</span><span class="par">]</span><span class="op">.</span><span class="fn">boxplot</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col2'</span><span class="par">])</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">tight_layout</span><span class="par">()</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Save figure</span>
+<span class="nb">plt</span><span class="op">.</span><span class="fn">savefig</span><span class="par">(</span><span class="st">'chart.png'</span><span class="par">,</span> <span class="var">dpi</span><span class="op">=</span><span class="num">300</span><span class="par">,</span> <span class="var">bbox_inches</span><span class="op">=</span><span class="st">'tight'</span><span class="par">)</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 8: SEABORN
+         ============================================================ -->
+    <section class="card card-accent-8" id="sec8">
+        <div class="card-header">
+            <span class="badge">8</span>
+            <h2>Visualizacion - seaborn</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Graficos estadisticos de alto nivel con estilos elegantes.</p>
+
+            <p class="desc-label">Distribucion y comparacion</p>
+            <div class="code-block"><code><span class="kw">import</span> <span class="nb">seaborn</span> <span class="kw">as</span> <span class="nb">sns</span>
+
+<span class="cm"># Histogram with KDE</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">histplot</span><span class="par">(</span><span class="var">df</span><span class="par">[</span><span class="st">'col'</span><span class="par">],</span> <span class="var">bins</span><span class="op">=</span><span class="num">30</span><span class="par">,</span> <span class="var">kde</span><span class="op">=</span><span class="kw">True</span><span class="par">)</span>
+
+<span class="cm"># Box plot</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">boxplot</span><span class="par">(</span><span class="var">x</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span> <span class="var">data</span><span class="op">=</span><span class="var">df</span><span class="par">)</span>
+
+<span class="cm"># Violin plot</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">violinplot</span><span class="par">(</span><span class="var">x</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span> <span class="var">data</span><span class="op">=</span><span class="var">df</span><span class="par">)</span>
+
+<span class="cm"># Count plot (categorical)</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">countplot</span><span class="par">(</span><span class="var">x</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">data</span><span class="op">=</span><span class="var">df</span><span class="par">)</span></code></div>
+
+            <p class="desc-label">Relaciones y correlacion</p>
+            <div class="code-block"><code><span class="cm"># Scatter with regression line</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">regplot</span><span class="par">(</span><span class="var">x</span><span class="op">=</span><span class="st">'col1'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'col2'</span><span class="par">,</span> <span class="var">data</span><span class="op">=</span><span class="var">df</span><span class="par">)</span>
+
+<span class="cm"># Scatter with color groups</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">scatterplot</span><span class="par">(</span><span class="var">x</span><span class="op">=</span><span class="st">'col1'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'col2'</span><span class="par">,</span> <span class="var">hue</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">data</span><span class="op">=</span><span class="var">df</span><span class="par">)</span>
+
+<span class="cm"># Correlation heatmap</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">heatmap</span><span class="par">(</span><span class="var">df</span><span class="op">.</span><span class="fn">corr</span><span class="par">(),</span> <span class="var">annot</span><span class="op">=</span><span class="kw">True</span><span class="par">,</span> <span class="var">cmap</span><span class="op">=</span><span class="st">'RdYlGn'</span><span class="par">,</span>
+             <span class="var">center</span><span class="op">=</span><span class="num">0</span><span class="par">,</span> <span class="var">fmt</span><span class="op">=</span><span class="st">'.2f'</span><span class="par">)</span>
+
+<span class="cm"># Pair plot (all pairs)</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">pairplot</span><span class="par">(</span><span class="var">df</span><span class="par">[[</span><span class="st">'col1'</span><span class="par">,</span> <span class="st">'col2'</span><span class="par">,</span> <span class="st">'col3'</span><span class="par">]])</span></code></div>
+
+            <p class="desc-label">Estilo global</p>
+            <div class="code-block"><code><span class="nb">sns</span><span class="op">.</span><span class="fn">set_style</span><span class="par">(</span><span class="st">'whitegrid'</span><span class="par">)</span>
+<span class="nb">sns</span><span class="op">.</span><span class="fn">set_palette</span><span class="par">(</span><span class="st">'husl'</span><span class="par">)</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 9: PLOTLY
+         ============================================================ -->
+    <section class="card card-accent-9" id="sec9">
+        <div class="card-header">
+            <span class="badge">9</span>
+            <h2>Visualizacion - plotly</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Graficos interactivos: zoom, hover, filtros dinamicos.</p>
+
+            <p class="desc-label">Graficos basicos</p>
+            <div class="code-block"><code><span class="kw">import</span> <span class="nb">plotly.express</span> <span class="kw">as</span> <span class="nb">px</span>
+
+<span class="cm"># Scatter</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">scatter</span><span class="par">(</span><span class="var">df</span><span class="par">,</span> <span class="var">x</span><span class="op">=</span><span class="st">'col1'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'col2'</span><span class="par">,</span>
+                  <span class="var">color</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">title</span><span class="op">=</span><span class="st">'Scatter Plot'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Bar chart</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">bar</span><span class="par">(</span><span class="var">df</span><span class="par">,</span> <span class="var">x</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span>
+              <span class="var">color</span><span class="op">=</span><span class="st">'subcategory'</span><span class="par">,</span> <span class="var">title</span><span class="op">=</span><span class="st">'Bar Chart'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Histogram</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">histogram</span><span class="par">(</span><span class="var">df</span><span class="par">,</span> <span class="var">x</span><span class="op">=</span><span class="st">'col'</span><span class="par">,</span> <span class="var">nbins</span><span class="op">=</span><span class="num">30</span><span class="par">,</span>
+                     <span class="var">title</span><span class="op">=</span><span class="st">'Distribution'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span></code></div>
+
+            <p class="desc-label">Box, linea y heatmap</p>
+            <div class="code-block"><code><span class="cm"># Box plot</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">box</span><span class="par">(</span><span class="var">df</span><span class="par">,</span> <span class="var">x</span><span class="op">=</span><span class="st">'category'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span>
+              <span class="var">title</span><span class="op">=</span><span class="st">'Box Plot'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Line chart</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">line</span><span class="par">(</span><span class="var">df</span><span class="par">,</span> <span class="var">x</span><span class="op">=</span><span class="st">'date'</span><span class="par">,</span> <span class="var">y</span><span class="op">=</span><span class="st">'value'</span><span class="par">,</span>
+               <span class="var">title</span><span class="op">=</span><span class="st">'Trend'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Heatmap (correlation)</span>
+<span class="var">fig</span> <span class="op">=</span> <span class="nb">px</span><span class="op">.</span><span class="fn">imshow</span><span class="par">(</span><span class="var">df</span><span class="op">.</span><span class="fn">corr</span><span class="par">(),</span> <span class="var">text_auto</span><span class="op">=</span><span class="st">'.2f'</span><span class="par">,</span>
+                <span class="var">color_continuous_scale</span><span class="op">=</span><span class="st">'RdYlGn'</span><span class="par">)</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">show</span><span class="par">()</span>
+
+<span class="cm"># Save to HTML</span>
+<span class="var">fig</span><span class="op">.</span><span class="fn">write_html</span><span class="par">(</span><span class="st">'chart.html'</span><span class="par">)</span></code></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 10: MACHINE LEARNING BASICS
+         ============================================================ -->
+    <section class="card card-accent-10" id="sec10">
+        <div class="card-header">
+            <span class="badge">10</span>
+            <h2>Machine Learning Basico</h2>
+        </div>
+        <div class="card-body">
+            <p class="desc">Arbol de decision: preparar datos, entrenar, predecir y evaluar.</p>
+
+            <p class="desc-label">Preparar datos</p>
+            <div class="code-block"><code><span class="kw">from</span> <span class="nb">sklearn.model_selection</span> <span class="kw">import</span> <span class="nb">train_test_split</span>
+<span class="kw">from</span> <span class="nb">sklearn.tree</span> <span class="kw">import</span> <span class="nb">DecisionTreeClassifier</span>
+<span class="kw">from</span> <span class="nb">sklearn.metrics</span> <span class="kw">import</span> <span class="par">(</span>
+    <span class="nb">accuracy_score</span><span class="par">,</span> <span class="nb">confusion_matrix</span><span class="par">,</span>
+    <span class="nb">classification_report</span>
+<span class="par">)</span>
+
+<span class="cm"># Features and target</span>
+<span class="var">X</span> <span class="op">=</span> <span class="var">df</span><span class="par">[[</span><span class="st">'feature1'</span><span class="par">,</span> <span class="st">'feature2'</span><span class="par">,</span> <span class="st">'feature3'</span><span class="par">]]</span>
+<span class="var">y</span> <span class="op">=</span> <span class="var">df</span><span class="par">[</span><span class="st">'target'</span><span class="par">]</span>
+
+<span class="cm"># Split 80/20</span>
+<span class="var">X_train</span><span class="par">,</span> <span class="var">X_test</span><span class="par">,</span> <span class="var">y_train</span><span class="par">,</span> <span class="var">y_test</span> <span class="op">=</span> <span class="fn">train_test_split</span><span class="par">(</span>
+    <span class="var">X</span><span class="par">,</span> <span class="var">y</span><span class="par">,</span> <span class="var">test_size</span><span class="op">=</span><span class="num">0.2</span><span class="par">,</span> <span class="var">random_state</span><span class="op">=</span><span class="num">42</span>
+<span class="par">)</span></code></div>
+
+            <p class="desc-label">Entrenar y predecir</p>
+            <div class="code-block"><code><span class="cm"># Train model</span>
+<span class="var">model</span> <span class="op">=</span> <span class="nb">DecisionTreeClassifier</span><span class="par">(</span>
+    <span class="var">max_depth</span><span class="op">=</span><span class="num">5</span><span class="par">,</span> <span class="var">random_state</span><span class="op">=</span><span class="num">42</span>
+<span class="par">)</span>
+<span class="var">model</span><span class="op">.</span><span class="fn">fit</span><span class="par">(</span><span class="var">X_train</span><span class="par">,</span> <span class="var">y_train</span><span class="par">)</span>
+
+<span class="cm"># Predict</span>
+<span class="var">y_pred</span> <span class="op">=</span> <span class="var">model</span><span class="op">.</span><span class="fn">predict</span><span class="par">(</span><span class="var">X_test</span><span class="par">)</span></code></div>
+
+            <p class="desc-label">Evaluar</p>
+            <div class="code-block"><code><span class="cm"># Accuracy</span>
+<span class="kw">print</span><span class="par">(</span><span class="st">f"Accuracy: {</span><span class="fn">accuracy_score</span><span class="par">(</span><span class="var">y_test</span><span class="par">,</span> <span class="var">y_pred</span><span class="par">)</span><span class="st">:.2f}"</span><span class="par">)</span>
+
+<span class="cm"># Confusion matrix</span>
+<span class="kw">print</span><span class="par">(</span><span class="fn">confusion_matrix</span><span class="par">(</span><span class="var">y_test</span><span class="par">,</span> <span class="var">y_pred</span><span class="par">))</span>
+
+<span class="cm"># Full report (precision, recall, f1)</span>
+<span class="kw">print</span><span class="par">(</span><span class="fn">classification_report</span><span class="par">(</span><span class="var">y_test</span><span class="par">,</span> <span class="var">y_pred</span><span class="par">))</span>
+
+<span class="cm"># Feature importance</span>
+<span class="var">importance</span> <span class="op">=</span> <span class="nb">pd</span><span class="op">.</span><span class="fn">Series</span><span class="par">(</span>
+    <span class="var">model</span><span class="op">.</span><span class="var">feature_importances_</span><span class="par">,</span>
+    <span class="var">index</span><span class="op">=</span><span class="var">X</span><span class="op">.</span><span class="var">columns</span>
+<span class="par">)</span>
+<span class="var">importance</span><span class="op">.</span><span class="fn">sort_values</span><span class="par">(</span><span class="var">ascending</span><span class="op">=</span><span class="kw">False</span><span class="par">)</span><span class="op">.</span><span class="fn">plot</span><span class="par">(</span><span class="var">kind</span><span class="op">=</span><span class="st">'barh'</span><span class="par">)</span></code></div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="footer">
+    <strong>Analitica de Datos</strong> &mdash; Universidad Cooperativa de Colombia &mdash; 2025-I
+</footer>
+
+</body>
+</html>
