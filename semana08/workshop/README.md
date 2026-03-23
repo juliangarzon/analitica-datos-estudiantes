@@ -1,249 +1,153 @@
-# Week 8 Workshop: Visualization Principles
+# Week 8 Workshop: Build Your AI Skills Ecosystem
 
-## Creating Publication-Ready Figures with Budget Execution Data
+## Overview
 
-**Duration:** 2 hours (homework or in-class workshop)
+Expand what you started in class into a complete skills ecosystem for the semester. You will plan which AI skills you need, build two more, test them with real course content, and reflect on the experience.
 
-**Dataset:** Budget Execution Data (EJECUCION_PRESUPUESTAL) from datos.gov.co
-
----
-
-## Objectives
-
-By completing this workshop, you will:
-
-1. Create 5 different chart types with real budget data
-2. Apply a consistent, professional color palette
-3. Add proper titles, labels, and annotations
-4. Export publication-ready figures in multiple formats
+**Duration:** ~2 hours at home
+**Prerequisites:** Completed in-class exercise (working AI CLI tool + at least 1 skill created)
+**Due:** Before Week 9 class
 
 ---
 
-## Workshop Tasks
+## Task 1: Ecosystem Plan (20 minutes)
 
-### Part 1: Data Preparation and Color Palette (15 minutes)
+Think about the deliverables you will produce in this course over the next 8 weeks:
 
-**Task 1.1: Load and Explore the Data**
+- Visualizations (matplotlib, seaborn, Plotly charts)
+- Interactive dashboards (Streamlit apps)
+- Data storytelling narratives
+- Project documentation (READMEs, reports)
+- Data cleaning and transformation scripts
+- EDA reports and summaries
+- Milestone presentations
+- Machine learning experiments (if time permits)
 
-1. Load the budget execution dataset
-2. Identify numeric and categorical columns
-3. Create summary statistics
+Write a short document (~1 page) listing:
 
-**Task 1.2: Define a Professional Color Palette**
+1. Which deliverable types you will need skills for
+2. Priority order (what will you need first?)
+3. For each: a one-sentence description of what the skill should do
 
-Create a consistent color palette that you will use throughout:
-- Primary color (main data)
-- Secondary color (comparison/secondary data)
-- Accent color (highlighting important values)
-- Warning color (below-target or negative values)
-- Neutral color (reference lines, background elements)
+### Example
 
-Recommended palettes:
-- Corporate blue: `['#2C3E50', '#3498DB', '#1ABC9C', '#E74C3C', '#95A5A6']`
-- Muted earth: `['#5D4E37', '#8B7355', '#CD853F', '#B22222', '#A9A9A9']`
-- Modern minimal: `['#1A1A2E', '#16213E', '#0F3460', '#E94560', '#EAEAEA']`
-
----
-
-### Part 2: Create 5 Chart Types (75 minutes)
-
-**Chart 1: Horizontal Bar Chart - Budget by Category (15 minutes)**
-
-Create a horizontal bar chart showing budget allocation by category:
-- Sort values from largest to smallest
-- Use a single professional color
-- Add value labels at the end of each bar
-- Include a clean title with context
-- Remove unnecessary gridlines and spines
-
-**Chart 2: Grouped Bar Chart - Approved vs Executed (15 minutes)**
-
-Create a grouped bar chart comparing approved budget vs executed budget:
-- Use two distinct colors (one for approved, one for executed)
-- Add a legend
-- Show the gap between approved and executed
-- Include percentage execution rate in annotations
-
-**Chart 3: Line Chart - Monthly Execution Trend (15 minutes)**
-
-Create a line chart showing monthly budget execution rate:
-- Include a target line for reference
-- Use color to differentiate actual vs target
-- Highlight months where execution was below target
-- Add annotations for key data points (start, end, any notable changes)
-
-**Chart 4: Stacked Bar Chart - Budget Composition (15 minutes)**
-
-Create a stacked bar chart showing how the budget is composed:
-- Use a sequential color palette (light to dark)
-- Add percentage labels within each segment
-- Include a legend
-- Consider horizontal orientation for readability
-
-**Chart 5: Small Multiples - Department Comparison (15 minutes)**
-
-Create a small multiples visualization comparing execution across departments:
-- Use consistent scales across all subplots
-- Highlight the department with lowest execution
-- Add reference lines at 90% target
-- Use minimal styling for each subplot
+| Priority | Deliverable | Skill Description |
+|----------|-------------|-------------------|
+| 1 | Data Quality Reports | Generate a structured quality assessment with scores, column analysis, and action items |
+| 2 | EDA Summaries | Produce a narrative EDA summary from descriptive statistics and visualizations |
+| 3 | Streamlit Scaffolding | Generate a Streamlit app skeleton with sidebar filters and chart sections from a dataset description |
+| 4 | Storytelling Outline | Create a data story outline with hook, context, insights, and call to action |
+| 5 | README Generator | Build a project README with installation, usage, and data dictionary sections |
 
 ---
 
-### Part 3: Publication-Ready Formatting (20 minutes)
+## Task 2: Create 2 More Skills (40 minutes)
 
-**Task 3.1: Apply Consistent Styling**
+Pick the top 2 from your ecosystem plan. Create them:
 
-For each of your 5 charts, ensure:
+- Folder: `.toolname/skills/skill-name/SKILL.md` (use the folder for your chosen tool)
+- Each skill must have: clear instructions, format specification, constraints/rules
+- Test each with at least 2 different prompts
+- Iterate until the output is useful
 
-- [ ] Title is descriptive and left-aligned
-- [ ] Axis labels are clear and have units if applicable
-- [ ] Font sizes are consistent across all charts
-- [ ] Colors follow your defined palette
-- [ ] Legends are positioned appropriately
-- [ ] No unnecessary gridlines or borders
+### Quality Checklist
 
-**Task 3.2: Add Source Attribution**
+Before moving on, verify each skill:
 
-Add a footnote to each chart with:
-- Data source: "Source: datos.gov.co - Budget Execution Data"
-- Date of data (if available)
+- [ ] Frontmatter has name, description, and version
+- [ ] Instructions are specific (not "write good output")
+- [ ] Output format is defined explicitly
+- [ ] At least 2 rules constrain the AI behavior
+- [ ] Tested with 2 different prompts and produced useful results
 
-**Task 3.3: Export Figures**
+### Skill Ideas by Domain
 
-Export each chart in two formats:
-1. PNG at 300 DPI for reports
-2. SVG for presentations (vector format)
+**Data Analytics:**
+- Data cleaning script generator
+- Visualization recommender (suggest chart types for your data)
+- Statistical test selector (which test for your hypothesis?)
+- Outlier analysis reporter
 
-Use consistent naming:
-- `chart1_budget_by_category.png`
-- `chart2_approved_vs_executed.png`
-- etc.
+**Software / Documentation:**
+- README generator for data projects
+- Code comment writer
+- Git commit message generator
+- Requirements.txt generator from imports
+
+**Communication:**
+- Data storytelling outline creator
+- Executive summary writer
+- Presentation slide planner
+- Findings report formatter
 
 ---
 
-### Part 4: Critical Analysis (10 minutes)
+## Task 3: Test with Real Course Content (30 minutes)
 
-Answer the following questions in your notebook:
+Use your skills (or the ones from class) on actual course content:
 
-1. **Which chart type was most effective** for communicating the budget story? Why?
+1. Use the data-quality-report skill on your Milestone 1 dataset (the one from datos.gov.co)
+2. Use another skill to generate a deliverable relevant to your next milestone (Milestone 2: dashboard + storytelling)
+3. Save the output and note what worked vs what needed manual editing
 
-2. **What insight would be missed** if you only used one chart type?
+### What to Document
 
-3. **If you could only show one chart** to a decision-maker, which would you choose and why?
+For each test, record:
 
-4. **What additional data** would make these visualizations more impactful?
+- The prompt you used
+- Whether the output was usable as-is, needed minor edits, or needed major rework
+- What you would change in the skill instructions to improve the output
+
+---
+
+## Task 4: Reflection (15 minutes)
+
+Write a short reflection (half page):
+
+- What surprised you about using AI tools?
+- What was harder than expected?
+- What skill would save you the most time for Milestones 2 and 3?
+- Any concerns about using AI for course deliverables?
 
 ---
 
 ## Deliverables
 
-Your completed workshop should include:
+Submit a zip containing:
 
-1. **Jupyter Notebook** (`workshop_solution.ipynb`) with:
-   - All code cells executed
-   - Clear markdown explanations for each chart
-   - Answers to critical analysis questions
-
-2. **Exported Figures** (10 files total):
-   - 5 PNG files at 300 DPI
-   - 5 SVG files
-
-3. **Color Palette Documentation**:
-   - Hex codes for your chosen palette
-   - Brief rationale for color choices
-
----
-
-## Grading Criteria
-
-| Criteria | Points | Description |
-|----------|--------|-------------|
-| Data-Ink Ratio | 20 | Charts are clean, no chartjunk |
-| Chart Type Selection | 20 | Appropriate chart for each data type |
-| Color Usage | 15 | Purposeful, consistent palette |
-| Labels & Titles | 15 | Clear, informative, professional |
-| Export Quality | 15 | High-resolution, properly named files |
-| Critical Analysis | 15 | Thoughtful answers to questions |
-| **Total** | **100** | |
-
----
-
-## Tips for Success
-
-### Matplotlib Style Tips
-
-```python
-# Set a clean style
-plt.style.use('seaborn-v0_8-whitegrid')
-
-# Or create custom style
-plt.rcParams['figure.figsize'] = (10, 6)
-plt.rcParams['figure.dpi'] = 100
-plt.rcParams['font.size'] = 11
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['axes.spines.top'] = False
-plt.rcParams['axes.spines.right'] = False
+```
+workshop-08/
+    ecosystem_plan.md        # Your ecosystem plan from Task 1
+    skills/                  # All your SKILL.md files (at least 3 total including class)
+        data-quality-report/SKILL.md
+        skill-two/SKILL.md
+        skill-three/SKILL.md
+    outputs/                 # Sample outputs from Task 3
+        quality_report_output.md
+        other_output.md
+    reflection.md            # Your reflection from Task 4
+    setup_screenshot.png     # Screenshot of working AI CLI setup
 ```
 
-### Color Best Practices
+---
 
-| Do | Do Not |
-|-----|---------|
-| Use color to highlight key data | Use rainbow colors |
-| Keep palette to 5-7 colors max | Use different color for each bar |
-| Use sequential colors for ordered data | Use red-green (colorblind issues) |
-| Gray out less important data | Make everything equally prominent |
+## Evaluation (100 points)
 
-### Exporting Tips
-
-```python
-# High-resolution PNG
-plt.savefig('chart.png', dpi=300, bbox_inches='tight',
-            facecolor='white', edgecolor='none')
-
-# Vector format for editing
-plt.savefig('chart.svg', format='svg', bbox_inches='tight')
-
-# PDF for printing
-plt.savefig('chart.pdf', format='pdf', bbox_inches='tight')
-```
-
-### Annotation Best Practices
-
-- Annotate only the most important values
-- Use consistent formatting for numbers
-- Position annotations to avoid overlap
-- Use subtle colors for annotations (gray or dark version of main color)
+| Criterion | Points |
+|-----------|--------|
+| Ecosystem plan is thoughtful and complete | 20 |
+| Skills are well-structured (clear instructions, format, rules) | 30 |
+| Skills produce useful output (tested with real prompts) | 25 |
+| Reflection shows genuine engagement | 15 |
+| Setup screenshot included | 10 |
 
 ---
 
-## Files Provided
+## Tips
 
-- `workshop_starter.ipynb` - Starter notebook with structure and hints
-- `workshop_solution.ipynb` - Complete solution (for reference after completion)
-
----
-
-## Submission
-
-Submit your completed notebook and exported figures via the course platform by [deadline].
-
-Create a folder named: `Week7_Workshop_[YourName]/`
-
-Include:
-- `workshop_completed.ipynb`
-- `figures/` folder with all exported charts
-
----
-
-## Additional Resources
-
-- [Edward Tufte - The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
-- [Matplotlib Gallery](https://matplotlib.org/stable/gallery/index.html)
-- [Seaborn Gallery](https://seaborn.pydata.org/examples/index.html)
-- [ColorBrewer - Color Advice for Maps](https://colorbrewer2.org/)
-
----
-
-*Remember: Good visualization is about communication, not decoration. Every element should serve the data.*
+1. **Start with the ecosystem plan.** It forces you to think about what you actually need before building.
+2. **Steal from the class example.** The data-quality-report skill from the exercise is a good template. Copy the structure, change the content.
+3. **Iterate on your skills.** Run them, see what comes out, adjust the instructions. The first version is never the best.
+4. **Be honest in your reflection.** There are no wrong answers. If you think AI is overhyped, say so and explain why.
+5. **Test with YOUR data.** Use the dataset from your Milestone 1 project. The more real the test, the more useful the feedback.
+6. **Think about Milestone 2.** You will need dashboards, storytelling narratives, and visualizations. Skills that help with those will pay off immediately.
