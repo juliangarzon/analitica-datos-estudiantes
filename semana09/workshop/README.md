@@ -15,9 +15,10 @@
 By completing this workshop, you will:
 
 1. Create 5 different chart types with real budget data
-2. Apply a consistent, professional color palette
-3. Add proper titles, labels, and annotations
-4. Export publication-ready figures in multiple formats
+2. Answer 5 concrete analytical questions using code
+3. Apply a consistent, professional color palette
+4. Add proper titles, labels, and annotations
+5. Export publication-ready figures in multiple formats
 
 ---
 
@@ -49,46 +50,51 @@ Recommended palettes:
 
 ### Part 2: Create 5 Chart Types (75 minutes)
 
-**Chart 1: Horizontal Bar Chart - Budget by Category (15 minutes)**
+Each chart must answer a real analytical question from the dataset.
 
-Create a horizontal bar chart showing budget allocation by category:
+**Chart 1: Horizontal Bar Chart - Which sectors concentrate the most budget? (15 minutes)**
+
+Use the real dataset to aggregate `Apropiación Vigente` by `Nombre Sector`:
+- Focus on the top 10 sectors
 - Sort values from largest to smallest
 - Use a single professional color
 - Add value labels at the end of each bar
-- Include a clean title with context
-- Remove unnecessary gridlines and spines
+- Include a title that states the takeaway
 
-**Chart 2: Grouped Bar Chart - Approved vs Executed (15 minutes)**
+**Chart 2: Grouped Bar Chart - Where is the largest gap between appropriation and commitments? (15 minutes)**
 
-Create a grouped bar chart comparing approved budget vs executed budget:
-- Use two distinct colors (one for approved, one for executed)
+Use the real dataset to compare `Apropiación Vigente` vs `Compromisos` by sector:
+- Focus on the top 8 sectors by appropriation
+- Use two distinct colors
 - Add a legend
-- Show the gap between approved and executed
-- Include percentage execution rate in annotations
+- Show the execution percentage above each pair
+- Help the reader see where the gap is widest
 
-**Chart 3: Line Chart - Monthly Execution Trend (15 minutes)**
+**Chart 3: Scatter Plot - Which entities combine large budgets with low execution? (15 minutes)**
 
-Create a line chart showing monthly budget execution rate:
-- Include a target line for reference
-- Use color to differentiate actual vs target
-- Highlight months where execution was below target
-- Add annotations for key data points (start, end, any notable changes)
+Build a scatter plot with real aggregated data:
+- X axis: `Apropiación Vigente`
+- Y axis: execution percentage
+- Highlight at least 2 interesting outliers
+- Add a 90% reference line
+- Use point size or color intentionally
 
-**Chart 4: Stacked Bar Chart - Budget Composition (15 minutes)**
+**Chart 4: Stacked Bar Chart - How does budget composition differ across sectors? (15 minutes)**
 
-Create a stacked bar chart showing how the budget is composed:
-- Use a sequential color palette (light to dark)
-- Add percentage labels within each segment
+Use `Nombre Nivel Uno Rubro` to compare composition across top sectors:
+- Use a sequential color palette
+- Add percentage labels when readable
 - Include a legend
-- Consider horizontal orientation for readability
+- Keep the chart readable even if some sectors have similar mixes
 
-**Chart 5: Small Multiples - Department Comparison (15 minutes)**
+**Chart 5: Small Multiples - Which sectors are below the 90% execution target? (15 minutes)**
 
-Create a small multiples visualization comparing execution across departments:
-- Use consistent scales across all subplots
-- Highlight the department with lowest execution
-- Add reference lines at 90% target
-- Use minimal styling for each subplot
+Create small multiples with one subplot per sector:
+- Use the top 8 sectors by appropriation
+- Show execution percentage in each subplot
+- Add a 90% reference line
+- Use warning color only for sectors below target
+- Keep scales consistent across subplots
 
 ---
 
@@ -128,13 +134,13 @@ Use consistent naming:
 
 Answer the following questions in your notebook:
 
-1. **Which chart type was most effective** for communicating the budget story? Why?
+1. **Which chart type was most effective** for communicating the most important pattern in the dataset? Why?
 
-2. **What insight would be missed** if you only used one chart type?
+2. **What insight would be missed** if you only showed the sectors with the largest budgets?
 
-3. **If you could only show one chart** to a decision-maker, which would you choose and why?
+3. **If you could only show one chart** to a decision-maker, which would you choose and what question would it answer best?
 
-4. **What additional data** would make these visualizations more impactful?
+4. **What additional data** or time dimension would make these visualizations more impactful?
 
 ---
 
@@ -142,7 +148,7 @@ Answer the following questions in your notebook:
 
 Your completed workshop should include:
 
-1. **Jupyter Notebook** (`workshop_solution.ipynb`) with:
+1. **Completed Jupyter Notebook** with:
    - All code cells executed
    - Clear markdown explanations for each chart
    - Answers to critical analysis questions
@@ -223,7 +229,7 @@ plt.savefig('chart.pdf', format='pdf', bbox_inches='tight')
 ## Files Provided
 
 - `workshop_starter.ipynb` - Starter notebook with structure and hints
-- `workshop_solution.ipynb` - Complete solution (for reference after completion)
+- `workshop_solution.ipynb` - Complete instructor solution (not for student submission)
 
 ---
 
@@ -231,7 +237,7 @@ plt.savefig('chart.pdf', format='pdf', bbox_inches='tight')
 
 Submit your completed notebook and exported figures via the course platform by [deadline].
 
-Create a folder named: `Week7_Workshop_[YourName]/`
+Create a folder named: `Week9_Workshop_[YourName]/`
 
 Include:
 - `workshop_completed.ipynb`
