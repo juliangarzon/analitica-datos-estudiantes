@@ -6,6 +6,8 @@
 
 **Dataset:** Budget Execution Data (EJECUCION_PRESUPUESTAL) from datos.gov.co
 
+**Local file in this repository:** `../data/EJECUCION_PRESUPUESTAL.csv`
+
 ---
 
 ## Objectives
