@@ -3,8 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 10 - Interactive Visualization: Plotly + Streamlit</title>
+    <title>Week 10 - Data Storytelling: From Analysis to Narrative</title>
     <style>
+        /* ===========================================
+           CSS VARIABLES - DATA STORYTELLING THEME
+           =========================================== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent: #f093fb;
+            --success: #00b894;
+            --success-dark: #00cec9;
+            --warning: #fdcb6e;
+            --warning-dark: #e17055;
+            --danger: #ff7675;
+            --danger-dark: #fd79a8;
+            --info: #74b9ff;
+            --info-dark: #0984e3;
+            --text-dark: #2c3e50;
+            --text-medium: #34495e;
+            --bg-light: #f8f9fa;
+            --bg-medium: #e9ecef;
+
+            /* Section-specific colors */
+            --hook-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --context-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --content-gradient: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            --summary-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,8 +40,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: var(--context-gradient);
+            color: var(--text-dark);
             overflow-x: hidden;
         }
 
@@ -24,6 +51,9 @@
             padding: 20px;
         }
 
+        /* ===========================================
+           SLIDE BASE STYLES
+           =========================================== */
         .slide {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -47,14 +77,53 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--accent));
             border-radius: 20px 20px 0 0;
         }
 
+        /* ===========================================
+           SECTION LABELS
+           =========================================== */
+        .section-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .section-label.hook {
+            background: var(--hook-gradient);
+        }
+
+        .section-label.context {
+            background: var(--context-gradient);
+        }
+
+        .section-label.content {
+            background: var(--content-gradient);
+        }
+
+        .section-label.summary {
+            background: var(--summary-gradient);
+        }
+
+        /* ===========================================
+           TITLE SLIDE
+           =========================================== */
         .title-slide {
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--context-gradient);
             color: white;
+        }
+
+        .title-slide::before {
+            display: none;
         }
 
         .title-slide h1 {
@@ -62,6 +131,11 @@
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             animation: fadeInUp 1s ease-out;
+            color: white;
+        }
+
+        .title-slide h1::after {
+            display: none;
         }
 
         .title-slide h2 {
@@ -69,6 +143,7 @@
             margin-bottom: 40px;
             opacity: 0.9;
             animation: fadeInUp 1s ease-out 0.3s both;
+            color: white;
         }
 
         .title-slide .author {
@@ -77,9 +152,22 @@
             animation: fadeInUp 1s ease-out 0.6s both;
         }
 
+        .title-slide .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 30px;
+            margin-top: 30px;
+            font-size: 1rem;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        /* ===========================================
+           HEADINGS
+           =========================================== */
         h1 {
             font-size: 2.5rem;
-            color: #2c3e50;
+            color: var(--text-dark);
             margin-bottom: 40px;
             text-align: center;
             position: relative;
@@ -93,275 +181,68 @@
             transform: translateX(-50%);
             width: 100px;
             height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: var(--context-gradient);
             border-radius: 2px;
         }
 
         h2 {
             font-size: 1.8rem;
-            color: #34495e;
+            color: var(--text-medium);
             margin: 30px 0 20px 0;
         }
 
         h3 {
             font-size: 1.4rem;
-            color: #2c3e50;
+            color: var(--text-dark);
             margin-bottom: 15px;
         }
 
-        .section-label {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .objectives-list {
-            display: grid;
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .objective-item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            border-left: 4px solid #28a745;
-            transition: all 0.3s ease;
-        }
-
-        .objective-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.1);
-        }
-
-        .check-icon {
-            width: 24px;
-            height: 24px;
-            background: #28a745;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin: 40px 0;
-        }
-
-        .comparison-card {
-            padding: 30px;
-            border-radius: 15px;
+        /* ===========================================
+           SECTION INTRO SLIDES
+           =========================================== */
+        .section-intro {
             text-align: center;
-        }
-
-        .comparison-card.good {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             color: white;
         }
 
-        .comparison-card.bad {
-            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+        .section-intro.hook-section {
+            background: var(--hook-gradient);
+        }
+
+        .section-intro.context-section {
+            background: var(--context-gradient);
+        }
+
+        .section-intro.content-section {
+            background: var(--content-gradient);
+        }
+
+        .section-intro.summary-section {
+            background: var(--summary-gradient);
+        }
+
+        .section-intro::before {
+            display: none;
+        }
+
+        .section-intro h1 {
             color: white;
-        }
-
-        .code-example {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 25px;
-            border-radius: 12px;
-            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-            margin: 20px 0;
-            overflow-x: auto;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            border: 1px solid #4a5568;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            white-space: pre;
-        }
-
-        .code-example .comment {
-            color: #68d391;
-            font-style: italic;
-        }
-
-        .code-example .keyword {
-            color: #f093fb;
-            font-weight: bold;
-        }
-
-        .code-example .string {
-            color: #ffd93d;
-        }
-
-        .code-example .function {
-            color: #4fd1c7;
-        }
-
-        .code-example .number {
-            color: #f6ad55;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: scale(1.05);
-        }
-
-        .feature-card h3 {
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .concept-box {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            border-left: 5px solid #667eea;
-        }
-
-        .concept-box .analogy {
-            background: rgba(102, 126, 234, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-style: italic;
-        }
-
-        .alert {
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
-            color: white;
-        }
-
-        .alert-warning {
-            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
-            color: white;
-        }
-
-        .alert-success {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-        }
-
-        .alert-info {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .data-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .data-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .demo-section {
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
-            margin: 60px 0;
-        }
-
-        .demo-title {
             font-size: 3rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .workshop-section {
-            text-align: center;
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 25px;
-            margin: 60px 0;
+        .section-intro h1::after {
+            background: rgba(255, 255, 255, 0.5);
         }
 
-        .widget-showcase {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin: 40px 0;
+        .section-intro p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-top: 20px;
         }
 
-        .widget-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .widget-card h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .widget-card code {
-            background: #1a202c;
-            color: #4fd1c7;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-        }
-
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
         .nav-container {
             position: fixed;
             top: 20px;
@@ -382,7 +263,7 @@
         }
 
         .nav-btn:hover {
-            background: #667eea;
+            background: var(--primary);
             color: white;
             transform: scale(1.05);
         }
@@ -394,6 +275,538 @@
             font-weight: bold;
         }
 
+        /* ===========================================
+           GRID LAYOUTS
+           =========================================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        /* ===========================================
+           BEFORE/AFTER COMPARISON
+           =========================================== */
+        .before-after-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .before-card {
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #b2bec3;
+        }
+
+        .before-card h3 {
+            color: #636e72;
+            margin-bottom: 20px;
+        }
+
+        .before-card h3::before {
+            content: 'BEFORE: ';
+            color: var(--danger);
+        }
+
+        .after-card {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid var(--success);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+        }
+
+        .after-card h3 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .after-card h3::before {
+            content: 'AFTER: ';
+        }
+
+        .transform-arrow {
+            font-size: 3rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* ===========================================
+           CARDS
+           =========================================== */
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-primary {
+            background: var(--context-gradient);
+            color: white;
+        }
+
+        .card-success {
+            background: var(--content-gradient);
+            color: white;
+        }
+
+        .card-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            color: white;
+        }
+
+        .card-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            color: white;
+        }
+
+        .card-info {
+            background: var(--summary-gradient);
+            color: white;
+        }
+
+        .card-light {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+            color: var(--text-dark);
+            border-left: 5px solid var(--primary);
+        }
+
+        .card h3 {
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .card-light h3 {
+            color: var(--primary);
+        }
+
+        /* ===========================================
+           NARRATIVE ARC VISUALIZATION
+           =========================================== */
+        .narrative-arc {
+            position: relative;
+            height: 300px;
+            margin: 40px 0;
+            background: var(--bg-light);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .arc-path {
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            top: 40px;
+        }
+
+        .arc-point {
+            position: absolute;
+            width: 80px;
+            text-align: center;
+        }
+
+        .arc-point .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: var(--primary);
+        }
+
+        .arc-point.situation { left: 5%; top: 70%; }
+        .arc-point.situation .dot { background: var(--info); }
+
+        .arc-point.complication { left: 35%; top: 20%; }
+        .arc-point.complication .dot { background: var(--danger); }
+
+        .arc-point.resolution { left: 70%; top: 70%; }
+        .arc-point.resolution .dot { background: var(--success); }
+
+        .arc-line {
+            position: absolute;
+            border: none;
+            height: 4px;
+            background: var(--primary);
+            transform-origin: left center;
+        }
+
+        .arc-line.line1 {
+            width: 200px;
+            left: 8%;
+            top: 50%;
+            transform: rotate(-35deg);
+        }
+
+        .arc-line.line2 {
+            width: 200px;
+            left: 45%;
+            top: 35%;
+            transform: rotate(35deg);
+        }
+
+        /* ===========================================
+           AUDIENCE CARDS
+           =========================================== */
+        .audience-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid var(--primary);
+        }
+
+        .audience-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .audience-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .audience-card ul {
+            list-style: none;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .audience-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-medium);
+        }
+
+        .audience-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* ===========================================
+           CHART JUNK EXAMPLES
+           =========================================== */
+        .chart-example {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-example pre {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            text-align: left;
+            margin: 20px 0;
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .chart-example.bad {
+            border: 3px dashed var(--danger);
+        }
+
+        .chart-example.bad h3 {
+            color: var(--danger);
+        }
+
+        .chart-example.good {
+            border: 3px solid var(--success);
+        }
+
+        .chart-example.good h3 {
+            color: var(--success);
+        }
+
+        /* ===========================================
+           PROCESS FLOW
+           =========================================== */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .process-step {
+            background: var(--context-gradient);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+        }
+
+        .process-step::after {
+            content: '\2192';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        .process-step strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* ===========================================
+           PRESENTATION DECK MOCKUP
+           =========================================== */
+        .deck-mockup {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .deck-slide {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.75rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .deck-slide:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .deck-slide .slide-num {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        /* ===========================================
+           CHECKLIST
+           =========================================== */
+        .checklist {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--bg-medium);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .check-box {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--success);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .check-box.checked {
+            background: var(--success);
+            color: white;
+        }
+
+        /* ===========================================
+           QUOTE BOX
+           =========================================== */
+        .quote-box {
+            background: var(--bg-light);
+            border-left: 5px solid var(--primary);
+            padding: 25px 30px;
+            border-radius: 0 15px 15px 0;
+            margin: 30px 0;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-medium);
+        }
+
+        .quote-box .author {
+            display: block;
+            margin-top: 15px;
+            font-size: 1rem;
+            font-style: normal;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* ===========================================
+           ALERT BOXES
+           =========================================== */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* ===========================================
+           TABLE
+           =========================================== */
+        .table-styled {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-styled thead {
+            background: var(--context-gradient);
+            color: white;
+        }
+
+        .table-styled th,
+        .table-styled td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table-styled tbody tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .table-styled tbody tr:hover {
+            background: var(--bg-medium);
+        }
+
+        /* ===========================================
+           KEY TAKEAWAY
+           =========================================== */
+        .key-takeaway {
+            background: var(--context-gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .key-takeaway h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        /* ===========================================
+           INTERACTIVE REVEAL
+           =========================================== */
+        .reveal-container {
+            margin: 30px 0;
+        }
+
+        .reveal-item {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+
+        .reveal-item:hover {
+            background: var(--bg-medium);
+            transform: translateX(10px);
+        }
+
+        .reveal-item.active {
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .reveal-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--bg-medium);
+        }
+
+        .reveal-item.active .reveal-content {
+            display: block;
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -405,10 +818,50 @@
             }
         }
 
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        /* Staggered animations */
+        .stagger > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger > *:nth-child(5) { animation-delay: 0.5s; }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
         @media (max-width: 768px) {
             .slide {
                 padding: 30px;
@@ -419,936 +872,953 @@
                 font-size: 2.5rem;
             }
 
-            .comparison-grid {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid-2,
+            .grid-3 {
                 grid-template-columns: 1fr;
             }
 
-            .widget-showcase {
+            .before-after-container {
                 grid-template-columns: 1fr;
+            }
+
+            .transform-arrow {
+                transform: rotate(90deg);
+            }
+
+            .deck-mockup {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .process-step::after {
+                content: '\2193';
+                right: auto;
+                bottom: -25px;
+                top: auto;
+                transform: none;
+            }
+        }
+
+        /* ===========================================
+           PRINT STYLES
+           =========================================== */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .slide {
+                display: flex !important;
+                page-break-after: always;
+                min-height: auto;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .nav-container {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
+    <!-- NAVIGATION -->
     <div class="nav-container">
-        <button class="nav-btn" onclick="previousSlide()">Previous</button>
-        <span class="slide-counter" id="slideCounter">1 / 20</span>
+        <button class="nav-btn" onclick="previousSlide()">Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 24</span>
         <button class="nav-btn" onclick="nextSlide()">Next</button>
     </div>
 
     <div class="presentation-container">
-        <!-- Slide 1: Title (HOOK) -->
+
+        <!-- =========================================
+             SLIDE 1: TITLE
+             ========================================= -->
         <div class="slide title-slide">
-            <h1>Interactive Visualization: Plotly + Streamlit</h1>
-            <h2>Week 10 - Data Analytics</h2>
-            <div class="author">Julian Eduardo Garzon Giraldo, MsC</div>
-            <div style="margin-top: 40px; opacity: 0.8;">Universidad Cooperativa de Colombia - I/2025</div>
+            <h1>Narrativa con Datos</h1>
+            <h2>Convertir análisis en presentaciones que importan</h2>
+            <div class="author">Curso de Analítica de Datos - Semana 10</div>
+            <div class="badge">Narrativa antes de la implementación del dashboard</div>
         </div>
 
-        <!-- Slide 2: Hook - The Question (HOOK) -->
-        <div class="slide">
-            <span class="section-label">HOOK</span>
-            <h1>What If Your Charts Could Talk Back?</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0; align-items: center;">
-                <div style="text-align: center;">
-                    <div style="font-size: 6rem;">📊</div>
-                    <p style="font-size: 1.3rem; margin-top: 20px; color: #666;">Static Chart</p>
-                    <p style="font-size: 1rem; margin-top: 10px;">"Here's the data. Take it or leave it."</p>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 6rem;">🎮</div>
-                    <p style="font-size: 1.3rem; margin-top: 20px; color: #667eea;">Interactive Dashboard</p>
-                    <p style="font-size: 1rem; margin-top: 10px;">"What do YOU want to explore?"</p>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
-                <h2 style="color: white; margin-bottom: 15px;">The Analyst's Dilemma</h2>
-                <p style="font-size: 1.2rem;">Your boss asks: "Show me sales by region"</p>
-                <p style="font-size: 1.2rem; margin-top: 10px;">Then: "Wait, what about by product?"</p>
-                <p style="font-size: 1.2rem; margin-top: 10px;">Then: "Actually, just Q2..."</p>
-                <p style="font-size: 1.5rem; margin-top: 20px; font-weight: bold;">How many charts will you make?</p>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <p style="font-size: 1.3rem; color: #00b894; font-weight: bold;">Today: Build ONE dashboard that answers ALL questions</p>
-            </div>
+        <!-- =========================================
+             SLIDE 2: TRANSITION FROM HOOK
+             ========================================= -->
+        <div class="slide section-intro hook-section">
+            <h1>¿Qué acaba de pasar?</h1>
+            <p>El hook funcionó porque cambió el significado de una idea que ya conocían</p>
         </div>
 
-        <!-- Slide 3: Learning Objectives (HOOK) -->
+        <!-- =========================================
+             SLIDE 3: WHY GOOD ANALYSIS STILL FAILS
+             ========================================= -->
         <div class="slide">
-            <span class="section-label">HOOK</span>
-            <h1>What You'll Learn Today</h1>
-            <div class="objectives-list">
-                <div class="objective-item">
-                    <div class="check-icon">1</div>
-                    <div>Understand WHY interactive visualization matters</div>
+            <span class="section-label context">CONTEXTO</span>
+            <h1>Un buen análisis también puede fracasar</h1>
+
+            <div class="grid-3">
+                <div class="card card-warning">
+                    <h3>Demasiado proceso</h3>
+                    <p style="margin-top: 15px;">Explicamos todo lo que hicimos antes de explicar qué cambió.</p>
                 </div>
-                <div class="objective-item">
-                    <div class="check-icon">2</div>
-                    <div>Create interactive charts with Plotly (scatter, bar, hover)</div>
+                <div class="card card-danger">
+                    <h3>Sin mensaje claro</h3>
+                    <p style="margin-top: 15px;">La audiencia ve gráficos, tablas y código, pero no entiende el punto.</p>
                 </div>
-                <div class="objective-item">
-                    <div class="check-icon">3</div>
-                    <div>Build web dashboards with Streamlit (no HTML/CSS needed)</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">4</div>
-                    <div>Master widget types: selectbox, multiselect, slider, checkbox</div>
-                </div>
-                <div class="objective-item">
-                    <div class="check-icon">5</div>
-                    <div>Connect widgets to filter data and update charts dynamically</div>
+                <div class="card card-info">
+                    <h3>Sin acción</h3>
+                    <p style="margin-top: 15px;">Si nadie sabe qué hacer después, el análisis muere en el salón.</p>
                 </div>
             </div>
 
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 30px;">
-                <p style="font-size: 1.2rem;">Dataset: Budget Execution (Ejecucion Presupuestal)</p>
+            <div class="quote-box" style="margin-top: 30px;">
+                Un análisis correcto puede fracasar si la audiencia no logra entenderlo, recordarlo o usarlo.
             </div>
         </div>
 
-        <!-- Slide 4: Static vs Interactive (CONTEXT) -->
+        <!-- =========================================
+             SLIDE 4: SAME FINDING, DIFFERENT OUTCOME
+             ========================================= -->
         <div class="slide">
-            <span class="section-label">CONTEXT</span>
-            <h1>Static vs Interactive: The Evolution</h1>
-            <div class="comparison-grid">
-                <div class="comparison-card bad">
-                    <h2 style="color: white; margin-bottom: 20px;">Static Charts (Matplotlib)</h2>
-                    <div style="font-size: 4rem; margin: 20px 0;">📸</div>
-                    <ul style="list-style: none; text-align: left; margin-top: 20px;">
-                        <li style="padding: 8px 0;">One fixed view of data</li>
-                        <li style="padding: 8px 0;">Can't zoom or pan</li>
-                        <li style="padding: 8px 0;">No hover information</li>
-                        <li style="padding: 8px 0;">New question = new chart</li>
-                        <li style="padding: 8px 0;">Good for: Reports, publications</li>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>El mismo hallazgo, dos resultados distintos</h1>
+
+            <div class="before-after-container">
+                <div class="before-card">
+                    <h3>Versión débil</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.7;">
+                        Analizamos los registros semanales de asistencia de 2023 y encontramos una relación entre las ausencias tempranas y el rendimiento final del curso.
+                    </p>
+                    <p style="margin-top: 20px; color: var(--text-medium);">
+                        Es correcta, pero pasiva. La audiencia todavía no sabe por qué importa.
+                    </p>
+                </div>
+
+                <div class="transform-arrow">→</div>
+
+                <div class="after-card">
+                    <h3>Versión más fuerte</h3>
+                    <p style="font-size: 1.08rem; line-height: 1.7;">
+                        Los estudiantes que faltan al inicio tienen mucha más probabilidad de perder después, así que la asistencia es una señal temprana de alerta, no solo una métrica administrativa.
+                    </p>
+                    <p style="margin-top: 20px; opacity: 0.95;">
+                        Mismo análisis. Mejor historia. Implicación clara.
+                    </p>
+                </div>
+            </div>
+
+            <div class="key-takeaway">
+                <h3>Pregunta para el salón</h3>
+                <p>¿Cuál versión haría que un profesor, coordinador o gerente se interese más rápido?</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 5: WHY ONE VERSION DIES
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Por qué una versión no funciona</h1>
+
+            <div class="grid-2">
+                <div class="card card-light">
+                    <h3>Lo que hace la versión débil</h3>
+                    <ul style="margin-top: 20px; line-height: 2;">
+                        <li>Empieza por el proceso</li>
+                        <li>Suena como resumen de informe</li>
+                        <li>Esconde la implicación</li>
+                        <li>Obliga a la audiencia a interpretar sola</li>
                     </ul>
                 </div>
-
-                <div class="comparison-card good">
-                    <h2 style="color: white; margin-bottom: 20px;">Interactive Charts (Plotly)</h2>
-                    <div style="font-size: 4rem; margin: 20px 0;">🎬</div>
-                    <ul style="list-style: none; text-align: left; margin-top: 20px;">
-                        <li style="padding: 8px 0;">User explores the data</li>
-                        <li style="padding: 8px 0;">Zoom, pan, select regions</li>
-                        <li style="padding: 8px 0;">Hover shows exact values</li>
-                        <li style="padding: 8px 0;">Filter without new code</li>
-                        <li style="padding: 8px 0;">Good for: Dashboards, exploration</li>
+                <div class="card card-success">
+                    <h3>Lo que hace la versión fuerte</h3>
+                    <ul style="margin-top: 20px; line-height: 2; color: white;">
+                        <li>Empieza por la implicación</li>
+                        <li>Crea una consecuencia</li>
+                        <li>Se recuerda más fácil</li>
+                        <li>Apunta naturalmente a una acción</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="concept-box">
-                <p style="font-size: 1.2rem;"><strong>Key Insight:</strong> Static charts TELL, interactive charts INVITE exploration</p>
-                <div class="analogy">
-                    Static chart = Museum painting: "Look, but don't touch"<br>
-                    Interactive chart = Video game: "Here are the controls. Go explore!"
-                </div>
+            <div class="alert alert-warning" style="margin-top: 25px;">
+                <strong>El storytelling no es decoración.</strong> Es decidir qué debe entender primero la audiencia.
             </div>
         </div>
 
-        <!-- Slide 5: Why Interactive? (CONTEXT) -->
+        <!-- =========================================
+             SLIDE 6: FROM NOISE TO IMPACT
+             ========================================= -->
         <div class="slide">
-            <span class="section-label">CONTEXT</span>
-            <h1>Why Interactive Visualization?</h1>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 40px 0;">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">🔍</div>
-                    <h3 style="color: white;">Self-Service Analytics</h3>
-                    <p style="margin-top: 15px; font-size: 0.95rem;">
-                        Users answer their OWN questions without asking you for new charts
-                    </p>
-                </div>
+            <span class="section-label context">PUENTE</span>
+            <h1>Confundimos ruido con impacto</h1>
 
-                <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">💡</div>
-                    <h3 style="color: white;">Discovery</h3>
-                    <p style="margin-top: 15px; font-size: 0.95rem;">
-                        Users find patterns YOU might have missed by exploring on their own
-                    </p>
-                </div>
-
-                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">📊</div>
-                    <h3 style="color: white;">Context on Demand</h3>
-                    <p style="margin-top: 15px; font-size: 0.95rem;">
-                        Hover for details instead of cramming everything on one chart
-                    </p>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 15px; margin-top: 20px;">
-                <h3 style="color: #667eea; margin-bottom: 15px;">Real Example: Budget Analysis</h3>
-                <table class="data-table">
-                    <tr>
-                        <th>Question</th>
-                        <th>Static Approach</th>
-                        <th>Interactive Approach</th>
-                    </tr>
-                    <tr>
-                        <td>Budget by department?</td>
-                        <td>Make chart 1</td>
-                        <td rowspan="3" style="background: #00b894; color: white; text-align: center; font-weight: bold;">ONE dashboard<br>with filters</td>
-                    </tr>
-                    <tr>
-                        <td>Only 2024?</td>
-                        <td>Make chart 2</td>
-                    </tr>
-                    <tr>
-                        <td>Execution rate > 80%?</td>
-                        <td>Make chart 3</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- Slide 6: Plotly Introduction (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Plotly: Your Interactive Chart Library</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+            <div class="grid-2">
                 <div>
-                    <div class="concept-box">
-                        <h3 style="color: #667eea;">What is Plotly?</h3>
-                        <p style="margin-top: 15px;">
-                            A Python library that creates interactive charts for the web.
+                    <img src="2daa75d0244c8c5734bf480930ae2852766365cc0067de2dd93949ff7fd81c00.png" alt="Meme sobre infraestructura de internet" style="max-height: 58vh; border-radius: 18px;">
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="card card-light">
+                        <h3>El puente desde el hook</h3>
+                        <p style="font-size: 1.08rem; line-height: 1.7; margin-top: 18px;">
+                            En el hook, el movimiento clave no fue el chiste. El movimiento clave fue el cambio de marco.
                         </p>
-                        <div class="analogy">
-                            If Matplotlib is a camera (takes static photos),<br>
-                            Plotly is a video camera (captures dynamic content)
-                        </div>
-                    </div>
-
-                    <div class="alert alert-success" style="margin-top: 20px;">
-                        <strong>Key Advantage:</strong> Plotly charts work in Jupyter notebooks, web apps, and dashboards with ZERO extra configuration.
-                    </div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Built-in Interactivity</h3>
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-top: 15px;">
-                        <ul style="line-height: 2.2;">
-                            <li><strong>Hover:</strong> See exact values on mouse-over</li>
-                            <li><strong>Zoom:</strong> Click and drag to zoom in</li>
-                            <li><strong>Pan:</strong> Move around the zoomed view</li>
-                            <li><strong>Select:</strong> Box or lasso select points</li>
-                            <li><strong>Download:</strong> Save as PNG with one click</li>
-                            <li><strong>Compare:</strong> Toggle traces on/off</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="code-example"><span class="comment"># Installation (run once in terminal)</span>
-pip install plotly
-
-<span class="comment"># Import in your code</span>
-<span class="keyword">import</span> plotly.express <span class="keyword">as</span> px</div>
-        </div>
-
-        <!-- Slide 7: Plotly Scatter Plot (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Plotly: Interactive Scatter Plot</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="keyword">import</span> plotly.express <span class="keyword">as</span> px
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-
-<span class="comment"># Load budget data</span>
-df = pd.read_csv(<span class="string">'budget_execution.csv'</span>)
-
-<span class="comment"># Create interactive scatter plot</span>
-fig = px.scatter(
-    df,
-    x=<span class="string">'budget_approved'</span>,
-    y=<span class="string">'budget_executed'</span>,
-    color=<span class="string">'department'</span>,
-    size=<span class="string">'execution_rate'</span>,
-    hover_name=<span class="string">'project_name'</span>,
-    hover_data=[<span class="string">'year'</span>, <span class="string">'category'</span>],
-    title=<span class="string">'Budget: Approved vs Executed'</span>
-)
-
-fig.show()</div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Key Parameters</h3>
-                    <table class="data-table">
-                        <tr><th>Parameter</th><th>What it does</th></tr>
-                        <tr><td><code>x, y</code></td><td>Position on axes</td></tr>
-                        <tr><td><code>color</code></td><td>Color by category</td></tr>
-                        <tr><td><code>size</code></td><td>Point size by value</td></tr>
-                        <tr><td><code>hover_name</code></td><td>Main hover label</td></tr>
-                        <tr><td><code>hover_data</code></td><td>Extra hover info</td></tr>
-                    </table>
-
-                    <div class="alert alert-info" style="margin-top: 20px;">
-                        <strong>Try it:</strong> Hover over points to see project details. Click legend items to show/hide departments.
-                    </div>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center;">
-                <p style="font-size: 1.1rem;">One line of code = interactive chart with zoom, hover, and filtering</p>
-            </div>
-        </div>
-
-        <!-- Slide 8: Plotly Bar Chart (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Plotly: Interactive Bar Chart</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="comment"># Basic bar chart</span>
-fig = px.bar(
-    df,
-    x=<span class="string">'department'</span>,
-    y=<span class="string">'budget_executed'</span>,
-    color=<span class="string">'category'</span>,
-    title=<span class="string">'Budget Executed by Department'</span>
-)
-fig.show()
-
-<span class="comment"># Grouped bar chart</span>
-fig = px.bar(
-    df,
-    x=<span class="string">'department'</span>,
-    y=<span class="string">'budget_executed'</span>,
-    color=<span class="string">'year'</span>,
-    barmode=<span class="string">'group'</span>,  <span class="comment"># Side by side</span>
-    title=<span class="string">'Budget by Year'</span>
-)
-fig.show()
-
-<span class="comment"># Horizontal bar chart</span>
-fig = px.bar(
-    df,
-    x=<span class="string">'budget_executed'</span>,
-    y=<span class="string">'department'</span>,
-    orientation=<span class="string">'h'</span>,
-    title=<span class="string">'Horizontal View'</span>
-)
-fig.show()</div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Bar Mode Options</h3>
-                    <div style="display: grid; gap: 15px; margin-top: 15px;">
-                        <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">barmode='stack'</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Bars stacked on top of each other. Good for: total composition</p>
-                        </div>
-                        <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">barmode='group'</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Bars side by side. Good for: comparing categories</p>
-                        </div>
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">orientation='h'</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Horizontal bars. Good for: long category names</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 9: Plotly Customization (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Customizing Plotly Charts</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="comment"># Create figure</span>
-fig = px.scatter(
-    df,
-    x=<span class="string">'budget_approved'</span>,
-    y=<span class="string">'budget_executed'</span>,
-    color=<span class="string">'department'</span>
-)
-
-<span class="comment"># Customize layout</span>
-fig.update_layout(
-    title={
-        <span class="string">'text'</span>: <span class="string">'Budget Analysis'</span>,
-        <span class="string">'font_size'</span>: <span class="number">24</span>,
-        <span class="string">'x'</span>: <span class="number">0.5</span>  <span class="comment"># Center title</span>
-    },
-    xaxis_title=<span class="string">'Approved (COP)'</span>,
-    yaxis_title=<span class="string">'Executed (COP)'</span>,
-    legend_title=<span class="string">'Department'</span>,
-    template=<span class="string">'plotly_white'</span>
-)
-
-<span class="comment"># Add reference line</span>
-fig.add_shape(
-    <span class="keyword">type</span>=<span class="string">'line'</span>,
-    x0=<span class="number">0</span>, y0=<span class="number">0</span>,
-    x1=df[<span class="string">'budget_approved'</span>].max(),
-    y1=df[<span class="string">'budget_approved'</span>].max(),
-    line=<span class="keyword">dict</span>(dash=<span class="string">'dash'</span>, color=<span class="string">'gray'</span>)
-)
-
-fig.show()</div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Available Templates</h3>
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-top: 15px;">
-                        <ul style="line-height: 2;">
-                            <li><code>plotly</code> - Default blue background</li>
-                            <li><code>plotly_white</code> - Clean white</li>
-                            <li><code>plotly_dark</code> - Dark mode</li>
-                            <li><code>ggplot2</code> - R-style</li>
-                            <li><code>seaborn</code> - Seaborn-style</li>
-                            <li><code>simple_white</code> - Minimal</li>
-                        </ul>
-                    </div>
-
-                    <div class="alert alert-warning" style="margin-top: 20px;">
-                        <strong>Pro Tip:</strong> Add a diagonal reference line (y=x) to show where executed equals approved budget.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: Streamlit Introduction (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Streamlit: Python to Web App in Minutes</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="concept-box">
-                        <h3 style="color: #667eea;">What is Streamlit?</h3>
-                        <p style="margin-top: 15px;">
-                            A Python library that turns scripts into interactive web applications.
+                        <p style="font-size: 1.08rem; line-height: 1.7; margin-top: 18px;">
+                            Pasamos de <strong>lo que se siente enorme</strong> a <strong>lo que es estructuralmente importante</strong>.
                         </p>
-                        <div class="analogy">
-                            If your Python script is a recipe,<br>
-                            Streamlit is the kitchen that serves it to customers
-                        </div>
                     </div>
 
-                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 15px; margin-top: 20px;">
-                        <h4 style="color: white; margin-bottom: 10px;">No Need to Learn:</h4>
-                        <ul style="list-style: none;">
-                            <li>No HTML</li>
-                            <li>No CSS</li>
-                            <li>No JavaScript</li>
-                            <li>No web frameworks</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Just Python!</h3>
-                    <div class="code-example"><span class="comment"># Installation (run once)</span>
-pip install streamlit
-
-<span class="comment"># Create app.py file</span>
-<span class="keyword">import</span> streamlit <span class="keyword">as</span> st
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-
-st.title(<span class="string">'My First Dashboard'</span>)
-st.write(<span class="string">'Hello, World!'</span>)
-
-<span class="comment"># Run from terminal:</span>
-<span class="comment"># streamlit run app.py</span></div>
-
-                    <div class="alert alert-info" style="margin-top: 20px;">
-                        <strong>How it works:</strong> Streamlit re-runs your entire script from top to bottom every time user interacts with a widget.
+                    <div class="quote-box" style="margin-top: 24px;">
+                        El buen storytelling cambia lo que la audiencia cree que realmente trata la historia.
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 11: Streamlit Basics (CONTENT) -->
+        <!-- =========================================
+             SLIDE 7: CONTENT SECTION INTRO
+             ========================================= -->
+        <div class="slide section-intro content-section">
+            <h1>De la atención a la acción</h1>
+            <p>Cómo construir una presentación que lleve del insight a la decisión</p>
+        </div>
+
+        <!-- =========================================
+             SLIDE 8: LEAD WITH THE ANSWER
+             ========================================= -->
         <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Streamlit: Basic Building Blocks</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-<span class="keyword">import</span> plotly.express <span class="keyword">as</span> px
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Empieza por la respuesta</h1>
 
-<span class="comment"># Title and text</span>
-st.title(<span class="string">'Budget Dashboard'</span>)
-st.header(<span class="string">'Overview'</span>)
-st.subheader(<span class="string">'Key Metrics'</span>)
-st.write(<span class="string">'This is regular text'</span>)
-
-<span class="comment"># Load and display data</span>
-df = pd.read_csv(<span class="string">'budget.csv'</span>)
-st.dataframe(df)  <span class="comment"># Interactive table</span>
-st.table(df.head())  <span class="comment"># Static table</span>
-
-<span class="comment"># Display metrics</span>
-st.metric(
-    label=<span class="string">'Total Budget'</span>,
-    value=<span class="string">'$1.2M'</span>,
-    delta=<span class="string">'+15%'</span>
-)
-
-<span class="comment"># Display Plotly chart</span>
-fig = px.bar(df, x=<span class="string">'dept'</span>, y=<span class="string">'budget'</span>)
-st.plotly_chart(fig)</div>
+            <div class="grid-3">
+                <div class="card card-danger">
+                    <h3>No empieces así</h3>
+                    <p style="margin-top: 15px; color: white;">“Limpiamos el dataset, exploramos variables y probamos varios gráficos...”</p>
                 </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Display Functions</h3>
-                    <table class="data-table">
-                        <tr><th>Function</th><th>Use For</th></tr>
-                        <tr><td><code>st.title()</code></td><td>Main page title</td></tr>
-                        <tr><td><code>st.header()</code></td><td>Section header</td></tr>
-                        <tr><td><code>st.write()</code></td><td>Text, data, figures</td></tr>
-                        <tr><td><code>st.dataframe()</code></td><td>Interactive table</td></tr>
-                        <tr><td><code>st.metric()</code></td><td>KPI with delta</td></tr>
-                        <tr><td><code>st.plotly_chart()</code></td><td>Plotly figures</td></tr>
-                    </table>
-
-                    <div class="alert alert-success" style="margin-top: 20px;">
-                        <strong>Pro Tip:</strong> <code>st.write()</code> is smart! It detects DataFrames, figures, and markdown automatically.
-                    </div>
+                <div class="card card-warning">
+                    <h3>¿Qué falla?</h3>
+                    <p style="margin-top: 15px; color: white;">La audiencia todavía no sabe qué cambió, por qué importa ni cuál es la idea central.</p>
                 </div>
+                <div class="card card-success">
+                    <h3>Empieza así</h3>
+                    <p style="margin-top: 15px; color: white;">Primero di el hallazgo. Después muestra el camino que te llevó hasta ahí.</p>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Regla</h3>
+                <p>No empieces donde tú empezaste a trabajar. Empieza donde la audiencia necesita claridad.</p>
             </div>
         </div>
 
-        <!-- Slide 12: Streamlit Widgets Overview (CONTENT) -->
+        <!-- =========================================
+             SLIDE 9: ANSWER-FIRST EXAMPLE
+             ========================================= -->
         <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Streamlit Widgets: User Input</h1>
-            <p style="text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px;">
-                Widgets are the controls that let users interact with your dashboard
-            </p>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Así se ve una mejor apertura</h1>
 
-            <div class="widget-showcase">
-                <div class="widget-card">
-                    <h4>selectbox</h4>
-                    <p style="margin: 10px 0;">Choose ONE option from a list</p>
-                    <code>st.selectbox('Label', options)</code>
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">Use for: Choosing a department, year, category</p>
+            <div class="before-after-container">
+                <div class="before-card">
+                    <h3>Antes</h3>
+                    <p style="font-size: 1.02rem; line-height: 1.7;">
+                        Limpiamos el dataset, revisamos 14 variables, encontramos patrones de asistencia y luego analizamos el rendimiento final.
+                    </p>
                 </div>
 
-                <div class="widget-card">
-                    <h4>multiselect</h4>
-                    <p style="margin: 10px 0;">Choose MULTIPLE options</p>
-                    <code>st.multiselect('Label', options)</code>
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">Use for: Selecting several departments to compare</p>
-                </div>
+                <div class="transform-arrow">→</div>
 
-                <div class="widget-card">
-                    <h4>slider</h4>
-                    <p style="margin: 10px 0;">Choose a number in a range</p>
-                    <code>st.slider('Label', min, max)</code>
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">Use for: Budget range, year range, thresholds</p>
-                </div>
-
-                <div class="widget-card">
-                    <h4>checkbox</h4>
-                    <p style="margin: 10px 0;">Yes/No toggle</p>
-                    <code>st.checkbox('Label')</code>
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">Use for: Show/hide data, include/exclude options</p>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 20px;">
-                <p style="font-size: 1.1rem;">Widgets RETURN values. Store them in variables to use in your code!</p>
-            </div>
-        </div>
-
-        <!-- Slide 13: Selectbox in Detail (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Widget: Selectbox</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-<span class="keyword">import</span> plotly.express <span class="keyword">as</span> px
-
-<span class="comment"># Load data</span>
-df = pd.read_csv(<span class="string">'budget.csv'</span>)
-
-<span class="comment"># Create dropdown</span>
-department = st.selectbox(
-    <span class="string">'Select Department:'</span>,
-    options=df[<span class="string">'department'</span>].unique()
-)
-
-<span class="comment"># Filter data based on selection</span>
-filtered = df[df[<span class="string">'department'</span>] == department]
-
-<span class="comment"># Show filtered results</span>
-st.write(<span class="string">f'Showing data for: {department}'</span>)
-st.dataframe(filtered)
-
-<span class="comment"># Chart updates automatically!</span>
-fig = px.bar(filtered, x=<span class="string">'project'</span>, y=<span class="string">'budget'</span>)
-st.plotly_chart(fig)</div>
-                </div>
-
-                <div>
-                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 15px;">
-                        <h3 style="color: #667eea; margin-bottom: 20px;">How It Works</h3>
-                        <ol style="line-height: 2;">
-                            <li>User selects "Education"</li>
-                            <li>Streamlit re-runs entire script</li>
-                            <li><code>department</code> variable = "Education"</li>
-                            <li>Filter applies to DataFrame</li>
-                            <li>Chart shows only Education data</li>
-                        </ol>
-                    </div>
-
-                    <div class="alert alert-warning" style="margin-top: 20px;">
-                        <strong>Common Mistake:</strong> Forgetting that selectbox RETURNS a value. Always store it!
-                        <br><br>
-                        <span style="color: #ff7675;">Bad:</span> <code>st.selectbox(...)</code><br>
-                        <span style="color: #00b894;">Good:</span> <code>choice = st.selectbox(...)</code>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 14: Multiselect (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Widget: Multiselect</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="comment"># Multiselect returns a LIST</span>
-departments = st.multiselect(
-    <span class="string">'Select Departments:'</span>,
-    options=df[<span class="string">'department'</span>].unique(),
-    default=[<span class="string">'Health'</span>, <span class="string">'Education'</span>]  <span class="comment"># Pre-selected</span>
-)
-
-<span class="comment"># Handle empty selection</span>
-<span class="keyword">if</span> <span class="keyword">len</span>(departments) == <span class="number">0</span>:
-    st.warning(<span class="string">'Please select at least one department'</span>)
-<span class="keyword">else</span>:
-    <span class="comment"># Filter by list of values</span>
-    filtered = df[df[<span class="string">'department'</span>].isin(departments)]
-
-    st.write(<span class="string">f'Comparing: {", ".join(departments)}'</span>)
-
-    <span class="comment"># Compare departments</span>
-    fig = px.bar(
-        filtered,
-        x=<span class="string">'department'</span>,
-        y=<span class="string">'budget'</span>,
-        color=<span class="string">'department'</span>
-    )
-    st.plotly_chart(fig)</div>
-                </div>
-
-                <div>
-                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px;">
-                        <h3 style="color: white; margin-bottom: 15px;">Selectbox vs Multiselect</h3>
-                        <table style="width: 100%; color: white;">
-                            <tr>
-                                <td><strong>selectbox</strong></td>
-                                <td>Returns: string</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>"Education"</td>
-                            </tr>
-                            <tr style="border-top: 1px solid rgba(255,255,255,0.3);">
-                                <td><strong>multiselect</strong></td>
-                                <td>Returns: list</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>["Education", "Health"]</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="alert alert-info" style="margin-top: 20px;">
-                        <strong>Filtering Tip:</strong> Use <code>.isin()</code> for list filtering:
-                        <br><br>
-                        <code>df[df['col'].isin(selected_list)]</code>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 15: Slider (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Widget: Slider</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="comment"># Single value slider</span>
-min_budget = st.slider(
-    <span class="string">'Minimum Budget (COP)'</span>,
-    min_value=<span class="number">0</span>,
-    max_value=<span class="number">1000000000</span>,
-    value=<span class="number">100000000</span>,  <span class="comment"># Default</span>
-    step=<span class="number">10000000</span>
-)
-
-<span class="comment"># Range slider (two handles)</span>
-budget_range = st.slider(
-    <span class="string">'Budget Range'</span>,
-    min_value=<span class="number">0</span>,
-    max_value=<span class="number">1000000000</span>,
-    value=(<span class="number">100000000</span>, <span class="number">500000000</span>)  <span class="comment"># Tuple = range</span>
-)
-
-<span class="comment"># Filter with range</span>
-filtered = df[
-    (df[<span class="string">'budget'</span>] >= budget_range[<span class="number">0</span>]) &
-    (df[<span class="string">'budget'</span>] <= budget_range[<span class="number">1</span>])
-]
-
-st.write(<span class="string">f'Showing {len(filtered)} projects'</span>)</div>
-                </div>
-
-                <div>
-                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px;">
-                        <h3 style="color: #667eea; margin-bottom: 15px;">Slider Variants</h3>
-                        <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 10px;">
-                            <p><strong>Single value:</strong></p>
-                            <p style="font-size: 0.9rem; color: #666;">value=100 (integer)</p>
-                            <p style="font-size: 0.9rem;">Returns: 100</p>
-                        </div>
-                        <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 10px;">
-                            <p><strong>Range:</strong></p>
-                            <p style="font-size: 0.9rem; color: #666;">value=(100, 500) (tuple)</p>
-                            <p style="font-size: 0.9rem;">Returns: (100, 500)</p>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-success" style="margin-top: 20px;">
-                        <strong>Also Available:</strong>
-                        <br><code>st.select_slider()</code> - Slider with discrete options (categories)
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 16: Checkbox and Columns (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Widget: Checkbox + Layout Columns</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <div class="code-example"><span class="comment"># Checkbox returns True/False</span>
-show_raw = st.checkbox(<span class="string">'Show raw data'</span>)
-<span class="keyword">if</span> show_raw:
-    st.dataframe(df)
-
-<span class="comment"># Checkbox with default checked</span>
-include_2024 = st.checkbox(
-    <span class="string">'Include 2024'</span>,
-    value=<span class="keyword">True</span>  <span class="comment"># Checked by default</span>
-)
-
-<span class="comment"># Layout with columns</span>
-col1, col2 = st.columns(<span class="number">2</span>)
-
-<span class="keyword">with</span> col1:
-    st.metric(<span class="string">'Total Budget'</span>, <span class="string">'$1.2M'</span>)
-    dept = st.selectbox(<span class="string">'Dept'</span>, options)
-
-<span class="keyword">with</span> col2:
-    st.metric(<span class="string">'Executed'</span>, <span class="string">'$950K'</span>)
-    year = st.selectbox(<span class="string">'Year'</span>, years)
-
-<span class="comment"># Sidebar (always visible)</span>
-<span class="keyword">with</span> st.sidebar:
-    st.title(<span class="string">'Filters'</span>)
-    department = st.selectbox(<span class="string">'Dept'</span>, depts)</div>
-                </div>
-
-                <div>
-                    <h3 style="color: #00b894;">Layout Options</h3>
-                    <div style="display: grid; gap: 15px; margin-top: 15px;">
-                        <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">st.columns(n)</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Create n columns side by side</p>
-                        </div>
-                        <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">st.sidebar</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Left sidebar for filters</p>
-                        </div>
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px;">
-                            <h4 style="color: white;">st.expander</h4>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Collapsible section</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 17: Complete Dashboard Example (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Putting It Together: Complete Dashboard</h1>
-            <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st
-<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
-<span class="keyword">import</span> plotly.express <span class="keyword">as</span> px
-
-<span class="comment"># Page config</span>
-st.set_page_config(page_title=<span class="string">'Budget Dashboard'</span>, layout=<span class="string">'wide'</span>)
-
-<span class="comment"># Load data</span>
-df = pd.read_csv(<span class="string">'budget_execution.csv'</span>)
-
-<span class="comment"># SIDEBAR FILTERS</span>
-<span class="keyword">with</span> st.sidebar:
-    st.title(<span class="string">'Filters'</span>)
-    departments = st.multiselect(<span class="string">'Departments'</span>, df[<span class="string">'department'</span>].unique(), default=df[<span class="string">'department'</span>].unique())
-    year_range = st.slider(<span class="string">'Year'</span>, <span class="number">2020</span>, <span class="number">2024</span>, (<span class="number">2020</span>, <span class="number">2024</span>))
-    show_table = st.checkbox(<span class="string">'Show data table'</span>)
-
-<span class="comment"># APPLY FILTERS</span>
-mask = (df[<span class="string">'department'</span>].isin(departments)) & (df[<span class="string">'year'</span>].between(*year_range))
-filtered = df[mask]
-
-<span class="comment"># MAIN CONTENT</span>
-st.title(<span class="string">'Budget Execution Dashboard'</span>)
-
-<span class="comment"># Metrics row</span>
-col1, col2, col3 = st.columns(<span class="number">3</span>)
-col1.metric(<span class="string">'Total Budget'</span>, <span class="string">f"${filtered['approved'].sum():,.0f}"</span>)
-col2.metric(<span class="string">'Executed'</span>, <span class="string">f"${filtered['executed'].sum():,.0f}"</span>)
-col3.metric(<span class="string">'Execution Rate'</span>, <span class="string">f"{(filtered['executed'].sum()/filtered['approved'].sum()*100):.1f}%"</span>)
-
-<span class="comment"># Charts</span>
-st.plotly_chart(px.bar(filtered, x=<span class="string">'department'</span>, y=<span class="string">'executed'</span>, color=<span class="string">'year'</span>, barmode=<span class="string">'group'</span>))
-
-<span class="keyword">if</span> show_table:
-    st.dataframe(filtered)</div>
-        </div>
-
-        <!-- Slide 18: Running Streamlit (CONTENT) -->
-        <div class="slide">
-            <span class="section-label">CONTENT</span>
-            <h1>Running Your Streamlit App</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-                <div>
-                    <h3 style="color: #667eea;">Step-by-Step</h3>
-                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 15px; margin-top: 15px;">
-                        <ol style="line-height: 2.5;">
-                            <li>Save your code as <code>app.py</code></li>
-                            <li>Open terminal in that folder</li>
-                            <li>Run: <code>streamlit run app.py</code></li>
-                            <li>Browser opens at localhost:8501</li>
-                            <li>Edit code, save, app reloads!</li>
-                        </ol>
-                    </div>
-
-                    <div class="alert alert-info" style="margin-top: 20px;">
-                        <strong>Shortcut:</strong> Press <code>R</code> in the browser to rerun, or enable "Always rerun" in Settings menu.
-                    </div>
-                </div>
-
-                <div>
-                    <div class="code-example"><span class="comment"># Terminal commands</span>
-
-<span class="comment"># Navigate to your project folder</span>
-cd /path/to/your/project
-
-<span class="comment"># Run the app</span>
-streamlit run app.py
-
-<span class="comment"># Run with specific port</span>
-streamlit run app.py --server.port <span class="number">8080</span>
-
-<span class="comment"># Run in headless mode (no browser)</span>
-streamlit run app.py --server.headless <span class="keyword">true</span></div>
-
-                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 20px; border-radius: 15px; margin-top: 20px;">
-                        <h4 style="color: white; margin-bottom: 10px;">Free Deployment</h4>
-                        <p style="font-size: 0.95rem;">Deploy to Streamlit Cloud for free! Push to GitHub, connect to share.streamlit.io</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 19: Exercise Preview -->
-        <div class="slide">
-            <div class="demo-section">
-                <div class="demo-title">Exercise: Budget Dashboard</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Build a complete interactive dashboard</div>
-
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Your Dashboard Must Have:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Title and description</li>
-                                <li style="padding: 8px 0;">2. At least 3 filter widgets (sidebar)</li>
-                                <li style="padding: 8px 0;">3. KPI metrics row</li>
-                                <li style="padding: 8px 0;">4. Two different Plotly charts</li>
-                                <li style="padding: 8px 0;">5. Optional data table toggle</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Suggested Filters:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Department (multiselect)</li>
-                                <li style="padding: 8px 0;">- Year (slider or selectbox)</li>
-                                <li style="padding: 8px 0;">- Budget minimum (slider)</li>
-                                <li style="padding: 8px 0;">- Show raw data (checkbox)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.2rem;">
-                    <strong>Time: 45 minutes | File: budget_execution.csv</strong>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 20: Summary (SUMMARY) -->
-        <div class="slide">
-            <span class="section-label">SUMMARY</span>
-            <h1>Key Takeaways</h1>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;">
-                <div>
-                    <h2>Today You Learned:</h2>
-                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
-                        <ul style="list-style: none;">
-                            <li style="padding: 8px 0;"><strong>Plotly</strong> = Interactive charts (hover, zoom, filter)</li>
-                            <li style="padding: 8px 0;"><strong>Streamlit</strong> = Python to web app (no HTML needed)</li>
-                            <li style="padding: 8px 0;"><strong>Widgets</strong> return values you use to filter data</li>
-                            <li style="padding: 8px 0;"><strong>selectbox</strong> = one choice, <strong>multiselect</strong> = many</li>
-                            <li style="padding: 8px 0;"><strong>slider</strong> = numeric range</li>
-                            <li style="padding: 8px 0;"><strong>checkbox</strong> = show/hide toggle</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <h2>Next Week (Week 10):</h2>
-                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
-                        <h3 style="color: white; margin-bottom: 15px;">Power BI Essentials</h3>
-                        <ul style="list-style: none;">
-                            <li style="padding: 8px 0;">Power BI Desktop interface</li>
-                            <li style="padding: 8px 0;">Power Query for data transformation</li>
-                            <li style="padding: 8px 0;">Essential visualizations</li>
-                            <li style="padding: 8px 0;">Basic DAX measures</li>
-                            <li style="padding: 8px 0;">Dataset: Birth Records</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
-                    <h2 style="color: white; margin-bottom: 15px;">Remember</h2>
-                    <p style="font-size: 1.5rem;">
-                        "Static charts tell.<br>
-                        Interactive dashboards invite exploration."
+                <div class="after-card">
+                    <h3>Después</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.7;">
+                        El predictor más fuerte de pérdida en nuestro dataset no son las notas. Es el desenganche temprano.
                     </p>
                 </div>
             </div>
+
+            <div class="quote-box" style="margin-top: 24px;">
+                La segunda versión ya te dice qué tienes que recordar antes de que empiecen los detalles.
+            </div>
         </div>
+
+        <!-- =========================================
+             SLIDE 10: EVERY STORY NEEDS AN AUDIENCE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Toda historia necesita audiencia</h1>
+
+            <div class="grid-3">
+                <div class="audience-card">
+                    <div class="audience-icon">E</div>
+                    <h3>Ejecutivo</h3>
+                    <ul>
+                        <li><strong>Le importa:</strong> decisión, riesgo, impacto</li>
+                        <li><strong>Necesita:</strong> una respuesta rápida</li>
+                        <li><strong>Detesta:</strong> introducciones largas</li>
+                    </ul>
+                </div>
+                <div class="audience-card" style="border-top-color: var(--success);">
+                    <div class="audience-icon">M</div>
+                    <h3>Gerente</h3>
+                    <ul>
+                        <li><strong>Le importa:</strong> implementación</li>
+                        <li><strong>Necesita:</strong> prioridades y tradeoffs</li>
+                        <li><strong>Detesta:</strong> recomendaciones vagas</li>
+                    </ul>
+                </div>
+                <div class="audience-card" style="border-top-color: var(--warning);">
+                    <div class="audience-icon">T</div>
+                    <h3>Equipo técnico</h3>
+                    <ul>
+                        <li><strong>Le importa:</strong> método y evidencia</li>
+                        <li><strong>Necesita:</strong> detalle y caveats</li>
+                        <li><strong>Detesta:</strong> afirmaciones sin soporte</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 25px;">
+                <strong>Una presentación, una audiencia principal.</strong> Si el salón está mezclado, abre con la versión orientada a decisión.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 11: AUDIENCE EXAMPLE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Así cambia el mismo hallazgo</h1>
+
+            <div class="grid-3">
+                <div class="card card-primary">
+                    <h3>Versión ejecutiva</h3>
+                    <p style="margin-top: 18px; color: white;">
+                        Las ausencias tempranas son la señal más clara de pérdida futura, así que la intervención debe empezar en las primeras semanas, no en mitad del semestre.
+                    </p>
+                </div>
+                <div class="card card-warning">
+                    <h3>Versión gerente</h3>
+                    <p style="margin-top: 18px; color: white;">
+                        Deberíamos identificar a los estudiantes con ausencias repetidas al inicio y conectarlos a seguimiento antes de que el rendimiento caiga.
+                    </p>
+                </div>
+                <div class="card card-info">
+                    <h3>Versión técnica</h3>
+                    <p style="margin-top: 18px; color: white;">
+                        Las ausencias tempranas se mantuvieron como el predictor más fuerte incluso controlando por notas previas y carga académica.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quote-box" style="margin-top: 30px;">
+                Los datos pueden quedarse iguales. El encuadre no.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 12: CHART IS NOT THE MESSAGE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Un gráfico no es el mensaje</h1>
+
+            <div class="grid-3">
+                <div class="card card-light">
+                    <h3>Un gráfico muestra</h3>
+                    <p style="margin-top: 15px;">formas, valores, tendencias y comparaciones.</p>
+                </div>
+                <div class="card card-warning">
+                    <h3>El mensaje dice</h3>
+                    <p style="margin-top: 15px; color: white;">qué debe notar primero la audiencia y por qué debería importarle.</p>
+                </div>
+                <div class="card card-success">
+                    <h3>Por eso</h3>
+                    <p style="margin-top: 15px; color: white;">el título, el foco y la limpieza visual hacen parte de la historia.</p>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Regla</h3>
+                <p>Si el título es neutro, la audiencia tiene que trabajar de más. Haz que el título cargue con el punto.</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 13: VISUAL EXAMPLE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Así se ve una slide con foco</h1>
+
+            <div class="grid-2">
+                <div class="chart-example bad">
+                    <h3>Antes</h3>
+                    <pre>
+  Asistencia por semana
+
+  100 |---+---+---+---+---
+   80 | ██ ██ ██ ██ ██ ██
+   60 | ██ ██ ██ ██ ██ ██
+   40 | ██ ██ ██ ██ ██ ██
+   20 | ██ ██ ██ ██ ██ ██
+    0 +-------------------
+        W1 W2 W3 W4 W5 W6
+
+  Leyenda: azul = activo
+  Fuente: exportación LMS
+  Creado por equipo analítico
+                    </pre>
+                    <p style="color: var(--danger); margin-top: 10px;">Título genérico, demasiada decoración, sin foco</p>
+                </div>
+
+                <div class="chart-example good">
+                    <h3>Después</h3>
+                    <pre>
+  La asistencia cae primero al inicio
+
+  Aprueba      |||||||||||||| 82%
+  En riesgo    |||||||||      58%
+  Pierde       ||||||         41%
+
+  Foco:
+  Los estudiantes que se desconectan
+  temprano se separan rápido del resto.
+                    </pre>
+                    <p style="color: var(--success); margin-top: 10px;">Una idea, un contraste, una razón para importar</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 14: CASE INTRO
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CASO</span>
+            <h1>Ahora veámoslo completo</h1>
+
+            <div class="quote-box" style="font-size: 1.45rem;">
+                Vamos a tomar un dataset real, detectar una señal, convertirla en historia y cerrar con una acción concreta.
+            </div>
+
+            <div class="deck-mockup" style="margin-top: 34px;">
+                <div class="deck-slide" style="background: #e7f0ff;">
+                    <span class="slide-num">1</span>
+                    <strong>Hook</strong>
+                    <span>Abrimos con una tensión real</span>
+                </div>
+                <div class="deck-slide" style="background: #fff3cd;">
+                    <span class="slide-num">2</span>
+                    <strong>Evidencia</strong>
+                    <span>Mostramos 2 o 3 cifras que sostienen la idea</span>
+                </div>
+                <div class="deck-slide" style="background: #ffe1e6;">
+                    <span class="slide-num">3</span>
+                    <strong>Lectura</strong>
+                    <span>Explicamos por qué el dato importa</span>
+                </div>
+                <div class="deck-slide" style="background: #d4edda;">
+                    <span class="slide-num">4</span>
+                    <strong>Call to action</strong>
+                    <span>Cerramos con una decisión concreta</span>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 28px;">
+                <strong>Dataset base:</strong> [EJECUCION_PRESUPUESTAL.csv](/Users/juliangarzon/universdad/analitica_datos/semana09/data/EJECUCION_PRESUPUESTAL.csv)
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 15: CASE HOOK + EVIDENCE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CASO</span>
+            <h1>Estamos comprometiendo mucho más de lo que realmente estamos pagando</h1>
+
+            <div style="background: var(--bg-light); padding: 30px; border-radius: 18px; margin-top: 26px;">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">La brecha se ve así</h3>
+
+                <div style="display: grid; gap: 18px;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px;">
+                            <span>Apropiación</span>
+                            <span>88,4 billones</span>
+                        </div>
+                        <div style="height: 24px; border-radius: 999px; background: #dbe7ff; overflow: hidden;">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb);"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px;">
+                            <span>Compromisos</span>
+                            <span>29,9 billones</span>
+                        </div>
+                        <div style="height: 24px; border-radius: 999px; background: #fef0c7; overflow: hidden;">
+                            <div style="width: 33.8%; height: 100%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px;">
+                            <span>Pagos</span>
+                            <span>1,06 billones</span>
+                        </div>
+                        <div style="height: 24px; border-radius: 999px; background: #ffe1e6; overflow: hidden;">
+                            <div style="width: 1.2%; min-width: 10px; height: 100%; background: linear-gradient(90deg, #ef4444, #dc2626);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-takeaway" style="margin-top: 24px;">
+                    <h3>Hook del caso</h3>
+                    <p>La inversión parece avanzar cuando miramos compromisos, pero la historia cambia cuando miramos pagos reales.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 16: CASE INTERPRETATION
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CASO</span>
+            <h1>La historia no es contable. Es de ejecución.</h1>
+
+            <div class="grid-2">
+                <div style="background: var(--bg-light); padding: 28px; border-radius: 18px;">
+                    <h3 style="color: var(--primary); margin-bottom: 18px;">La brecha también se puede leer así</h3>
+
+                    <div class="grid-3" style="gap: 14px; margin-top: 0;">
+                        <div class="card card-danger" style="padding: 18px;">
+                            <h3>28,9 billones</h3>
+                            <p style="margin-top: 10px; color: white;">Brecha entre compromisos y pagos</p>
+                        </div>
+                        <div class="card card-warning" style="padding: 18px;">
+                            <h3>1,2%</h3>
+                            <p style="margin-top: 10px; color: white;">Pagos sobre apropiación</p>
+                        </div>
+                        <div class="card card-info" style="padding: 18px;">
+                            <h3>33,8%</h3>
+                            <p style="margin-top: 10px; color: white;">Compromisos sobre apropiación</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 22px; background: white; border-radius: 16px; padding: 18px;">
+                        <h3 style="color: var(--text-dark); margin-bottom: 14px;">Sectores donde la brecha también pesa</h3>
+                        <div style="display: grid; gap: 12px;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--bg-medium); padding-bottom: 10px;">
+                                <span><strong>Educación</strong></span>
+                                <span>brecha ≈ <strong>20,3 billones</strong></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--bg-medium); padding-bottom: 10px;">
+                                <span><strong>Transporte</strong></span>
+                                <span>brecha ≈ <strong>6,3 billones</strong></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span><strong>Igualdad y Equidad</strong></span>
+                                <span>brecha ≈ <strong>4,7 billones</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-warning">
+                    <h3>Lo que eso significa</h3>
+                    <p style="margin-top: 18px; line-height: 1.7; color: white;">
+                        Si solo presentamos “compromisos”, la historia suena mejor de lo que realmente está pasando.
+                    </p>
+                    <p style="margin-top: 18px; line-height: 1.7; color: white;">
+                        El problema no es solo presupuestal. Es seguimiento, prioridad y capacidad de ejecución.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quote-box" style="margin-top: 28px;">
+                Aquí aparece la implicación: no basta con mostrar que algo fue comprometido. Hay que mostrar si realmente avanza.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 17: CASE CALL TO ACTION
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">CASO</span>
+            <h1>Call to action: no midamos solo intención, midamos ejecución</h1>
+
+            <div class="grid-2">
+                <div class="card card-success">
+                    <h3>Propuesta</h3>
+                    <p style="margin-top: 18px; line-height: 1.7; color: white;">
+                        Implementemos un tablero mensual de seguimiento para rubros de inversión con alto compromiso y bajo pago.
+                    </p>
+                    <p style="margin-top: 18px; line-height: 1.7; color: white;">
+                        La meta no sería solo reportar cuánto se asignó, sino identificar dónde la ejecución se está quedando atrás.
+                    </p>
+                </div>
+                <div class="card card-light">
+                    <h3>Qué mostraría ese tablero</h3>
+                    <ul style="margin-top: 18px; line-height: 2;">
+                        <li>Brecha entre apropiación, compromiso y pago</li>
+                        <li>Rubros críticos con rezago sostenido</li>
+                        <li>Sectores con mayor distancia entre promesa y ejecución</li>
+                        <li>Alertas tempranas para seguimiento de gestión</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 28px;">
+                <strong>Eso es storytelling con datos:</strong> detectar una señal, explicarla bien y cerrar con una decisión concreta.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 18: EXERCISE INTRO
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">EJERCICIO</span>
+            <h1>Construye una mini historia</h1>
+
+            <div class="grid-2">
+                <div class="card card-primary">
+                    <h3>Qué van a hacer</h3>
+                    <ul style="margin-top: 18px; line-height: 2; color: white;">
+                        <li>Trabajen en parejas</li>
+                        <li>Elijan un tema que de verdad les interese</li>
+                        <li>Armen una mini presentación de 4 slides</li>
+                        <li>Usen al menos 2 evidencias</li>
+                        <li>Cierren con una conclusión clara</li>
+                    </ul>
+                </div>
+                <div class="card card-light">
+                    <h3>Qué importa aquí</h3>
+                    <ul style="margin-top: 18px; line-height: 2;">
+                        <li>Una idea clara</li>
+                        <li>Una estructura limpia</li>
+                        <li>Una razón para importar</li>
+                        <li>Un cierre fuerte</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-takeaway" style="margin-top: 30px;">
+                <h3>Esto no se trata de diseño perfecto.</h3>
+                <p>Se trata de practicar cómo dar forma a una historia desde un tema que ya les importa.</p>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 19: EXERCISE STRUCTURE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">EJERCICIO</span>
+            <h1>Tu historia en 4 slides</h1>
+
+            <div class="deck-mockup">
+                <div class="deck-slide" style="background: var(--context-gradient); color: white;">
+                    <span class="slide-num">1</span>
+                    <strong>Contexto</strong>
+                    <span>¿Qué estamos viendo?</span>
+                </div>
+                <div class="deck-slide" style="background: #fff3cd;">
+                    <span class="slide-num">2</span>
+                    <strong>Hallazgo</strong>
+                    <span>¿Qué encontraron?</span>
+                </div>
+                <div class="deck-slide" style="background: #d6e4ff;">
+                    <span class="slide-num">3</span>
+                    <strong>Por qué importa</strong>
+                    <span>¿Por qué debería importarnos?</span>
+                </div>
+                <div class="deck-slide" style="background: #d4edda;">
+                    <span class="slide-num">4</span>
+                    <strong>Cierre</strong>
+                    <span>Conclusión o recomendación</span>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 28px;">
+                <strong>Tiempo:</strong> 2 minutos para presentar.
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 20: RAPID FEEDBACK
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label content">EJERCICIO</span>
+            <h1>Cómo vamos a juzgar la mini historia</h1>
+
+            <div class="grid-2">
+                <div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">1</span>
+                            <div>
+                                <strong>¿El mensaje principal es claro?</strong>
+                                <p style="font-size: 0.9rem;">¿El salón puede repetir el punto en una sola frase?</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">2</span>
+                            <div>
+                                <strong>¿Usaron evidencia?</strong>
+                                <p style="font-size: 0.9rem;">No solo opinión, no solo decoración</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">3</span>
+                            <div>
+                                <strong>¿La historia fluye?</strong>
+                                <p style="font-size: 0.9rem;">Contexto, hallazgo, implicación, acción</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">4</span>
+                            <div>
+                                <strong>¿Los visuales ayudan?</strong>
+                                <p style="font-size: 0.9rem;">La slide debe apoyar el mensaje, no pelear con él</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">5</span>
+                            <div>
+                                <strong>¿Cierra fuerte?</strong>
+                                <p style="font-size: 0.9rem;">Un cierre débil hace que toda la historia se sienta incompleta</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 18: DELIVERY 2 SECTION INTRO
+             ========================================= -->
+        <div class="slide section-intro summary-section">
+            <h1>Entrega 2</h1>
+            <p>Ahora lleven estos mismos principios a la presentación de su proyecto</p>
+        </div>
+
+        <!-- =========================================
+             SLIDE 19: DELIVERY 2 OVERVIEW
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">ENTREGA 2</span>
+            <h1>Su presentación de 10 minutos</h1>
+
+            <div class="grid-2">
+                <div class="card card-primary">
+                    <h3>Qué van a presentar</h3>
+                    <ul style="margin-top: 18px; line-height: 2; color: white;">
+                        <li>La pregunta de su proyecto</li>
+                        <li>Sus hallazgos clave</li>
+                        <li>Sus visualizaciones de soporte</li>
+                        <li>Su interpretación</li>
+                        <li>Su conclusión o recomendación final</li>
+                    </ul>
+                </div>
+                <div class="card card-light">
+                    <h3>Cómo debería sentirse</h3>
+                    <ul style="margin-top: 18px; line-height: 2;">
+                        <li>Clara</li>
+                        <li>Estructurada</li>
+                        <li>Intencional</li>
+                        <li>Lo bastante corta para mantenerse afilada</li>
+                        <li>Lo bastante fuerte para recordarse</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 20: EVALUATION CRITERIA
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">ENTREGA 2</span>
+            <h1>Qué vamos a evaluar</h1>
+
+            <div class="grid-3">
+                <div class="card card-info">
+                    <h3>Mensaje central</h3>
+                    <p style="margin-top: 15px;">¿La idea principal se entiende desde el comienzo?</p>
+                </div>
+                <div class="card card-warning">
+                    <h3>Flujo narrativo</h3>
+                    <p style="margin-top: 15px;">¿La presentación avanza lógicamente desde el contexto hasta la conclusión?</p>
+                </div>
+                <div class="card card-success">
+                    <h3>Soporte visual</h3>
+                    <p style="margin-top: 15px;">¿Los gráficos ayudan a entender el punto?</p>
+                </div>
+                <div class="card card-primary">
+                    <h3>Evidencia</h3>
+                    <p style="margin-top: 15px;">¿Las afirmaciones están respaldadas por datos y no solo por frases?</p>
+                </div>
+                <div class="card card-danger">
+                    <h3>Conclusión</h3>
+                    <p style="margin-top: 15px;">¿La presentación termina con una idea final clara?</p>
+                </div>
+                <div class="card card-light">
+                    <h3>Manejo del tiempo</h3>
+                    <p style="margin-top: 15px;">¿Logran hacer el punto sin correr ni quedarse sin tiempo?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 21: HARD TIME LIMIT
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">ENTREGA 2</span>
+            <h1>Al minuto 10, paramos</h1>
+
+            <div class="quote-box" style="font-size: 1.55rem;">
+                Si llegan al minuto 10, la presentación se corta.
+                <span class="author">No es un castigo, es una restricción de diseño.</span>
+            </div>
+
+            <div class="grid-3" style="margin-top: 35px;">
+                <div class="card card-danger">
+                    <h3>No intenten mostrar todo</h3>
+                </div>
+                <div class="card card-warning">
+                    <h3>Elijan los hallazgos que más importan</h3>
+                </div>
+                <div class="card card-success">
+                    <h3>Dejen detalles para preguntas o apéndice</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 22: BEFORE YOU PRESENT
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">RESUMEN</span>
+            <h1>Antes de presentar</h1>
+
+            <div class="grid-2">
+                <div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">1</span>
+                            <div>
+                                <strong>¿Puedo decir mi mensaje principal en una sola frase?</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">2</span>
+                            <div>
+                                <strong>¿Cada slide se gana su lugar?</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">3</span>
+                            <div>
+                                <strong>¿Mis gráficos aclaran en lugar de distraer?</strong>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-box">4</span>
+                            <div>
+                                <strong>¿El cierre es fuerte y explícito?</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">5</span>
+                            <div>
+                                <strong>¿Puedo terminar dentro de 10 minutos?</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-box">6</span>
+                            <div>
+                                <strong>¿Esto haría que mi audiencia se interese?</strong>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 23: NEXT MOVE
+             ========================================= -->
+        <div class="slide">
+            <span class="section-label summary">RESUMEN</span>
+            <h1>Su siguiente movimiento</h1>
+
+            <div class="deck-mockup">
+                <div class="deck-slide" style="background: var(--context-gradient); color: white;">
+                    <span class="slide-num">1</span>
+                    <strong>Elijan su mensaje</strong>
+                    <span>¿Cuál es la única cosa que el salón debe recordar?</span>
+                </div>
+                <div class="deck-slide">
+                    <span class="slide-num">2</span>
+                    <strong>Corten el ruido</strong>
+                    <span>Quiten todo lo que no sirva a ese mensaje</span>
+                </div>
+                <div class="deck-slide" style="background: #fff3cd;">
+                    <span class="slide-num">3</span>
+                    <strong>Construyan el flujo</strong>
+                    <span>Contexto, hallazgo, implicación, acción</span>
+                </div>
+                <div class="deck-slide" style="background: #d4edda;">
+                    <span class="slide-num">4</span>
+                    <strong>Practiquen con reloj</strong>
+                    <span>Si no cabe, todavía no está lista</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+             SLIDE 24: CLOSING
+             ========================================= -->
+        <div class="slide section-intro context-section">
+            <h1>Narrativa con Datos</h1>
+            <p style="font-size: 1.8rem; margin-top: 20px;">No muestren solo datos. Cambien cómo la audiencia ve el problema.</p>
+
+            <div style="margin-top: 60px; background: rgba(255, 255, 255, 0.18); padding: 30px; border-radius: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; text-align: center;">
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Contexto</h3>
+                        <p>Define el marco</p>
+                    </div>
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Hallazgo</h3>
+                        <p>Revela lo que importa</p>
+                    </div>
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Implicación</h3>
+                        <p>Sube la apuesta</p>
+                    </div>
+                    <div>
+                        <h3 style="color: white; margin-bottom: 10px;">Acción</h3>
+                        <p>Cierra con dirección</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- NAVIGATION SCRIPT -->
     <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
@@ -1360,9 +1830,9 @@ streamlit run app.py --server.headless <span class="keyword">true</span></div>
 
         function showSlide(n) {
             slides.forEach(slide => slide.style.display = 'none');
-            currentSlide = (n + slides.length) % slides.length;
+            currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].style.display = 'flex';
-            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+            slides[currentSlide].style.animation = 'fadeInUp 0.4s ease-out';
             updateCounter();
         }
 
@@ -1376,11 +1846,26 @@ streamlit run app.py --server.headless <span class="keyword">true</span></div>
 
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
                 previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
             }
+        });
+
+        // Initialize reveal items
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
         });
 
         // Initialize

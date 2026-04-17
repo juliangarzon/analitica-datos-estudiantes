@@ -1,276 +1,190 @@
-# Week 10 Workshop: Build a Budget Execution Dashboard
+# Week 10 Workshop: Data Storytelling for Your Project
+
+**Duration**: 2 hours
 
 ## Overview
 
-| Item | Details |
-|------|---------|
-| **Duration** | 90 minutes |
-| **Dataset** | Budget Execution (Ejecucion Presupuestal) |
-| **Deliverable** | Working Streamlit dashboard |
-| **Tools** | Python, Plotly, Streamlit |
+In this workshop, you will create a complete 5-slide presentation for your data analytics project and practice delivering a 5-minute pitch. You will also participate in a peer feedback session to refine your storytelling skills.
 
 ---
 
 ## Learning Objectives
 
-By completing this workshop, you will be able to:
-
-1. Build a complete Streamlit web application
-2. Implement filter widgets (selectbox, multiselect, slider)
-3. Display key metrics using `st.metric()`
-4. Create and display 4 interactive Plotly charts
-5. Organize dashboard layout with columns and sidebar
-
----
-
-## Prerequisites
-
-### Install Required Packages
-
-```bash
-pip install streamlit plotly pandas
-```
-
-### Verify Installation
-
-```bash
-streamlit --version
-```
-
----
-
-## Dashboard Requirements
-
-Your dashboard must include:
-
-### 1. Title and Description
-- Application title
-- Brief description of what the dashboard shows
-- Data source information
-
-### 2. Three Filter Widgets (in sidebar)
-
-| Widget | Type | Purpose |
-|--------|------|---------|
-| Department | `multiselect` | Filter by one or more departments |
-| Year | `slider` | Filter by year range |
-| Show Raw Data | `checkbox` | Toggle data table visibility |
-
-### 3. Four Charts
-
-| Chart # | Type | Purpose |
-|---------|------|---------|
-| 1 | Bar Chart | Budget by department (approved vs executed) |
-| 2 | Line Chart | Budget trend over years |
-| 3 | Pie Chart | Budget distribution by category |
-| 4 | Scatter Plot | Approved vs Executed with size = execution rate |
-
-### 4. Key Metrics Row
-
-Display these 3 metrics at the top:
-
-| Metric | Calculation |
-|--------|-------------|
-| Total Approved Budget | Sum of approved budget |
-| Total Executed Budget | Sum of executed budget |
-| Average Execution Rate | Executed / Approved * 100 |
+By the end of this workshop, you will be able to:
+1. Distill your project findings into a compelling 5-slide story
+2. Deliver a focused 5-minute data presentation
+3. Give and receive constructive feedback on data storytelling
 
 ---
 
 ## Workshop Structure
 
-### Part 1: Plotly Exercises (30 minutes)
-Complete `workshop_starter.ipynb` to practice Plotly charts.
-
-### Part 2: Streamlit Dashboard (60 minutes)
-Build the complete dashboard using `streamlit_app_starter.py`.
-
----
-
-## Files in This Workshop
-
-| File | Purpose |
-|------|---------|
-| `workshop_starter.ipynb` | Plotly practice exercises |
-| `workshop_solution.ipynb` | Plotly solutions |
-| `streamlit_app_starter.py` | Dashboard starter template |
-| `streamlit_app_solution.py` | Complete dashboard solution |
+| Time | Activity | Description |
+|------|----------|-------------|
+| 0:00 - 0:15 | Introduction | Review storytelling principles |
+| 0:15 - 0:45 | Slide Creation | Build your 5-slide presentation |
+| 0:45 - 1:00 | Practice Solo | Rehearse your pitch |
+| 1:00 - 1:45 | Peer Presentations | Present to small groups + feedback |
+| 1:45 - 2:00 | Wrap-up | Reflection and next steps |
 
 ---
 
-## Running the Streamlit App
+## Part 1: The 5-Slide Framework (30 minutes)
 
-### Step 1: Navigate to workshop directory
-```bash
-cd /path/to/semana08/workshop
-```
+Your presentation must follow this structure:
 
-### Step 2: Run the app
-```bash
-streamlit run streamlit_app_starter.py
-```
+### Slide 1: The Hook
+**Purpose**: Grab attention and establish relevance
 
-### Step 3: View in browser
-The app will open automatically at `http://localhost:8501`
+- Start with a surprising fact, question, or problem statement
+- Make the audience care in the first 30 seconds
+- Avoid: title slides with just your name and project title
 
-### Step 4: Make changes and refresh
-- Edit the Python file
-- Save your changes
-- Click "Rerun" in the browser (or enable "Always rerun")
+**Example**: "Every day, our company loses $6,500 to customer churn. Today I'll show you how we can cut that by 40%."
 
----
+### Slide 2: The Situation
+**Purpose**: Set the context
 
-## Streamlit Quick Reference
+- What data did you analyze?
+- What was the business/research question?
+- Why does this matter?
+- Keep it brief - this is setup, not the main event
 
-### Text and Titles
-```python
-st.title('Main Title')
-st.header('Section Header')
-st.subheader('Subsection')
-st.write('Regular text')
-st.markdown('**Bold** and *italic*')
-```
+### Slide 3: The Key Insight
+**Purpose**: Deliver your main finding
 
-### Widgets
-```python
-# Selectbox (single choice)
-selected = st.selectbox('Label', options=['A', 'B', 'C'])
+- ONE central insight (not a list of findings)
+- Support with a clear, simple visualization
+- Use the "newspaper headline" test: could this be a headline?
+- This is the heart of your presentation
 
-# Multiselect (multiple choices)
-selected_list = st.multiselect('Label', options=['A', 'B', 'C'], default=['A'])
+### Slide 4: The Evidence
+**Purpose**: Build credibility
 
-# Slider (numeric range)
-year = st.slider('Year', min_value=2020, max_value=2024, value=(2020, 2024))
+- Show 2-3 supporting data points
+- Address potential objections ("But what about...?")
+- Include methodology notes if relevant
+- Keep visualizations simple and readable
 
-# Checkbox (boolean)
-show_data = st.checkbox('Show raw data')
-```
+### Slide 5: The Call to Action
+**Purpose**: Drive decision-making
 
-### Layout
-```python
-# Columns
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric('Label', value, delta)
-
-# Sidebar
-with st.sidebar:
-    st.title('Filters')
-    # widgets go here
-
-# Tabs
-tab1, tab2 = st.tabs(['Tab 1', 'Tab 2'])
-with tab1:
-    # content for tab 1
-```
-
-### Display
-```python
-# Metrics
-st.metric(label='Total', value=1000, delta='+10%')
-
-# DataFrames
-st.dataframe(df)  # Interactive
-st.table(df)      # Static
-
-# Plotly charts
-st.plotly_chart(fig, use_container_width=True)
-```
-
-### Control Flow
-```python
-# Stop execution if condition not met
-if len(selected) == 0:
-    st.warning('Please select at least one option')
-    st.stop()
-```
+- Specific, actionable recommendations
+- Expected impact (quantified if possible)
+- Next steps and timeline
+- End with confidence, not "any questions?"
 
 ---
 
-## Common Issues and Solutions
+## Part 2: Pitch Guidelines (15 minutes practice)
 
-### Issue: "ModuleNotFoundError: No module named 'streamlit'"
-**Solution:** Install streamlit: `pip install streamlit`
+### Time Allocation (5 minutes total)
+- Hook: 30 seconds
+- Situation: 45 seconds
+- Key Insight: 90 seconds
+- Evidence: 90 seconds
+- Call to Action: 30 seconds
 
-### Issue: "fig.show() opens in browser, not in app"
-**Solution:** Use `st.plotly_chart(fig)` instead of `fig.show()`
+### Delivery Tips
 
-### Issue: "Multiselect returns empty list and breaks filter"
-**Solution:** Check for empty selection before filtering:
-```python
-if len(selected_depts) == 0:
-    st.warning('Please select at least one department')
-    st.stop()
-```
+**Do:**
+- Make eye contact with your audience
+- Use simple language (no jargon without explanation)
+- Pause after key points
+- Point to specific parts of visualizations
+- End with a clear recommendation
 
-### Issue: "Chart is too narrow"
-**Solution:** Add `use_container_width=True`:
-```python
-st.plotly_chart(fig, use_container_width=True)
-```
+**Don't:**
+- Read from your slides
+- Apologize for your data or analysis
+- Rush through the ending
+- Use phrases like "I just want to show..." or "This is just..."
+- End with "That's it" or "Any questions?"
 
-### Issue: "TypeError: cannot use == with list"
-**Solution:** Use `.isin()` for multiselect filtering:
-```python
-# Wrong
-filtered = df[df['dept'] == selected_depts]
+### Practice Checklist
 
-# Right
-filtered = df[df['dept'].isin(selected_depts)]
-```
-
----
-
-## Rubric
-
-| Criteria | Points | Description |
-|----------|--------|-------------|
-| Title & Description | 10 | App has clear title and description |
-| Filter Widgets | 20 | 3 working filters (multiselect, slider, checkbox) |
-| Key Metrics | 15 | 3 metrics displayed correctly |
-| Bar Chart | 15 | Department comparison chart |
-| Line Chart | 10 | Year trend chart |
-| Pie Chart | 10 | Category distribution chart |
-| Scatter Plot | 10 | Approved vs Executed with size |
-| Layout | 10 | Clean organization with sidebar and columns |
-| **Total** | **100** | |
+Before presenting, verify:
+- [ ] Each slide has ONE main point
+- [ ] Visualizations are readable from the back of the room
+- [ ] You can explain each chart in one sentence
+- [ ] Your pitch fits in 5 minutes (practice with a timer)
+- [ ] You have a strong opening and closing line
 
 ---
 
-## Bonus Challenges
+## Part 3: Peer Feedback Session (45 minutes)
 
-If you finish early, try these enhancements:
+### Group Formation
+- Form groups of 4 students
+- Each person presents (5 min) + receives feedback (5-7 min)
 
-1. **Add a download button** for filtered data
-   ```python
-   st.download_button('Download CSV', filtered.to_csv(), 'data.csv')
-   ```
+### Feedback Protocol
 
-2. **Add a category filter** (fourth filter widget)
+**For Presenters:**
+1. Present your 5-minute pitch
+2. Listen to feedback without defending
+3. Take notes on suggestions
+4. Ask clarifying questions if needed
 
-3. **Add delta values** to metrics showing change from previous year
+**For Reviewers:**
+Use the feedback form in the workshop notebook. Focus on:
 
-4. **Add color to metrics** based on performance (green for good, red for bad)
+1. **Clarity**: Did you understand the main point?
+2. **Evidence**: Was the data convincing?
+3. **Action**: Do you know what to do next?
+4. **Engagement**: Did the story hold your attention?
 
-5. **Create a two-tab layout** separating Overview and Details
+### Feedback Framework: "I Like, I Wish, What If"
+
+- **I like...** (what worked well)
+- **I wish...** (what could be improved)
+- **What if...** (suggestions to try)
+
+**Example:**
+- "I like how you quantified the business impact upfront"
+- "I wish the key insight slide had a clearer headline"
+- "What if you started with a customer story instead of the data overview?"
 
 ---
 
-## Submission
+## Deliverables
 
-Submit the following:
-1. Your completed `streamlit_app.py` file
-2. A screenshot of your running dashboard
+By the end of this workshop, you should have:
+
+1. **5-slide presentation** (PDF or slides format)
+2. **Completed peer feedback forms** (for each group member)
+3. **Revised pitch notes** based on feedback received
 
 ---
 
 ## Resources
 
-- [Streamlit Documentation](https://docs.streamlit.io/)
-- [Streamlit Cheat Sheet](https://docs.streamlit.io/library/cheatsheet)
-- [Plotly Express Documentation](https://plotly.com/python/plotly-express/)
-- [Streamlit Gallery](https://streamlit.io/gallery)
+- `workshop_starter.ipynb` - Templates and frameworks to get started
+- `workshop_solution.ipynb` - Example of a complete data story
 
 ---
 
-*Last updated: January 2026*
+## Evaluation Criteria
+
+Your final project presentation will be evaluated on:
+
+| Criteria | Weight | Description |
+|----------|--------|-------------|
+| Story Structure | 25% | Clear narrative arc with hook, insight, and action |
+| Data Visualization | 25% | Charts are clear, appropriate, and support the story |
+| Insight Quality | 25% | Main finding is meaningful and well-supported |
+| Delivery | 25% | Confident, clear, within time limit |
+
+---
+
+## Tips for Success
+
+1. **Start with the end**: What do you want your audience to DO after your presentation?
+2. **Cut ruthlessly**: If a slide doesn't advance your story, remove it
+3. **Test your visuals**: Show them to someone unfamiliar with your project
+4. **Practice out loud**: Silent practice doesn't reveal timing or awkward phrasing
+5. **Embrace feedback**: The best presenters are the best listeners
+
+---
+
+*Good luck with your presentations!*
