@@ -3,469 +3,758 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 11 - Interactive Apps with Plotly + Streamlit</title>
+    <title>Week 11 - Interactive Visualization: Plotly + Streamlit</title>
     <style>
         :root {
-            --ink: #1f2937;
-            --muted: #475569;
-            --paper: rgba(255, 255, 255, 0.94);
-            --line: rgba(15, 23, 42, 0.08);
-            --hook: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
-            --core: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
-            --demo: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
-            --build: linear-gradient(135deg, #059669 0%, #16a34a 100%);
-            --summary: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent: #f093fb;
+            --success: #00b894;
+            --success-dark: #00cec9;
+            --warning: #fdcb6e;
+            --warning-dark: #e17055;
+            --danger: #ff7675;
+            --danger-dark: #fd79a8;
+            --info: #74b9ff;
+            --info-dark: #0984e3;
+            --text-dark: #2c3e50;
+            --text-medium: #34495e;
+            --bg-light: #f8f9fa;
+            --bg-medium: #e9ecef;
+            --hook-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --context-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --content-gradient: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            --summary-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #334155 100%);
-            color: var(--ink);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--context-gradient);
+            color: var(--text-dark);
             overflow-x: hidden;
         }
 
-        .presentation {
+        .presentation-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 20px;
         }
 
         .slide {
-            min-height: 82vh;
-            margin: 28px 0;
-            padding: 56px;
-            border-radius: 28px;
-            background: var(--paper);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
-            position: relative;
-            display: flex;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: none;
             flex-direction: column;
             justify-content: center;
+            position: relative;
             overflow: hidden;
-            backdrop-filter: blur(12px);
         }
 
         .slide::before {
-            content: "";
+            content: '';
             position: absolute;
-            inset: 0 auto auto 0;
-            width: 100%;
-            height: 8px;
-            background: var(--core);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--accent));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .section-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .section-label.hook {
+            background: var(--hook-gradient);
+        }
+
+        .section-label.context {
+            background: var(--context-gradient);
+        }
+
+        .section-label.content {
+            background: var(--content-gradient);
+        }
+
+        .section-label.summary {
+            background: var(--summary-gradient);
         }
 
         .title-slide {
-            background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #0ea5e9 100%);
-            color: white;
             text-align: center;
+            background: var(--context-gradient);
+            color: white;
         }
 
         .title-slide::before {
-            background: linear-gradient(90deg, #f59e0b, #22c55e, #38bdf8);
-        }
-
-        .title-slide h1,
-        .title-slide h2,
-        .title-slide p {
-            color: white;
+            display: none;
         }
 
         .title-slide h1 {
-            font-size: 3.6rem;
-            margin-bottom: 24px;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+            color: white;
+        }
+
+        .title-slide h1::after {
+            display: none;
         }
 
         .title-slide h2 {
             font-size: 1.8rem;
-            font-weight: 500;
-            opacity: 0.92;
-            margin-bottom: 28px;
-        }
-
-        .title-slide .meta {
-            font-size: 1.15rem;
-            opacity: 0.8;
-        }
-
-        .label {
-            position: absolute;
-            top: 20px;
-            left: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
             color: white;
-            font-size: 0.85rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 999px;
-            background: var(--core);
         }
 
-        .label.hook { background: var(--hook); }
-        .label.core { background: var(--core); }
-        .label.demo { background: var(--demo); }
-        .label.build { background: var(--build); }
-        .label.summary { background: var(--summary); }
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .title-slide .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 30px;
+            margin-top: 30px;
+            font-size: 1rem;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
 
         h1 {
-            font-size: 2.6rem;
-            margin-bottom: 26px;
-            color: #0f172a;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--context-gradient);
+            border-radius: 2px;
         }
 
         h2 {
+            font-size: 1.8rem;
+            color: var(--text-medium);
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
             font-size: 1.4rem;
-            margin: 18px 0 12px;
-            color: #1e3a8a;
+            color: var(--text-dark);
+            margin-bottom: 15px;
         }
 
-        p, li {
-            font-size: 1.16rem;
-            line-height: 1.65;
-            color: var(--muted);
-        }
-
-        ul, ol {
-            margin-left: 24px;
-        }
-
+        p,
         li {
-            margin: 10px 0;
+            font-size: 1.2rem;
+            color: var(--text-medium);
+            line-height: 1.7;
+        }
+
+        .section-intro {
+            text-align: center;
+            color: white;
+        }
+
+        .section-intro.hook-section {
+            background: var(--hook-gradient);
+        }
+
+        .section-intro.context-section {
+            background: var(--context-gradient);
+        }
+
+        .section-intro.content-section {
+            background: var(--content-gradient);
+        }
+
+        .section-intro.summary-section {
+            background: var(--summary-gradient);
+        }
+
+        .section-intro::before {
+            display: none;
+        }
+
+        .section-intro h1 {
+            color: white;
+            font-size: 3rem;
+        }
+
+        .section-intro h1::after {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .section-intro p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
         }
 
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
         }
 
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 30px 0;
         }
 
         .card {
-            background: rgba(248, 250, 252, 0.92);
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            padding: 22px;
-        }
-
-        .card.dark {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            color: white;
-        }
-
-        .card.dark h2,
-        .card.dark h3,
-        .card.dark p,
-        .card.dark li {
-            color: white;
-        }
-
-        .accent {
-            font-size: 1.45rem;
-            font-weight: 700;
-            color: #0f766e;
-        }
-
-        .big-quote {
-            font-size: 2rem;
-            line-height: 1.4;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .code {
-            background: #0f172a;
-            color: #e2e8f0;
+            background: white;
             border-radius: 18px;
-            padding: 20px;
-            font-family: "Fira Code", "Consolas", monospace;
-            font-size: 0.97rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            margin-top: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary);
         }
 
-        .pill-list {
+        .card.success {
+            border-left-color: var(--success);
+        }
+
+        .card.warning {
+            border-left-color: var(--warning-dark);
+        }
+
+        .card.info {
+            border-left-color: var(--info-dark);
+        }
+
+        .comparison-panel {
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .comparison-bad {
+            background: linear-gradient(135deg, rgba(255, 118, 117, 0.1), rgba(253, 121, 168, 0.1));
+            border: 2px solid var(--danger);
+        }
+
+        .comparison-good {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 206, 201, 0.1));
+            border: 2px solid var(--success);
+        }
+
+        .comparison-bad h3 {
+            color: var(--danger);
+        }
+
+        .comparison-good h3 {
+            color: var(--success);
+        }
+
+        .big-question {
+            font-size: 2.9rem;
+            text-align: center;
+            color: var(--text-dark);
+            line-height: 1.4;
+            margin: 40px 0 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 28px 36px;
+            border-radius: 18px;
+            margin: 28px 0;
+            text-align: center;
+        }
+
+        .highlight-box h3,
+        .highlight-box p {
+            color: white;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 14px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin: 24px 0;
+            white-space: pre-wrap;
+        }
+
+        .pill-row {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
-            margin-top: 18px;
+            margin-top: 20px;
         }
 
         .pill {
-            padding: 10px 14px;
+            padding: 10px 16px;
             border-radius: 999px;
-            background: #e2e8f0;
-            color: #0f172a;
-            font-size: 0.96rem;
+            background: var(--bg-medium);
+            color: var(--text-dark);
+            font-size: 1rem;
             font-weight: 600;
         }
 
-        .footer-note {
-            margin-top: 22px;
-            font-size: 0.98rem;
-            color: #64748b;
+        .steps-list {
+            display: grid;
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--bg-light), #ffffff);
+            border-radius: 16px;
+            border-left: 5px solid var(--success);
+        }
+
+        .step-number {
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--content-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .timeline-card {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .timeline-card h3,
+        .timeline-card p {
+            color: white;
+        }
+
+        ul {
+            margin-left: 24px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 900px) {
             .slide {
-                padding: 36px 24px;
+                padding: 40px 24px;
                 min-height: auto;
             }
 
             .grid-2,
-            .grid-3 {
+            .grid-3,
+            .timeline {
                 grid-template-columns: 1fr;
             }
 
             .title-slide h1 {
-                font-size: 2.6rem;
+                font-size: 2.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="presentation">
-        <section class="slide title-slide">
-            <h1>Interactive Apps with Plotly + Streamlit</h1>
-            <h2>From static charts to dashboards people can actually use</h2>
-            <p class="meta">Week 11, Data Analytics</p>
-        </section>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <div class="slide-counter" id="slideCounter">1 / 12</div>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
 
-        <section class="slide">
-            <span class="label hook">Hook</span>
+    <div class="presentation-container">
+        <div class="slide title-slide">
+            <h1>Interactive Visualization: Plotly + Streamlit</h1>
+            <h2>From charts you watch to apps you can explore</h2>
+            <div class="author">Data Analytics Course</div>
+            <div class="badge">Week 11</div>
+        </div>
+
+        <div class="slide">
+            <span class="section-label hook">HOOK</span>
             <h1>What makes a dashboard useful?</h1>
-            <p class="big-quote">Not more charts. Better questions, better filters, better decisions.</p>
-            <div class="grid-2" style="margin-top: 28px;">
-                <div class="card">
-                    <h2>Bad dashboard</h2>
+            <div class="big-question">Not more charts. Better questions, better filters, better decisions.</div>
+
+            <div class="grid-2">
+                <div class="comparison-panel comparison-bad">
+                    <h3>Looks busy, says little</h3>
                     <ul>
-                        <li>Too many visuals</li>
+                        <li>Too many visuals on screen</li>
                         <li>No clear user question</li>
-                        <li>Filters nobody needs</li>
-                        <li>Looks impressive, says little</li>
+                        <li>Filters nobody actually needs</li>
+                        <li>Charts compete instead of explaining</li>
                     </ul>
                 </div>
-                <div class="card">
-                    <h2>Useful dashboard</h2>
+                <div class="comparison-panel comparison-good">
+                    <h3>Simple, focused, useful</h3>
                     <ul>
-                        <li>Starts from a question</li>
-                        <li>Highlights a few key metrics</li>
+                        <li>Starts from one analytical question</li>
+                        <li>Uses KPIs to summarize quickly</li>
                         <li>Lets the user compare and explore</li>
                         <li>Supports a clear insight</li>
                     </ul>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="slide">
-            <span class="label core">Context</span>
-            <h1>Today&apos;s structure</h1>
+        <div class="slide section-intro context-section">
+            <h1>Today&apos;s flow</h1>
+            <p>Understand the idea, inspect a finished app, reuse the pattern, then build your own version.</p>
+        </div>
+
+        <div class="slide">
+            <span class="section-label context">CONTEXT</span>
+            <h1>Two tools, two roles</h1>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Plotly</h3>
+                    <p>Creates interactive charts with hover, zoom, legend toggles and clean web-ready visuals.</p>
+                    <div class="pill-row">
+                        <span class="pill">Line</span>
+                        <span class="pill">Bar</span>
+                        <span class="pill">Scatter</span>
+                        <span class="pill">Box</span>
+                    </div>
+                </div>
+                <div class="card info">
+                    <h3>Streamlit</h3>
+                    <p>Wraps the analysis into a usable application with filters, layout, metrics and tables.</p>
+                    <div class="pill-row">
+                        <span class="pill">Sidebar</span>
+                        <span class="pill">Widgets</span>
+                        <span class="pill">Metrics</span>
+                        <span class="pill">Tabs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Mental model</h3>
+                <p>Plotly makes the charts interactive. Streamlit makes the whole analysis interactive.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="section-label content">DEMO</span>
+            <h1>Demo dataset: intrafamily violence in Colombia</h1>
+
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>Why use it for the demo?</h3>
+                    <ul>
+                        <li>Large enough to feel like a real analytical product</li>
+                        <li>Several useful filters</li>
+                        <li>Good for showing comparison and exploration</li>
+                    </ul>
+                </div>
+                <div class="card success">
+                    <h3>Main dimensions</h3>
+                    <ul>
+                        <li>Year</li>
+                        <li>Victim sex</li>
+                        <li>Life stage</li>
+                        <li>Context</li>
+                        <li>Department</li>
+                        <li>Aggressor category</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="section-label content">DEMO</span>
+            <h1>What should you notice in the finished app?</h1>
+
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Filters come first</h3>
+                        <p>The dashboard reduces noise before asking the user to interpret anything.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Metrics summarize</h3>
+                        <p>The KPI row gives a first reading in seconds.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Charts answer different questions</h3>
+                        <p>Trend, comparison and distribution should not say the same thing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide section-intro content-section">
+            <h1>Guided Build</h1>
+            <p>We will not code the whole app from scratch live. We will complete a solid template and then adapt it.</p>
+        </div>
+
+        <div class="slide">
+            <span class="section-label content">DATASET</span>
+            <h1>Guided dataset: air quality in Risaralda</h1>
+
             <div class="grid-3">
                 <div class="card">
-                    <p class="accent">1. Understand the idea</p>
-                    <p>What interactive visualization adds, and when it is worth building an app.</p>
+                    <h3>Temporal signal</h3>
+                    <p>We have dates, so we can build trends.</p>
                 </div>
-                <div class="card">
-                    <p class="accent">2. See a finished product</p>
-                    <p>We will navigate a real dashboard before touching the template.</p>
+                <div class="card success">
+                    <h3>Categorical filters</h3>
+                    <p>Municipality, station and particle type are ready to explore.</p>
                 </div>
-                <div class="card">
-                    <p class="accent">3. Reuse the pattern</p>
-                    <p>You will complete a guided app and then adapt the structure to another dataset.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide">
-            <span class="label core">Concept</span>
-            <h1>Two tools, two roles</h1>
-            <div class="grid-2">
-                <div class="card">
-                    <h2>Plotly</h2>
-                    <ul>
-                        <li>Interactive charts</li>
-                        <li>Hover, zoom, legend toggles</li>
-                        <li>Fast path for visual exploration</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h2>Streamlit</h2>
-                    <ul>
-                        <li>Turns Python into a web app</li>
-                        <li>Adds filters, layout, metrics and tables</li>
-                        <li>Lets users explore without editing notebooks</li>
-                    </ul>
+                <div class="card info">
+                    <h3>Numeric metric</h3>
+                    <p>The measurement column is perfect for KPIs and charts.</p>
                 </div>
             </div>
-            <div class="footer-note">Mental model: Plotly makes the charts interactive. Streamlit makes the whole analysis interactive.</div>
-        </section>
 
-        <section class="slide">
-            <span class="label demo">Demo</span>
-            <h1>Demo dataset</h1>
-            <div class="grid-2">
-                <div class="card dark">
-                    <h2>Violencia intrafamiliar en Colombia</h2>
-                    <p>National dataset, 2015 to 2024, used only for the teacher demo.</p>
-                    <div class="pill-list">
-                        <span class="pill">Year</span>
-                        <span class="pill">Victim sex</span>
-                        <span class="pill">Life stage</span>
-                        <span class="pill">Context</span>
-                        <span class="pill">Department</span>
-                        <span class="pill">Aggressor type</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>Why this dataset works for a demo</h2>
-                    <ul>
-                        <li>Many rows, many filters, many possible cuts</li>
-                        <li>Feels like a real analytical product</li>
-                        <li>Good for showing what a dashboard can reveal quickly</li>
-                    </ul>
-                </div>
+            <div class="pill-row">
+                <span class="pill">Municipio</span>
+                <span class="pill">Estacion</span>
+                <span class="pill">Fecha</span>
+                <span class="pill">PM10</span>
+                <span class="pill">PM2.5</span>
+                <span class="pill">Medicion</span>
             </div>
-        </section>
+        </div>
 
-        <section class="slide">
-            <span class="label demo">Demo</span>
-            <h1>What to notice in the app</h1>
-            <ul>
-                <li>The filters reduce noise before any chart is shown.</li>
-                <li>The KPI row gives a first reading in seconds.</li>
-                <li>Each chart answers a different question.</li>
-                <li>The dashboard is not a gallery. It is a decision support interface.</li>
-            </ul>
-        </section>
-
-        <section class="slide">
-            <span class="label build">Build</span>
-            <h1>Guided exercise dataset</h1>
-            <div class="grid-2">
-                <div class="card">
-                    <h2>Calidad del aire en Risaralda</h2>
-                    <p>Smaller and cleaner, ideal for a guided dashboard exercise.</p>
-                    <div class="pill-list">
-                        <span class="pill">Municipio</span>
-                        <span class="pill">Estación</span>
-                        <span class="pill">Fecha</span>
-                        <span class="pill">PM10</span>
-                        <span class="pill">PM2.5</span>
-                        <span class="pill">Medición</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>Why this dataset works for class</h2>
-                    <ul>
-                        <li>Clean variables and a clear numeric metric</li>
-                        <li>Easy to filter by place, particle type and time</li>
-                        <li>Enough structure for KPIs, trends and comparisons</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide">
-            <span class="label build">Pattern</span>
+        <div class="slide">
+            <span class="section-label content">PATTERN</span>
             <h1>The reusable dashboard pattern</h1>
-            <div class="code">load data
+
+            <div class="code-block">load data
 rename and clean columns
 create sidebar filters
 filter the dataframe
 compute KPIs
 build charts
 optionally show the filtered table</div>
-            <p class="footer-note">If you understand this sequence, you can adapt the same structure to many public datasets.</p>
-        </section>
 
-        <section class="slide">
-            <span class="label build">Pattern</span>
-            <h1>Minimum app requirements</h1>
+            <p>This is the part you should learn deeply. Once you understand this pattern, you can reuse it with many public datasets.</p>
+        </div>
+
+        <div class="slide">
+            <span class="section-label content">CHECKLIST</span>
+            <h1>Minimum app requirements for today</h1>
+
             <div class="grid-3">
                 <div class="card">
-                    <h2>Filters</h2>
-                    <p>At least 3, and they must help comparison.</p>
+                    <h3>3 filters</h3>
+                    <p>They must support comparison, not decoration.</p>
                 </div>
-                <div class="card">
-                    <h2>KPIs</h2>
-                    <p>At least 3, and they must summarize the current selection.</p>
+                <div class="card warning">
+                    <h3>3 KPIs</h3>
+                    <p>They must summarize the current selection.</p>
                 </div>
-                <div class="card">
-                    <h2>Charts</h2>
-                    <p>At least 3, and each one should answer a different question.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide">
-            <span class="label build">Checklist</span>
-            <h1>What you will complete today</h1>
-            <ol>
-                <li>Run the air quality template.</li>
-                <li>Fill the missing `TODO` sections.</li>
-                <li>Validate that filters actually change the data.</li>
-                <li>Add one small improvement.</li>
-                <li>Prepare to adapt the same pattern to another dataset.</li>
-            </ol>
-        </section>
-
-        <section class="slide">
-            <span class="label build">Tips</span>
-            <h1>Common mistakes</h1>
-            <div class="grid-2">
-                <div class="card">
-                    <h2>Technical</h2>
-                    <ul>
-                        <li>Empty multiselect, empty dataframe</li>
-                        <li>Dates still stored as strings</li>
-                        <li>Too many categories in a single chart</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h2>Analytical</h2>
-                    <ul>
-                        <li>Charts without a question</li>
-                        <li>Metrics without context</li>
-                        <li>Titles that say what the chart is, not what it shows</li>
-                    </ul>
+                <div class="card success">
+                    <h3>3 charts</h3>
+                    <p>Each one should answer a different analytical question.</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="slide">
-            <span class="label summary">Challenge</span>
-            <h1>Final challenge</h1>
-            <p>Choose another public dataset and reuse the template.</p>
-            <ul>
-                <li>Your dataset needs one time variable, one category and one numeric measure.</li>
-                <li>Your app should answer a clear question in less than 30 seconds.</li>
-                <li>Your team should be able to explain why each filter exists.</li>
-            </ul>
-        </section>
+        <div class="slide">
+            <span class="section-label summary">CHALLENGE</span>
+            <h1>Final team challenge</h1>
 
-        <section class="slide">
-            <span class="label summary">Wrap-up</span>
-            <h1>What matters from this week</h1>
-            <ul>
-                <li>Interactive apps are not about showing more, but about exploring better.</li>
-                <li>Plotly handles the interactive chart layer.</li>
-                <li>Streamlit handles the app structure and user flow.</li>
-                <li>A good dashboard pattern can be reused across datasets and projects.</li>
-            </ul>
-            <p class="footer-note">This class is direct preparation for Milestone 2: dashboard + storytelling.</p>
-        </section>
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Choose a dataset</h3>
+                        <p>Use a public dataset with one time variable, one category and one numeric measure.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Reuse the template</h3>
+                        <p>Do not start from zero. Adapt the structure you already completed.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>State the insight</h3>
+                        <p>Your dashboard should help someone understand something quickly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide section-intro summary-section">
+            <h1>Week 11 in one sentence</h1>
+            <p>Interactive dashboards are not about showing more data. They are about making better questions easier to explore.</p>
+
+            <div class="timeline">
+                <div class="timeline-card">
+                    <h3>Question</h3>
+                    <p>Start with what the user wants to know</p>
+                </div>
+                <div class="timeline-card">
+                    <h3>Filters</h3>
+                    <p>Reduce noise and support comparison</p>
+                </div>
+                <div class="timeline-card">
+                    <h3>Metrics</h3>
+                    <p>Summarize before explaining</p>
+                </div>
+                <div class="timeline-card">
+                    <h3>Charts</h3>
+                    <p>Reveal trends, differences and variation</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].style.display = 'flex';
+            slides[currentSlide].style.animation = 'fadeInUp 0.4s ease-out';
+            updateCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        showSlide(0);
+    </script>
 </body>
 </html>
