@@ -1,8 +1,10 @@
-# Week 14 Workshop: Build Your First Machine Learning Model
+# Week 14 Workshop: Build Your First Machine Learning Models
 
 ## Overview
 
-In this workshop, you will build, evaluate, and interpret a Decision Tree model using the Water Consumption dataset. You will practice the full ML workflow: data preparation, train/test split, model training, evaluation, and overfitting analysis.
+In this workshop, you will build, evaluate, and interpret Decision Tree models using the diabetes dataset included in scikit-learn. You will practice the full ML workflow: data preparation, train/test split, model training, evaluation, and overfitting analysis.
+
+This material is designed for guided self-study. Use it after reviewing the Week 14 slides and completing the shorter `exercise.ipynb` notebook.
 
 **Duration:** 2 hours (independent work)
 
@@ -16,21 +18,18 @@ By completing this workshop, you will be able to:
 
 1. Prepare a dataset for machine learning (select features, handle missing values)
 2. Split data into training and test sets
-3. Train a Decision Tree model (both Regressor and Classifier)
-4. Evaluate model performance using appropriate metrics
-5. Detect and address overfitting by adjusting model parameters
+3. Decide whether the problem is regression or classification
+4. Train a Decision Tree model (Regressor and Classifier)
+5. Evaluate model performance using appropriate metrics
+6. Detect and address overfitting by adjusting model parameters
 
 ---
 
 ## Dataset
 
-**Source:** datos.gov.co - Water Consumption Data
+**Source:** scikit-learn built-in diabetes dataset
 
-**Description:** Water consumption records containing:
-- Consumption measurements across different locations
-- Temporal data (dates, periods)
-- Categorical attributes (type, zone, etc.)
-- Numeric features for prediction
+**Description:** A built-in regression dataset with 442 observations and 10 numeric medical features. The target represents a quantitative measure of disease progression one year after baseline.
 
 ---
 
@@ -63,13 +62,14 @@ Understand overfitting through experimentation:
 3. Plot the overfitting curve
 4. Identify the best depth for your data
 
-### Part 4: Decision Tree Classifier (Bonus)
+### Part 4: Decision Tree Classifier (Guided Extension)
 
 Convert the problem to classification:
-1. Create consumption categories (Low, Medium, High)
+1. Create target categories (Low, Medium, High)
 2. Train a DecisionTreeClassifier
 3. Evaluate with accuracy_score
 4. Check for overfitting
+5. Decide if classification fits your final project question better than regression
 
 ### Part 5: Interpretation and Reflection
 
@@ -94,9 +94,11 @@ Write a brief analysis:
 
 ### Step 1: Setup
 
-1. Open `workshop_starter.ipynb` in Jupyter or VS Code
-2. Run the setup cell to load libraries and dataset
-3. Explore the data to understand its structure
+1. Review the Week 14 slides
+2. Complete `exercise.ipynb` first
+3. Open `workshop_starter.ipynb` in Jupyter or VS Code
+4. Run the setup cell to load libraries and dataset
+5. Explore the data to understand its structure
 
 ### Step 2: Data Preparation
 
@@ -148,7 +150,7 @@ gap = r2_train - r2_test
 | Data Preparation | 20 | Clean, well-prepared data with clear target/features |
 | Decision Tree Regressor | 30 | Model correctly trained and evaluated |
 | Overfitting Analysis | 25 | Multiple depths tested, overfitting curve plotted |
-| Classifier (Bonus) | 10 | Classification version attempted |
+| Classifier (Guided Extension) | 10 | Classification version attempted |
 | Interpretation | 15 | Clear reflection on results and next steps |
 
 **Total: 100 points**
@@ -202,6 +204,7 @@ Ensure that:
 - All cells have been executed (Kernel > Restart & Run All)
 - Decision Tree Regressor is trained and evaluated
 - Overfitting analysis is complete (multiple depths tested)
+- Classification is attempted in the guided extension
 - Interpretation section is written
 
 ---
@@ -212,10 +215,13 @@ These skills directly apply to your Milestone 3:
 
 | Workshop Skill | Project Application |
 |----------------|---------------------|
-| Data preparation | Prepare your datos.gov.co dataset for ML |
+| Data preparation | Prepare your project dataset for ML |
 | Decision Tree training | Add a predictive model to your project |
+| Classification vs regression decision | Choose the right ML framing for your business question |
 | Overfitting analysis | Ensure your model generalizes well |
 | Interpretation | Explain your model's predictions to stakeholders |
+
+For the final milestone, keep the storytelling structure from Milestone 2, then add the ML layer: what you predicted, which model you used, how you evaluated it, and what action the prediction supports.
 
 ---
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 14 - Introduction to Machine Learning</title>
+    <title>Semana 14 - Introducción a Machine Learning</title>
     <style>
         :root {
             --primary: #667eea;
@@ -659,323 +659,327 @@
 </head>
 <body>
     <div class="nav-container">
-        <button class="nav-btn" onclick="previousSlide()">Prev</button>
-        <span class="slide-counter" id="slideCounter">1 / 20</span>
-        <button class="nav-btn" onclick="nextSlide()">Next</button>
+        <button class="nav-btn" onclick="previousSlide()">Anterior</button>
+        <span class="slide-counter" id="slideCounter">1 / 24</span>
+        <button class="nav-btn" onclick="nextSlide()">Siguiente</button>
     </div>
 
     <div class="presentation-container">
         <!-- Slide 1: Title -->
         <div class="slide title-slide">
-            <h1>Introduction to Machine Learning</h1>
-            <h2>Teaching Computers to Learn from Data</h2>
-            <div class="author">Data Analytics Course - Week 14</div>
-            <div style="margin-top: 40px; opacity: 0.8;">From Data Analysis to Predictive Models</div>
+            <h1>Introducción a Machine Learning</h1>
+            <h2>Conceptos básicos, ejemplos reales y práctica guiada</h2>
+            <div class="author">Curso de Analítica de Datos - Semana 14</div>
+            <div style="margin-top: 40px; opacity: 0.8;">Del análisis de datos a los modelos predictivos y al storytelling final</div>
         </div>
 
         <!-- Slide 2: HOOK -->
         <div class="slide">
-            <span class="section-label hook">HOOK</span>
-            <h1>Can You Predict House Prices?</h1>
+            <span class="section-label hook">GANCHO</span>
+            <h1>¿Puedes predecir el precio de una casa?</h1>
             <div class="hook-card">
-                <h2>You have data on 1,000 houses that sold last year</h2>
-                <p>Size, bedrooms, location, age, condition... and the sale price.</p>
-                <p style="margin-top: 20px; font-size: 1.5rem;">A new house comes on the market. What will it sell for?</p>
+                <h2>Tienes datos de 1,000 casas que se vendieron el año pasado</h2>
+                <p>Tamaño, habitaciones, ubicación, antigüedad, estado... y el precio de venta.</p>
+                <p style="margin-top: 20px; font-size: 1.5rem;">Una casa nueva sale al mercado. ¿En cuánto se venderá?</p>
             </div>
             <div class="concept-grid" style="margin-top: 30px;">
                 <div class="concept-card danger">
-                    <h3>Traditional Approach</h3>
-                    <p style="font-size: 1.1rem;">"Well, similar houses sold for around $300K..."</p>
-                    <p style="margin-top: 15px;">Based on intuition and limited comparisons</p>
-                    <p style="color: #666; margin-top: 10px;">Error: +/- $50,000?</p>
+                    <h3>Enfoque tradicional</h3>
+                    <p style="font-size: 1.1rem;">"Bueno, casas parecidas se vendieron por unos $300K..."</p>
+                    <p style="margin-top: 15px;">Basado en intuición y comparaciones limitadas</p>
+                    <p style="color: #666; margin-top: 10px;">¿Error: +/- $50,000?</p>
                 </div>
                 <div class="concept-card success">
-                    <h3>Machine Learning Approach</h3>
-                    <p style="font-size: 1.1rem;">"Based on ALL 1,000 houses, predicted price is $312,450"</p>
-                    <p style="margin-top: 15px;">Computer learned patterns from data</p>
+                    <h3>Enfoque con Machine Learning</h3>
+                    <p style="font-size: 1.1rem;">"Con base en las 1,000 casas, el precio estimado es $312,450"</p>
+                    <p style="margin-top: 15px;">El computador aprendió patrones a partir de los datos</p>
                     <p style="color: #666; margin-top: 10px;">Error: +/- $15,000</p>
                 </div>
             </div>
             <div class="key-takeaway">
-                <h3>Machine Learning finds patterns humans cannot see</h3>
-                <p>It learns from thousands of examples to make predictions</p>
+                <h3>Machine Learning encuentra patrones que a simple vista no vemos</h3>
+                <p>Aprende de miles de ejemplos para hacer predicciones</p>
             </div>
         </div>
 
         <!-- Slide 3: Learning Objectives -->
         <div class="slide">
-            <span class="section-label context">CONTEXT</span>
-            <h1>What You Will Learn Today</h1>
+            <span class="section-label context">CONTEXTO</span>
+            <h1>Lo que vas a repasar en esta lección</h1>
             <div class="objectives-list">
                 <div class="objective-item">
                     <div class="check-icon">1</div>
-                    <div><strong>What is Machine Learning?</strong> - Computers learning patterns from data</div>
+                    <div><strong>¿Qué es Machine Learning?</strong> - Computadores aprendiendo patrones desde los datos</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">2</div>
-                    <div><strong>Supervised vs Unsupervised</strong> - Two main approaches</div>
+                    <div><strong>Clasificación vs Regresión</strong> - Categorías vs números</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">3</div>
-                    <div><strong>Classification vs Regression</strong> - Categories vs numbers</div>
+                    <div><strong>Supervisado vs No Supervisado</strong> - Dos enfoques principales</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">4</div>
-                    <div><strong>Train/Test Split</strong> - Why we separate data for evaluation</div>
+                    <div><strong>División entrenamiento/prueba</strong> - Por qué separamos los datos para evaluar</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">5</div>
-                    <div><strong>Overfitting</strong> - When models memorize instead of learn</div>
+                    <div><strong>Overfitting</strong> - Cuando el modelo memoriza en vez de aprender</div>
                 </div>
                 <div class="objective-item">
                     <div class="check-icon">6</div>
-                    <div><strong>Your First Model</strong> - End-to-end Decision Tree in scikit-learn</div>
+                    <div><strong>Práctica guiada</strong> - Clasificación y regresión paso a paso en scikit-learn</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">7</div>
+                    <div><strong>Entregable del Momento 3</strong> - Storytelling más resultados de ML para el milestone final</div>
                 </div>
             </div>
         </div>
 
         <!-- Slide 4: ML in Real Life -->
         <div class="slide">
-            <span class="section-label context">CONTEXT</span>
-            <h1>Machine Learning is Everywhere</h1>
+            <span class="section-label context">CONTEXTO</span>
+            <h1>Machine Learning está en todas partes</h1>
             <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="feature-card">
-                    <h3>Netflix</h3>
-                    <p>"You might also like..."</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Recommendation systems</p>
+                    <h3>Servicios de agua</h3>
+                    <p>Predecir el consumo del próximo mes</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Regresión</p>
                 </div>
                 <div class="feature-card" style="background: linear-gradient(135deg, var(--success), var(--success-light));">
-                    <h3>Banks</h3>
-                    <p>Fraud detection</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Anomaly detection</p>
+                    <h3>Educación</h3>
+                    <p>Clasificar riesgo de deserción</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Clasificación</p>
                 </div>
                 <div class="feature-card" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-coral));">
-                    <h3>Email</h3>
-                    <p>Spam filtering</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Classification</p>
+                    <h3>Salud pública</h3>
+                    <p>Pronosticar demanda de urgencias</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Regresión</p>
                 </div>
                 <div class="feature-card" style="background: linear-gradient(135deg, var(--warning), var(--warning-dark));">
-                    <h3>Healthcare</h3>
-                    <p>Disease diagnosis</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Image recognition</p>
+                    <h3>Banca</h3>
+                    <p>Detectar transacciones sospechosas</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Clasificación</p>
                 </div>
                 <div class="feature-card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
-                    <h3>Retail</h3>
-                    <p>Customer churn</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Prediction</p>
+                    <h3>Movilidad</h3>
+                    <p>Estimar tiempos de viaje y demanda</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Pronóstico</p>
                 </div>
                 <div class="feature-card" style="background: linear-gradient(135deg, var(--danger), var(--danger-light));">
-                    <h3>Self-Driving</h3>
-                    <p>Object detection</p>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Computer vision</p>
+                    <h3>Comercio</h3>
+                    <p>Recomendar productos a clientes</p>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px;">Personalización</p>
                 </div>
             </div>
             <div class="alert-box info" style="margin-top: 20px;">
-                <strong>Key Insight:</strong> Every time you see "personalized", "recommended", "predicted", or "automated", there is likely ML behind it.
+                <strong>Idea clave:</strong> En la práctica, ML casi siempre ayuda a responder una de dos preguntas: "¿Qué es probable que pase?" o "¿A qué grupo pertenece esto?"
             </div>
         </div>
 
         <!-- Slide 5: Section - What is ML? -->
         <div class="slide section-intro">
-            <h1>Part 1: What is Machine Learning?</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Teaching computers to find patterns</p>
+            <h1>Parte 1: ¿Qué es Machine Learning?</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Enseñar a los computadores a encontrar patrones</p>
         </div>
 
         <!-- Slide 6: What is ML? -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>What is Machine Learning?</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>¿Qué es Machine Learning?</h1>
             <div class="analogy-box">
-                <h3>The Child Learning Analogy</h3>
-                <p>Think about how a child learns to recognize cats: You do not give them rules ("4 legs + fur + whiskers = cat"). You show them MANY examples, and eventually they recognize new cats they have never seen before.</p>
-                <p style="margin-top: 15px;"><strong>Machine Learning works the same way:</strong> Show the computer many examples, and it learns the patterns.</p>
+                <h3>La analogía del niño que aprende</h3>
+                <p>Piensa en cómo un niño aprende a reconocer gatos: no le das reglas exactas ("4 patas + pelo + bigotes = gato"). Le muestras MUCHOS ejemplos y, después de un tiempo, reconoce gatos nuevos que nunca había visto.</p>
+                <p style="margin-top: 15px;"><strong>Machine Learning funciona igual:</strong> le muestras muchos ejemplos al computador y este aprende los patrones.</p>
             </div>
             <div class="visual-demo" style="margin-top: 30px;">
-                <h3 style="margin-bottom: 20px;">Traditional Programming vs Machine Learning</h3>
+                <h3 style="margin-bottom: 20px;">Programación tradicional vs Machine Learning</h3>
                 <pre style="font-size: 1rem;">
-Traditional Programming:
-    Data + Rules --> Program --> Output
+Programación tradicional:
+    Datos + Reglas --> Programa --> Resultado
 
 Machine Learning:
-    Data + Output --> Algorithm --> Rules (Model)
+    Datos + Resultados --> Algoritmo --> Reglas (Modelo)
                 </pre>
             </div>
             <div class="key-takeaway">
-                <h3>ML = Learning rules from examples, not programming rules manually</h3>
+                <h3>ML = aprender reglas a partir de ejemplos, no programarlas manualmente</h3>
             </div>
         </div>
 
         <!-- Slide 7: Section - Types of ML -->
         <div class="slide section-intro">
-            <h1>Part 2: Types of Machine Learning</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Supervised vs Unsupervised</p>
+            <h1>Parte 2: Tipos de Machine Learning</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Clasificación, regresión, supervisado y no supervisado</p>
         </div>
 
-        <!-- Slide 8: Supervised vs Unsupervised -->
+        <!-- Slide 8: Classification vs Regression -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Two Main Types of Machine Learning</h1>
-            <div class="ml-types-grid">
-                <div class="ml-type-card supervised">
-                    <h3>Supervised Learning</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0;">"Learning with a teacher"</p>
-                    <p><strong>You have:</strong> Input data AND correct answers</p>
-                    <p style="margin-top: 15px;"><strong>Goal:</strong> Learn to predict answers for new data</p>
-                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
-                        <p><strong>Examples:</strong></p>
-                        <ul style="list-style: none; margin-top: 10px;">
-                            <li>- House features --> Price</li>
-                            <li>- Email text --> Spam or Not</li>
-                            <li>- Patient symptoms --> Disease</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="ml-type-card unsupervised">
-                    <h3>Unsupervised Learning</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0;">"Learning without a teacher"</p>
-                    <p><strong>You have:</strong> Input data only (no answers)</p>
-                    <p style="margin-top: 15px;"><strong>Goal:</strong> Find hidden patterns or groups</p>
-                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
-                        <p><strong>Examples:</strong></p>
-                        <ul style="list-style: none; margin-top: 10px;">
-                            <li>- Customer segmentation</li>
-                            <li>- Anomaly detection</li>
-                            <li>- Topic discovery in documents</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="alert-box info" style="margin-top: 20px;">
-                <strong>This course focuses on Supervised Learning</strong> - It is the most common type and the foundation for understanding ML.
-            </div>
-        </div>
-
-        <!-- Slide 9: Classification vs Regression -->
-        <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Classification vs Regression</h1>
-            <p style="text-align: center; font-size: 1.2rem; color: var(--text-light); margin-bottom: 20px;">Two types of supervised learning problems</p>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Clasificación vs Regresión</h1>
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-light); margin-bottom: 20px;">Dos tipos comunes de problemas supervisados</p>
             <div class="comparison-grid">
                 <div style="background: linear-gradient(135deg, var(--info-light), var(--info)); padding: 30px; border-radius: 15px; color: white;">
-                    <h3 style="color: white; text-align: center;">Classification</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predict a CATEGORY</strong></p>
-                    <p style="text-align: center;">Output is one of several discrete classes</p>
+                    <h3 style="color: white; text-align: center;">Clasificación</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predice una CATEGORÍA</strong></p>
+                    <p style="text-align: center;">La salida pertenece a una clase discreta</p>
                     <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
                         <ul style="list-style: none;">
-                            <li>Email: Spam / Not Spam</li>
-                            <li>Tumor: Malignant / Benign</li>
-                            <li>Student: Pass / Fail</li>
-                            <li>Customer: Will churn / Will stay</li>
+                            <li>Correo: Spam / No spam</li>
+                            <li>Crédito: Aprobado / Rechazado</li>
+                            <li>Estudiante: Aprueba / No aprueba</li>
+                            <li>Cliente: Se va / Se queda</li>
                         </ul>
                     </div>
                 </div>
                 <div style="background: linear-gradient(135deg, var(--success), var(--success-light)); padding: 30px; border-radius: 15px; color: white;">
-                    <h3 style="color: white; text-align: center;">Regression</h3>
-                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predict a NUMBER</strong></p>
-                    <p style="text-align: center;">Output is a continuous value</p>
+                    <h3 style="color: white; text-align: center;">Regresión</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0; text-align: center;"><strong>Predice un NÚMERO</strong></p>
+                    <p style="text-align: center;">La salida es un valor continuo</p>
                     <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
                         <ul style="list-style: none;">
-                            <li>House price: $312,450</li>
-                            <li>Temperature tomorrow: 24.5C</li>
-                            <li>Sales next month: $1.2M</li>
-                            <li>Student grade: 4.2</li>
+                            <li>Precio de vivienda: $312,450</li>
+                            <li>Consumo de agua: 24.5 unidades</li>
+                            <li>Ventas del próximo mes: $1.2M</li>
+                            <li>Tiempo de viaje: 38 minutos</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="key-takeaway" style="margin-top: 20px;">
-                <h3>Quick Rule</h3>
-                <p>Classification = "What category?" | Regression = "How much/many?"</p>
+                <h3>Regla rápida</h3>
+                <p>Clasificación = "¿Qué clase es?" | Regresión = "¿Cuánto/cuántos?"</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Supervised vs Unsupervised -->
+        <div class="slide">
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Supervisado vs No Supervisado</h1>
+            <div class="ml-types-grid">
+                <div class="ml-type-card supervised">
+                    <h3>Aprendizaje supervisado</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">"Aprender con profesor"</p>
+                    <p><strong>Tienes:</strong> Datos de entrada Y respuestas correctas</p>
+                    <p style="margin-top: 15px;"><strong>Objetivo:</strong> Aprender a predecir respuestas para datos nuevos</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul style="list-style: none; margin-top: 10px;">
+                            <li>- Características de una casa --> Precio</li>
+                            <li>- Texto de correo --> Spam o no</li>
+                            <li>- Síntomas --> Riesgo de enfermedad</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ml-type-card unsupervised">
+                    <h3>Aprendizaje no supervisado</h3>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">"Aprender sin profesor"</p>
+                    <p><strong>Tienes:</strong> Solo datos de entrada (sin respuestas)</p>
+                    <p style="margin-top: 15px;"><strong>Objetivo:</strong> Encontrar patrones o grupos ocultos</p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul style="list-style: none; margin-top: 10px;">
+                            <li>- Segmentación de clientes</li>
+                            <li>- Barrios similares</li>
+                            <li>- Detección de anomalías</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="alert-box info" style="margin-top: 20px;">
+                <strong>Este curso se enfoca en aprendizaje supervisado</strong> porque es la puerta de entrada más clara para construir predicciones útiles con datos etiquetados.
             </div>
         </div>
 
         <!-- Slide 10: Section - The ML Workflow -->
         <div class="slide section-intro">
-            <h1>Part 3: The ML Workflow</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Train, Test, Evaluate</p>
+            <h1>Parte 3: Flujo de trabajo en ML</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Entrenar, probar, evaluar</p>
         </div>
 
         <!-- Slide 11: ML Workflow -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>The Machine Learning Workflow</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Flujo de trabajo en Machine Learning</h1>
             <div class="workflow-steps">
                 <div class="workflow-step">
                     <div class="step-num">1</div>
-                    <div>Collect Data</div>
+                    <div>Recolectar datos</div>
                 </div>
                 <div class="workflow-step">
                     <div class="step-num">2</div>
-                    <div>Prepare Data</div>
+                    <div>Preparar datos</div>
                 </div>
                 <div class="workflow-step">
                     <div class="step-num">3</div>
-                    <div>Split Data</div>
+                    <div>Dividir datos</div>
                 </div>
                 <div class="workflow-step">
                     <div class="step-num">4</div>
-                    <div>Train Model</div>
+                    <div>Entrenar modelo</div>
                 </div>
                 <div class="workflow-step">
                     <div class="step-num">5</div>
-                    <div>Evaluate</div>
+                    <div>Evaluar</div>
                 </div>
             </div>
             <div class="alert-box success" style="margin-top: 30px;">
-                <strong>Good news:</strong> You already know steps 1-2 from previous weeks! Today we focus on steps 3-5: the core ML process.
+                <strong>Buena noticia:</strong> ya conoces los pasos 1 y 2 por las semanas anteriores. Hoy nos enfocamos en los pasos 3 a 5, el núcleo del proceso de ML.
             </div>
         </div>
 
         <!-- Slide 12: Train/Test Split -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Train/Test Split: Why It Matters</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>División entrenamiento/prueba: por qué importa</h1>
             <div class="analogy-box">
-                <h3>The Exam Analogy</h3>
-                <p>Imagine a student who memorizes the exact questions from the practice exam. They score 100% on practice, but fail the real exam because the questions are different.</p>
-                <p style="margin-top: 15px;"><strong>We need to test on data the model has NEVER seen before.</strong></p>
+                <h3>La analogía del examen</h3>
+                <p>Imagina a un estudiante que memoriza exactamente las preguntas del simulacro. Saca 100% en la práctica, pero falla el examen real porque las preguntas cambian.</p>
+                <p style="margin-top: 15px;"><strong>Necesitamos evaluar con datos que el modelo NUNCA haya visto antes.</strong></p>
             </div>
             <div class="visual-demo" style="margin-top: 20px;">
-                <h3 style="margin-bottom: 15px;">Splitting Your Data</h3>
+                <h3 style="margin-bottom: 15px;">Cómo dividir tus datos</h3>
                 <pre>
-Your Dataset (1000 rows)
+Tu dataset (1000 filas)
 |=====================================================|
 |                                                     |
-|   TRAINING SET (80%)          |   TEST SET (20%)   |
-|   800 rows                    |   200 rows         |
-|   Model learns from these     |   Never seen!      |
-|                               |   Used to evaluate |
+|   ENTRENAMIENTO (80%)         |   PRUEBA (20%)     |
+|   800 filas                   |   200 filas        |
+|   El modelo aprende aquí      |   Nunca visto      |
+|                               |   Se usa para evaluar |
 |=====================================================|
                 </pre>
             </div>
             <div class="code-example"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
 
-<span class="comment"># Separate features (X) from target (y)</span>
-X = df[[<span class="string">'size'</span>, <span class="string">'bedrooms'</span>, <span class="string">'age'</span>]]  <span class="comment"># Features (inputs)</span>
-y = df[<span class="string">'price'</span>]                         <span class="comment"># Target (what we predict)</span>
+<span class="comment"># Separar variables predictoras (X) de la variable objetivo (y)</span>
+X = df[[<span class="string">'size'</span>, <span class="string">'bedrooms'</span>, <span class="string">'age'</span>]]  <span class="comment"># Variables de entrada</span>
+y = df[<span class="string">'price'</span>]                         <span class="comment"># Objetivo a predecir</span>
 
-<span class="comment"># Split: 80% train, 20% test</span>
+<span class="comment"># División: 80% entrenamiento, 20% prueba</span>
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>
 )</div>
             <div class="alert-box warning" style="margin-top: 15px;">
-                <strong>Golden Rule:</strong> NEVER use test data during training. Keep it completely separate until final evaluation.
+                <strong>Regla de oro:</strong> NUNCA uses los datos de prueba durante el entrenamiento. Déjalos separados hasta la evaluación final.
             </div>
         </div>
 
         <!-- Slide 13: Section - Overfitting -->
         <div class="slide section-intro">
-            <h1>Part 4: Overfitting</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">When models memorize instead of learn</p>
+            <h1>Parte 4: Overfitting</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Cuando los modelos memorizan en vez de aprender</p>
         </div>
 
         <!-- Slide 14: Overfitting Explained -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Understanding Overfitting</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Entendiendo el overfitting</h1>
             <div class="overfit-grid">
                 <div class="overfit-card">
-                    <h3 style="color: var(--danger);">Underfitting</h3>
+                    <h3 style="color: var(--danger);">Subajuste</h3>
                     <pre>
     o   o    o
  o     o  o
@@ -983,11 +987,11 @@ ______________ (line)
   o  o    o
     o   o
                     </pre>
-                    <p>Model too simple</p>
-                    <p style="color: #666; font-size: 0.9rem;">"Does not capture patterns"</p>
+                    <p>Modelo demasiado simple</p>
+                    <p style="color: #666; font-size: 0.9rem;">"No captura los patrones"</p>
                 </div>
                 <div class="overfit-card" style="border: 3px solid var(--success);">
-                    <h3 style="color: var(--success);">Good Fit</h3>
+                    <h3 style="color: var(--success);">Buen ajuste</h3>
                     <pre>
     o   o    o
  o    _/\__o
@@ -995,11 +999,11 @@ ___--/  o  \__
   o  o    o
     o   o
                     </pre>
-                    <p>Model captures trend</p>
-                    <p style="color: #666; font-size: 0.9rem;">"Generalizes well"</p>
+                    <p>El modelo captura la tendencia</p>
+                    <p style="color: #666; font-size: 0.9rem;">"Generaliza bien"</p>
                 </div>
                 <div class="overfit-card">
-                    <h3 style="color: var(--warning-dark);">Overfitting</h3>
+                    <h3 style="color: var(--warning-dark);">Sobreajuste</h3>
                     <pre>
     o   o    o
  o /\_/|  |/\o
@@ -1007,321 +1011,312 @@ _|/  |_|__|  \__
   o  o    o
     o   o
                     </pre>
-                    <p>Model too complex</p>
-                    <p style="color: #666; font-size: 0.9rem;">"Memorizes noise"</p>
+                    <p>Modelo demasiado complejo</p>
+                    <p style="color: #666; font-size: 0.9rem;">"Memoriza ruido"</p>
                 </div>
             </div>
             <div class="comparison-grid" style="margin-top: 20px;">
                 <div class="comparison-card bad">
-                    <h3>Overfitting Signs</h3>
-                    <p style="margin-top: 15px;">Training accuracy: 99%</p>
-                    <p>Test accuracy: 65%</p>
-                    <p style="margin-top: 15px; font-size: 0.9rem;">Huge gap = Problem!</p>
+                    <h3>Señales de overfitting</h3>
+                    <p style="margin-top: 15px;">Accuracy entrenamiento: 99%</p>
+                    <p>Accuracy prueba: 65%</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">Brecha grande = problema</p>
                 </div>
                 <div class="comparison-card good">
-                    <h3>Good Generalization</h3>
-                    <p style="margin-top: 15px;">Training accuracy: 85%</p>
-                    <p>Test accuracy: 82%</p>
-                    <p style="margin-top: 15px; font-size: 0.9rem;">Similar = Good!</p>
+                    <h3>Buena generalización</h3>
+                    <p style="margin-top: 15px;">Accuracy entrenamiento: 85%</p>
+                    <p>Accuracy prueba: 82%</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">Valores similares = bien</p>
                 </div>
             </div>
         </div>
 
         <!-- Slide 15: Section - scikit-learn and Decision Trees -->
         <div class="slide section-intro">
-            <h1>Part 5: Your First Model</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Decision Trees in scikit-learn</p>
+            <h1>Parte 5: Tu primer modelo</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; opacity: 0.9;">Árboles de decisión en scikit-learn</p>
         </div>
 
         <!-- Slide 16: scikit-learn Pattern -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>The scikit-learn Pattern</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>El patrón de scikit-learn</h1>
             <div class="analogy-box">
-                <h3>sklearn = Machine Learning Made Easy</h3>
-                <p>Just like pandas makes data manipulation easy, scikit-learn makes machine learning easy. The same 5-step pattern works for ALL algorithms!</p>
+                <h3>sklearn = Machine Learning más simple</h3>
+                <p>Así como pandas simplifica la manipulación de datos, scikit-learn simplifica el machine learning. El mismo patrón de 5 pasos sirve para TODOS los algoritmos.</p>
             </div>
             <div class="visual-demo" style="margin-top: 30px;">
-                <h3 style="margin-bottom: 20px;">The Universal Pattern</h3>
+                <h3 style="margin-bottom: 20px;">El patrón universal</h3>
                 <pre style="font-size: 1.1rem;">
-1. from sklearn import Model          # Import
-2. model = Model()                    # Create
-3. model.fit(X_train, y_train)        # Train
-4. predictions = model.predict(X_test) # Predict
-5. score = model.score(X_test, y_test) # Evaluate
+1. from sklearn import Model           # Importar
+2. model = Model()                     # Crear
+3. model.fit(X_train, y_train)         # Entrenar
+4. predictions = model.predict(X_test) # Predecir
+5. score = model.score(X_test, y_test) # Evaluar
                 </pre>
             </div>
             <div class="alert-box success" style="margin-top: 20px;">
-                <strong>Once you learn this pattern, you can use ANY algorithm in scikit-learn.</strong> Decision Trees, Linear Regression, Random Forest, Neural Networks - they all follow the same 5 steps.
+                <strong>Una vez aprendes este patrón, puedes usar CUALQUIER algoritmo de scikit-learn.</strong> Árboles de decisión, regresión lineal, random forest, redes neuronales, todos siguen los mismos 5 pasos.
             </div>
         </div>
 
         <!-- Slide 17: Decision Trees -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Decision Trees: How They Work</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Árboles de decisión: cómo funcionan</h1>
             <div class="concept-grid">
                 <div>
-                    <h3>The "20 Questions" Algorithm</h3>
-                    <p style="margin: 15px 0;">A decision tree asks yes/no questions about your data, splitting it until it can make a prediction.</p>
+                    <h3>El algoritmo de las "20 preguntas"</h3>
+                    <p style="margin: 15px 0;">Un árbol de decisión hace preguntas de sí o no sobre tus datos y los va dividiendo hasta poder hacer una predicción.</p>
                     <div class="alert-box info" style="margin-top: 20px;">
-                        <strong>Why start here?</strong>
+                        <strong>¿Por qué empezar aquí?</strong>
                         <ul style="margin-top: 10px; list-style: none;">
-                            <li>- Easy to understand and visualize</li>
-                            <li>- Works for classification AND regression</li>
-                            <li>- No complex math required</li>
-                            <li>- Shows which features matter most</li>
+                            <li>- Es fácil de entender y visualizar</li>
+                            <li>- Sirve para clasificación Y regresión</li>
+                            <li>- No exige matemáticas complejas</li>
+                            <li>- Muestra qué variables importan más</li>
                         </ul>
                     </div>
                 </div>
                 <div class="tree-visual">
-                    <h3 style="margin-bottom: 10px;">Predict: Will customer buy?</h3>
+                    <h3 style="margin-bottom: 10px;">Predicción: ¿el cliente comprará?</h3>
                     <pre>
-        [Age > 30?]
+        [Edad > 30?]
         /         \
-     Yes           No
+      Sí           No
       |             |
-[Income>50K?]   [Student?]
+[Ingreso>50K?]  [¿Estudia?]
   /      \       /     \
-Yes       No    Yes     No
+ Sí       No     Sí     No
  |         |     |       |
-[BUY]    [NO]  [BUY]   [NO]
+[COMPRA] [NO] [COMPRA] [NO]
                     </pre>
                 </div>
             </div>
             <div class="key-takeaway">
-                <h3>Decision Trees are interpretable</h3>
-                <p>You can explain exactly WHY the model made each prediction by following the decision path</p>
+                <h3>Los árboles de decisión son interpretables</h3>
+                <p>Puedes explicar exactamente POR QUÉ el modelo hizo cada predicción siguiendo el camino de decisiones</p>
             </div>
         </div>
 
         <!-- Slide 18: Complete Classification Example -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Complete Example: Classification</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Paso a paso: clasificación</h1>
             <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
 <span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier
 <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
-<span class="comment"># 1. Load data</span>
+<span class="comment"># 1. Cargar datos</span>
 df = pd.read_csv(<span class="string">'student_data.csv'</span>)
 
-<span class="comment"># 2. Prepare features (X) and target (y)</span>
+<span class="comment"># 2. Preparar variables predictoras (X) y objetivo (y)</span>
 X = df[[<span class="string">'study_hours'</span>, <span class="string">'attendance'</span>, <span class="string">'previous_grade'</span>]]
-y = df[<span class="string">'passed'</span>]  <span class="comment"># 1 = passed, 0 = failed</span>
+y = df[<span class="string">'passed'</span>]  <span class="comment"># 1 = aprueba, 0 = no aprueba</span>
 
-<span class="comment"># 3. Split data</span>
+<span class="comment"># 3. Dividir datos</span>
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
 
-<span class="comment"># 4. Create and train model</span>
-model = DecisionTreeClassifier(max_depth=<span class="number">3</span>)  <span class="comment"># Limit depth to avoid overfitting</span>
+<span class="comment"># 4. Crear y entrenar modelo</span>
+model = DecisionTreeClassifier(max_depth=<span class="number">3</span>)  <span class="comment"># Limita profundidad para evitar overfitting</span>
 model.fit(X_train, y_train)
 
-<span class="comment"># 5. Make predictions and evaluate</span>
+<span class="comment"># 5. Predecir y evaluar</span>
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 
-<span class="function">print</span>(<span class="string">f"Model Accuracy: {accuracy:.2%}"</span>)  <span class="comment"># e.g., "Model Accuracy: 85.00%"</span></div>
+<span class="function">print</span>(<span class="string">f"Accuracy del modelo: {accuracy:.2%}"</span>)  <span class="comment"># ej.: "Accuracy del modelo: 85.00%"</span></div>
             <div class="alert-box warning" style="margin-top: 15px;">
-                <strong>max_depth=3</strong> limits the tree to 3 levels of questions. This prevents overfitting by keeping the model simple.
+                <strong>max_depth=3</strong> limita el árbol a 3 niveles de preguntas. Eso ayuda a prevenir overfitting manteniendo el modelo simple.
             </div>
         </div>
 
         <!-- Slide 19: Complete Regression Example -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>Complete Example: Regression</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>Paso a paso: regresión</h1>
             <div class="code-example" style="font-size: 0.85rem;"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
 <span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor
 <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, r2_score
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># 1. Load data</span>
+<span class="comment"># 1. Cargar datos</span>
 df = pd.read_csv(<span class="string">'housing_data.csv'</span>)
 
-<span class="comment"># 2. Prepare features (X) and target (y)</span>
+<span class="comment"># 2. Preparar variables predictoras (X) y objetivo (y)</span>
 X = df[[<span class="string">'size_sqft'</span>, <span class="string">'bedrooms'</span>, <span class="string">'bathrooms'</span>, <span class="string">'age'</span>]]
-y = df[<span class="string">'price'</span>]  <span class="comment"># Continuous value</span>
+y = df[<span class="string">'price'</span>]  <span class="comment"># Valor continuo</span>
 
-<span class="comment"># 3. Split data</span>
+<span class="comment"># 3. Dividir datos</span>
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
 
-<span class="comment"># 4. Create and train model (note: Regressor, not Classifier)</span>
+<span class="comment"># 4. Crear y entrenar modelo (ojo: Regressor, no Classifier)</span>
 model = DecisionTreeRegressor(max_depth=<span class="number">5</span>)
 model.fit(X_train, y_train)
 
-<span class="comment"># 5. Make predictions and evaluate</span>
+<span class="comment"># 5. Predecir y evaluar</span>
 y_pred = model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-<span class="function">print</span>(<span class="string">f"Average Error: ${mae:,.0f}"</span>)    <span class="comment"># e.g., "$15,234"</span>
-<span class="function">print</span>(<span class="string">f"R-squared: {r2:.3f}"</span>)            <span class="comment"># e.g., "0.82" (explains 82% of variance)</span></div>
+<span class="function">print</span>(<span class="string">f"Error promedio: ${mae:,.0f}"</span>)    <span class="comment"># ej.: "$15,234"</span>
+<span class="function">print</span>(<span class="string">f"R-squared: {r2:.3f}"</span>)            <span class="comment"># ej.: "0.82" (explica 82% de la varianza)</span></div>
         </div>
 
         <!-- Slide 20: Key Metrics -->
         <div class="slide">
-            <span class="section-label content">CONTENT</span>
-            <h1>How Do We Know If Our Model Is Good?</h1>
+            <span class="section-label content">CONTENIDO</span>
+            <h1>¿Cómo sabemos si el modelo es bueno?</h1>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Problem Type</th>
-                            <th>Metric</th>
-                            <th>What It Measures</th>
-                            <th>Good Value</th>
+                            <th>Tipo de problema</th>
+                            <th>Métrica</th>
+                            <th>Qué mide</th>
+                            <th>Buen valor</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="2"><strong>Classification</strong></td>
-                            <td>Accuracy</td>
-                            <td>% of correct predictions</td>
-                            <td>> 80% (depends on task)</td>
+                            <td rowspan="2"><strong>Clasificación</strong></td>
+                            <td>Exactitud</td>
+                            <td>% de predicciones correctas</td>
+                            <td>> 80% (depende del caso)</td>
                         </tr>
                         <tr>
-                            <td>Confusion Matrix</td>
-                            <td>Types of errors made</td>
-                            <td>Few false positives/negatives</td>
+                            <td>Matriz de confusión</td>
+                            <td>Tipos de errores que comete</td>
+                            <td>Pocos falsos positivos/negativos</td>
                         </tr>
                         <tr>
-                            <td rowspan="2"><strong>Regression</strong></td>
+                            <td rowspan="2"><strong>Regresión</strong></td>
                             <td>MAE</td>
-                            <td>Average prediction error</td>
-                            <td>Small relative to target range</td>
+                            <td>Error promedio de predicción</td>
+                            <td>Pequeño frente al rango del objetivo</td>
                         </tr>
                         <tr>
                             <td>R-squared</td>
-                            <td>% variance explained</td>
-                            <td>Close to 1.0</td>
+                            <td>% de varianza explicada</td>
+                            <td>Cercano a 1.0</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="concept-grid" style="margin-top: 30px;">
                 <div class="concept-card info">
-                    <h3>Check for Overfitting</h3>
-                    <p>Always compare train vs test metrics. A big gap means your model memorized instead of learned.</p>
-                    <div class="code-example" style="font-size: 0.8rem; margin-top: 15px;"><span class="comment"># Check for overfitting</span>
+                    <h3>Revisa el overfitting</h3>
+                    <p>Siempre compara métricas de entrenamiento vs prueba. Una brecha grande significa que el modelo memorizó en vez de aprender.</p>
+                    <div class="code-example" style="font-size: 0.8rem; margin-top: 15px;"><span class="comment"># Revisar overfitting</span>
 train_score = model.score(X_train, y_train)
 test_score = model.score(X_test, y_test)
-<span class="function">print</span>(<span class="string">f"Train: {train_score:.3f}"</span>)
-<span class="function">print</span>(<span class="string">f"Test:  {test_score:.3f}"</span>)
-<span class="function">print</span>(<span class="string">f"Gap:   {train_score - test_score:.3f}"</span>)</div>
+<span class="function">print</span>(<span class="string">f"Entrenamiento: {train_score:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Prueba:        {test_score:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Brecha:        {train_score - test_score:.3f}"</span>)</div>
                 </div>
                 <div class="concept-card warning">
-                    <h3>Interpreting the Gap</h3>
+                    <h3>Cómo interpretar la brecha</h3>
                     <ul style="list-style: none; line-height: 2; margin-top: 10px;">
-                        <li>> Gap &lt; 0.05: Great, no overfitting</li>
-                        <li>> Gap 0.05-0.10: Acceptable</li>
-                        <li>> Gap 0.10-0.20: Concerning</li>
-                        <li>> Gap > 0.20: Overfitting! Simplify the model</li>
+                        <li>> Gap &lt; 0.05: Muy bien, sin overfitting</li>
+                        <li>> Gap 0.05-0.10: Aceptable</li>
+                        <li>> Gap 0.10-0.20: Preocupante</li>
+                        <li>> Gap > 0.20: Overfitting, simplifica el modelo</li>
                     </ul>
-                    <p style="margin-top: 15px; color: var(--text-light);">Fix: reduce max_depth or increase min_samples_split</p>
+                    <p style="margin-top: 15px; color: var(--text-light);">Arreglo: reduce `max_depth` o aumenta `min_samples_split`</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 21: Demo -->
+        <!-- Slide 21: Guided Regression Practice -->
         <div class="slide">
-            <div class="demo-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Live Demo</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Building Your First ML Model End-to-End</div>
-
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">What We Will Build:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Load a datos.gov.co dataset</li>
-                                <li style="padding: 8px 0;">2. Select features and target</li>
-                                <li style="padding: 8px 0;">3. Split into train/test</li>
-                                <li style="padding: 8px 0;">4. Train a Decision Tree</li>
-                                <li style="padding: 8px 0;">5. Evaluate and check for overfitting</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">The 5-Step Pattern:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">Import -> Create -> Fit -> Predict -> Evaluate</li>
-                            </ul>
-                            <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 10px; margin-top: 20px;">
-                                <p style="font-size: 0.95rem;">We will try both:</p>
-                                <p style="margin-top: 10px;">- <strong>Classification:</strong> Will student pass?</p>
-                                <p>- <strong>Regression:</strong> Predict consumption amount</p>
-                            </div>
-                        </div>
-                    </div>
+            <span class="section-label content">PRÁCTICA GUIADA</span>
+            <h1>Ejercicio guiado 1: regresión</h1>
+            <div class="concept-grid">
+                <div class="concept-card success">
+                    <h3>Abre <code>exercise.ipynb</code></h3>
+                    <ul style="list-style: none; line-height: 2; margin-top: 15px;">
+                        <li>1. Carga el dataset</li>
+                        <li>2. Identifica las columnas numéricas</li>
+                        <li>3. Elige una variable objetivo numérica</li>
+                        <li>4. Divide en <code>X_train</code>, <code>X_test</code>, <code>y_train</code>, <code>y_test</code></li>
+                        <li>5. Entrena <code>DecisionTreeRegressor(max_depth=5)</code></li>
+                    </ul>
                 </div>
+                <div class="concept-card info">
+                    <h3>Qué debes reportar</h3>
+                    <ul style="list-style: none; line-height: 2; margin-top: 15px;">
+                        <li>- <code>MAE</code></li>
+                        <li>- <code>R-squared</code></li>
+                        <li>- Brecha entre train y test</li>
+                        <li>- Mejor <code>max_depth</code> después de probar</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Si el puntaje de train es mucho mayor que el de test, el modelo está memorizando.</p>
+                </div>
+            </div>
+            <div class="alert-box success" style="margin-top: 25px;">
+                <strong>Objetivo:</strong> aprender una vez el flujo completo de regresión y luego reutilizarlo con el dataset de tu proyecto.
             </div>
         </div>
 
-        <!-- Slide 22: Workshop -->
+        <!-- Slide 22: Guided Classification Practice -->
         <div class="slide">
-            <div class="workshop-section">
-                <div style="font-size: 3rem; margin-bottom: 30px;">Workshop: Build Your Own ML Model</div>
-                <div style="font-size: 1.5rem; margin-bottom: 40px;">Apply the 5-Step Pattern to Your Project Data</div>
-
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px; margin: 40px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; text-align: left;">
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Your Mission:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">1. Load the Water Consumption dataset</li>
-                                <li style="padding: 8px 0;">2. Select features and target variable</li>
-                                <li style="padding: 8px 0;">3. Split into train/test (80/20)</li>
-                                <li style="padding: 8px 0;">4. Train a Decision Tree model</li>
-                                <li style="padding: 8px 0;">5. Evaluate and check for overfitting</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: white; margin-bottom: 20px;">Bonus Challenges:</h3>
-                            <ul style="list-style: none; color: white; font-size: 1rem;">
-                                <li style="padding: 8px 0;">- Try different max_depth values (3, 5, 10, None)</li>
-                                <li style="padding: 8px 0;">- Plot actual vs predicted values</li>
-                                <li style="padding: 8px 0;">- Try both classification and regression</li>
-                            </ul>
-                        </div>
-                    </div>
+            <span class="section-label content">PRÁCTICA GUIADA</span>
+            <h1>Ejercicio guiado 2: clasificación</h1>
+            <div class="concept-grid">
+                <div class="concept-card warning">
+                    <h3>Usa el mismo patrón de 5 pasos</h3>
+                    <ul style="list-style: none; line-height: 2; margin-top: 15px;">
+                        <li>1. Reutiliza las variables limpias</li>
+                        <li>2. Convierte el objetivo en categorías</li>
+                        <li>3. Divide otra vez con <code>train_test_split</code></li>
+                        <li>4. Entrena <code>DecisionTreeClassifier(max_depth=5)</code></li>
+                        <li>5. Evalúa con <code>accuracy_score</code></li>
+                    </ul>
                 </div>
-
-                <div style="background: rgba(255, 255, 255, 0.3); padding: 25px; border-radius: 15px; font-size: 1.1rem;">
-                    <strong>Deliverable:</strong> Jupyter notebook with a working ML model trained on your datos.gov.co dataset
+                <div class="concept-card danger">
+                    <h3>Dónde continuar</h3>
+                    <ul style="list-style: none; line-height: 2; margin-top: 15px;">
+                        <li>- <code>exercise.ipynb</code> para la primera práctica guiada</li>
+                        <li>- <code>workshop_starter.ipynb</code> para la práctica más larga</li>
+                        <li>- Tu notebook del proyecto para el Milestone 3</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--text-light);">Usa clasificación solo si la pregunta de tu proyecto busca una clase o etiqueta.</p>
                 </div>
+            </div>
+            <div class="alert-box warning" style="margin-top: 25px;">
+                <strong>Regla de decisión:</strong> si tu objetivo es una etiqueta, usa clasificación. Si tu objetivo es un número, usa regresión.
             </div>
         </div>
 
-        <!-- Slide 23: Summary -->
+        <!-- Slide 23: Self-Study Route -->
         <div class="slide">
-            <span class="section-label summary">SUMMARY</span>
-            <h1>What You Learned Today</h1>
+            <span class="section-label summary">LISTA</span>
+            <h1>Lo que debes completar esta semana</h1>
             <div class="concept-grid">
                 <div>
-                    <h2>Key Concepts</h2>
+                    <h2>Ruta de estudio</h2>
                     <div style="background: linear-gradient(135deg, var(--info-light) 0%, var(--info) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
                         <ul style="list-style: none; line-height: 2;">
-                            <li>> ML = learning rules from examples</li>
-                            <li>> Supervised: labeled data (inputs + answers)</li>
-                            <li>> Classification: predict categories</li>
-                            <li>> Regression: predict numbers</li>
-                            <li>> Train/test split: never test on training data</li>
-                            <li>> Overfitting: memorizing vs learning</li>
+                            <li>> Revisa las diapositivas de principio a fin</li>
+                            <li>> Completa <code>exercise.ipynb</code></li>
+                            <li>> Continúa con <code>workshop_starter.ipynb</code></li>
+                            <li>> Decide si tu proyecto necesita regresión o clasificación</li>
+                            <li>> Define tu objetivo, variables y métrica elegida</li>
                         </ul>
                     </div>
                 </div>
                 <div>
-                    <h2>Practical Skills</h2>
+                    <h2>Evidencia que necesitas</h2>
                     <div style="background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 15px;">
                         <ul style="list-style: none; line-height: 2;">
-                            <li>> The sklearn 5-step pattern</li>
-                            <li>> train_test_split()</li>
-                            <li>> DecisionTreeClassifier</li>
-                            <li>> DecisionTreeRegressor</li>
-                            <li>> accuracy_score, MAE, R-squared</li>
-                            <li>> Detecting overfitting (train vs test gap)</li>
+                            <li>> Un notebook funcionando</li>
+                            <li>> Al menos un modelo de ML entrenado</li>
+                            <li>> Métricas coherentes con el tipo de problema</li>
+                            <li>> Comparación entre train y test</li>
+                            <li>> Una interpretación corta del resultado</li>
+                            <li>> Una limitación y una mejora siguiente</li>
                         </ul>
                     </div>
                 </div>
@@ -1329,45 +1324,44 @@ test_score = model.score(X_test, y_test)
 
             <div style="text-align: center; margin-top: 40px;">
                 <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
-                    <h2 style="color: white; margin-bottom: 15px;">Key Takeaway</h2>
+                    <h2 style="color: white; margin-bottom: 15px;">Idea clave</h2>
                     <p style="font-size: 1.3rem;">
-                        ML is not magic. It is pattern recognition at scale.<br>
-                        You now have the tools to go from data to prediction.
+                        Mantenlo simple.<br>
+                        Una pregunta clara de ML, una división correcta y una evaluación honesta le ganan a un modelo sofisticado casi siempre.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 24: Next Steps -->
+        <!-- Slide 24: Momento 3 -->
         <div class="slide">
-            <h1>What Comes Next</h1>
+            <h1>Momento 3: Storytelling + ML</h1>
             <div class="concept-grid">
                 <div class="concept-card success">
-                    <h3>Week 15: Milestone 3</h3>
+                    <h3>Mantén la estructura del Milestone 2</h3>
                     <ul style="list-style: none; line-height: 2;">
-                        <li>> Final project presentation</li>
-                        <li>> Apply ML to your datos.gov.co dataset</li>
-                        <li>> Full analysis: EDA + Dashboard + ML</li>
-                        <li>> Tell the complete data story</li>
+                        <li>> Abre con el problema y por qué importa</li>
+                        <li>> Muestra los hallazgos más relevantes del análisis</li>
+                        <li>> Usa visualizaciones para apoyar la historia, no para decorarla</li>
+                        <li>> Cierra con acciones o recomendaciones concretas</li>
                     </ul>
                 </div>
                 <div class="concept-card info">
-                    <h3>Prepare for Milestone 3</h3>
+                    <h3>Agrega la capa de ML</h3>
                     <ul style="list-style: none; line-height: 2;">
-                        <li>> Complete the workshop notebook</li>
-                        <li>> Add an ML model to your project</li>
-                        <li>> Even a simple model adds value</li>
-                        <li>> Focus on interpretation, not complexity</li>
+                        <li>> Explica qué predijiste y por qué</li>
+                        <li>> Aclara si es regresión o clasificación</li>
+                        <li>> Muestra el modelo, las métricas y la revisión de overfitting</li>
+                        <li>> Presenta las predicciones generadas por el modelo como evidencia</li>
                     </ul>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 40px;">
                 <div style="background: linear-gradient(135deg, var(--warning), var(--warning-dark)); color: white; padding: 30px; border-radius: 15px; display: inline-block;">
-                    <h2 style="color: white; margin-bottom: 15px;">Homework</h2>
+                    <h2 style="color: white; margin-bottom: 15px;">Entregable final</h2>
                     <p style="font-size: 1.1rem;">
-                        Complete the workshop notebook.<br>
-                        Train a Decision Tree on the Water Consumption dataset.<br>
-                        Report your accuracy/R-squared and whether you see overfitting.
+                        Entrega la presentación de storytelling más el notebook o código que muestre lo que hiciste en ML.<br>
+                        La historia debe explicar el insight. La sección de ML debe demostrar cómo lo modelaste.
                     </p>
                 </div>
             </div>
