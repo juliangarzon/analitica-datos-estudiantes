@@ -1,4 +1,4 @@
-# Clase 12 · Reto — Inferencia sobre la educación en Colombia
+# Clase 12 · Reto: Inferencia sobre la educación en Colombia
 
 **Curso:** Analítica de Datos · Universidad Cooperativa de Colombia
 **Momento 3 · Clase 12 de 15**
@@ -63,7 +63,7 @@ Lo viste en el demo. La limpieza mínima ya viene escrita en el starter:
 
 ## El bucle, antes de las cuatro partes
 
-Este reto se recorre con el bucle de la clase 3 —**especificar, planear, ejecutar, validar**— y con
+Este reto se recorre con el bucle de la clase 3 (**especificar, planear, ejecutar, validar**) y con
 las skills que instalaste allá. No es una clase de IA: el bucle es andamiaje, y aquí se usa sin
 volver a explicarlo.
 
@@ -106,7 +106,8 @@ Con los **cuatro pasos completos** cada una:
 
 1. Plantear H0 y H1 en español, antes de mirar los datos.
 2. Elegir alfa.
-3. Calcular estadístico y p-valor.
+3. Calcular el **estadístico de prueba** (un número que resume qué tan lejos están los dos grupos,
+   medido en errores estándar) y el p-valor.
 4. Decidir y redactar.
 
 | Prueba | Pregunta | Grupos |
@@ -114,12 +115,15 @@ Con los **cuatro pasos completos** cada una:
 | **A** | ¿La tasa de aprobación difiere entre territorios? | Urbanizado vs rural disperso |
 | **B** | ¿La cobertura bruta cambió entre periodos? | 2011-2018 vs 2019-2024 |
 
-Usa `stats.ttest_ind(..., equal_var=False)` en las dos. Reporta descriptivos **antes** del test.
+Usa `stats.ttest_ind(..., equal_var=False)` en las dos. Ese `equal_var=False` activa el **t-test de
+Welch**, que no da por supuesto que los dos grupos tengan la misma dispersión: un supuesto que con
+datos reales casi nunca se cumple. Cuando sí se cumple, Welch da lo mismo; cuando no, Welch es el
+correcto. Por eso en este curso va siempre. Reporta descriptivos **antes** del test.
 
 > **Advertencia.** Una de las dos pruebas va a dar significativa y la otra no. Eso es un resultado, no
 > un error. **No cambies los grupos, ni los años, ni la columna, buscando que dé menor a 0.05.**
-> Eso se llama p-hacking y aquí se penaliza. Un resultado no significativo bien reportado vale más que
-> uno significativo fabricado.
+> Eso se llama p-hacking, y en la retroalimentación de abajo le pone techo a tu dimensión **Ser**.
+> Un resultado no significativo bien reportado vale más que uno significativo fabricado.
 
 ### Parte 3 · Resumen ejecutivo
 
@@ -168,7 +172,7 @@ aceptación que escribiste al principio, y encima van las cuatro preguntas de la
 
 ## Opcional (no se hace en clase, se cierra en casa si te sobra tiempo)
 
-Está marcado como `OPCIONAL` en el starter. No entra en la nota mínima.
+Está marcado como `OPCIONAL` en el starter. Nada de esto se exige para dar el reto por completo.
 
 - Calcular a mano el intervalo de confianza **de la diferencia** en cada prueba, con la fórmula de
   Welch.
@@ -181,14 +185,14 @@ Está marcado como `OPCIONAL` en el starter. No entra en la nota mínima.
 ## Cómo se valora
 
 **Este reto no produce nota ni cumplido / no cumplido.** Es práctica. La retroalimentación usa el
-mismo instrumento de los momentos evaluativos —**Saber, Ser y Hacer, una banda por dimensión**:
-Excelente, Bueno, Aceptable, Insuficiente, No aceptable— para que llegues familiarizado a las clases
+mismo instrumento de los momentos evaluativos (**Saber, Ser y Hacer, una banda por dimensión**:
+Excelente, Bueno, Aceptable, Insuficiente, No aceptable) para que llegues familiarizado a las clases
 6, 11 y 14. **Las tres dimensiones pesan lo mismo** y los elementos de cada fila **no tienen peso**:
 no se suman ni se promedian, alimentan una sola banda por dimensión.
 
 | Dimensión | Qué se mira en este reto |
 |-----------|--------------------------|
-| **Saber** | Los 4 pasos con H0 y H1 escritas **antes** del cálculo, y la interpretación: ninguna de las tres malinterpretaciones del p-valor, ninguna aceptación de H0 |
+| **Saber** | Los 4 pasos con H0 y H1 escritas **antes** del cálculo, y la interpretación: ninguna de las cuatro malinterpretaciones del p-valor, ninguna aceptación de H0 |
 | **Ser** | Honestidad: el resultado no significativo se reporta como tal, sin maquillarlo, y la validación de la Parte 5 se hace contra el criterio de aceptación escrito **antes**, no contra lo que salió. Y el resumen ejecutivo, sin jerga, con números y con recomendación |
 | **Hacer** | Corrección técnica (`dropna()` aplicado, error estándar en `scale`, `equal_var=False`, `n` reportado) y visualizaciones legibles solas, rotuladas, con la anotación de significancia |
 
