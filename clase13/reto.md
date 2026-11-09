@@ -1,4 +1,4 @@
-# Clase 13 · Reto — Tu primer modelo de machine learning
+# Clase 13 · Reto: Tu primer modelo de machine learning
 
 **Curso:** Analítica de Datos · Universidad Cooperativa de Colombia
 **Momento 3 · Clase 13 de 15**
@@ -49,8 +49,14 @@ Es un dataset distinto al del demo: otro dominio, otro archivo, otra escala. La 
 | `bp` | Presión arterial promedio |
 | `s1` a `s6` | Seis mediciones de suero sanguíneo |
 
-Todas vienen centradas y escaladas, así que sus valores no se leen en unidades originales. Para un árbol
-de decisión eso da igual: los árboles no necesitan variables escaladas.
+**Un aviso sobre los números, para que no parezca que el archivo está roto.** Las diez vienen
+**centradas y escaladas**: a cada columna le restaron su promedio y después la comprimieron, así que
+todas valen alrededor de cero y **muchas salen negativas**. Vas a ver una edad de `0.0381` y un `bmi`
+de `-0.0515`. No son errores: son posiciones relativas al paciente promedio, y no se leen en unidades
+originales (años, kg/m2). Se hace para que variables medidas en escalas muy distintas sean comparables
+entre sí. **A un árbol de decisión le da igual**, porque solo pregunta "¿esta columna es mayor que tal
+valor?" y el orden no cambia al reescalar. Se cuenta para que sepas leer la tabla, no porque haya que
+hacer algo al respecto.
 
 ---
 
@@ -72,14 +78,14 @@ La conclusión correcta de este reto **no** es "encontré el mejor modelo". Es a
 
 ## El bucle, antes de las partes
 
-Este reto se recorre con el bucle de la clase 3 —**especificar, planear, ejecutar, validar**— y con las
+Este reto se recorre con el bucle de la clase 3 (**especificar, planear, ejecutar, validar**) y con las
 skills que instalaste allá. No es una clase de IA: el bucle es andamiaje, y aquí se usa sin volver a
 explicarlo.
 
 | Tramo | Skill | Dónde vive en este reto |
 |-------|-------|--------------------------|
 | **Especificar** | `especifica-encargo` | La sección "Antes del código" del starter: objetivo, alcance, insumos, **criterio de aceptación** y **el piso contra el que vas a comparar**, todo escrito antes de entrenar |
-| **Planear** | `planea-trabajo` | Ya está hecho: el plan es el orden de las siete tareas |
+| **Planear** | `planea-trabajo` | Ya está hecho: el plan es el orden de las seis partes |
 | **Ejecutar** | `ejecuta-plan` | Las partes 1 a 5, una tarea por vez, con su comprobación |
 | **Validar** | `valida-resultado` | La Parte 6: el veredicto contra el criterio, y encima **las cuatro preguntas del analista** |
 
@@ -97,6 +103,11 @@ Las skills están en `clase03/skills/`. Si no las instalaste, funcionan igual pe
 
 Seis partes: cinco de trabajo y una de validación. Se trabajan en clase con acompañamiento; lo que
 quede se cierra en casa.
+
+**Sobre la numeración, para que no la busques:** hay **seis partes** y **siete tareas**. Una parte
+puede llevar más de una tarea (la Parte 2 lleva las tareas 2, 3 y 4), y las tareas son las que se
+comprueban con `comprobar('TN', ...)`. Cuando algo diga "la tarea 7", es la última comprobación, que
+vive dentro de la Parte 5.
 
 ### Parte 1 · Cargar, explorar y partir
 
@@ -196,8 +207,8 @@ Marcado como `OPCIONAL` en el starter. No entra en la retroalimentación mínima
 ## Cómo se valora
 
 **Este reto no produce nota ni cumplido / no cumplido.** Es práctica. La retroalimentación usa el
-mismo instrumento de los momentos evaluativos —**Saber, Ser y Hacer, una banda por dimensión**:
-Excelente, Bueno, Aceptable, Insuficiente, No aceptable— para que llegues familiarizado a las clases
+mismo instrumento de los momentos evaluativos (**Saber, Ser y Hacer, una banda por dimensión**:
+Excelente, Bueno, Aceptable, Insuficiente, No aceptable) para que llegues familiarizado a las clases
 6, 11 y 14. **Las tres dimensiones pesan lo mismo** y los elementos de cada fila **no tienen peso**:
 no se suman ni se promedian, alimentan una sola banda por dimensión.
 
